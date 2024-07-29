@@ -18,6 +18,6 @@
 <script src="{{asset('assets/js/custom/custom-form-validation.js')}}"></script>
 <!-- Sweet-Alert js -->
 <script src="{{asset('assets/plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
-<script src="{{asset('assets/js/custom/custom-sweet-alert.js')}}"></script>
+<!-- <script src="{{asset('assets/js/custom/custom-sweet-alert.js')}}"></script> -->
 <!-- Core js -->
 <script src="{{asset('assets/js/core.js')}}"></script>

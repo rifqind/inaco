@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('cms.layouts.head')
-
+{{ $head }}
 <body class="vertical-layout">
     <div class="containerbar">
         <!-- Leftbar / Sidebar -->

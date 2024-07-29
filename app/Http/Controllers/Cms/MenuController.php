@@ -94,7 +94,7 @@ class MenuController extends Controller
             //throw $th;
             DB::rollBack();
             return response()->json([
-                'error' => 'Error when storing data! ' . $th
+                'error' => 'Error when storing data! ' . $th->getMessage()
             ]);
         }
     }
@@ -163,6 +163,31 @@ class MenuController extends Controller
                     'error' => 'Error when updating data! ' . $th
                 ]);
             }
+        }
+    }
+
+    public function destroy(String $id) {
+        try {
+            //code...
+            DB::beginTransaction();
+            $deleteMenuNavigationTranslation = MenuNavigationTranslation::where('menu_translation_id', $id);
+            $getMenuNav = $deleteMenuNavigationTranslation->first();
+            $deleteMenuNavigation = MenuNavigation::where('menu_id', $getMenuNav->menu_id);
+
+            $deleteMenuNavigationTranslation->delete();
+            $deleteMenuNavigation->delete();
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return response()->json([
+                'error' => 'Error while deleting ' . $th->getMessage()
+            ]);
         }
     }
 }

@@ -86,7 +86,7 @@ jQuery(".form-validate").validate({
         },
     },
     submitHandler: function (form) {
-        if (window.location.pathname == '/menu/create') {
+        if (window.location.pathname == "/menu/create") {
             jQuery.ajax({
                 url: "/menu/store",
                 type: "POST",
@@ -138,7 +138,7 @@ jQuery(".form-validate").validate({
                             cancelButtonText: "Back to Main Menu",
                         }).then(
                             function () {
-                                window.location.reload()  // Ganti dengan URL tujuan Anda
+                                window.location.reload(); // Ganti dengan URL tujuan Anda
                             },
                             function (dismiss) {
                                 if (dismiss === "cancel") {
@@ -156,4 +156,57 @@ jQuery(".form-validate").validate({
             });
         }
     },
+});
+jQuery(document).ready(() => {
+    jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
+        e.preventDefault();
+        var row = jQuery(this).closest("tr");
+        var id = jQuery(this).data("id");
+        console.log({row, id})
+
+        swal({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-danger m-l-10",
+            confirmButtonText: "Yes, delete it!",
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery.ajax({
+                    url: "/menu/destroy/" + id,
+                    type: "DELETE",
+                    data: {
+                        _token: jQuery('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    success: function (data) {
+                        if (data.message) {
+                            row.remove();
+                            swal(
+                                "Deleted!",
+                                "Your data has been deleted.",
+                                "success"
+                            );
+                        } else if (data.error) {
+                            swal(
+                                "Error!",
+                                "There was a problem deleting your data.",
+                                "error"
+                            );
+                        }
+                    },
+                    error: function () {
+                        swal(
+                            "Error!",
+                            "There was a problem with the server.",
+                            "error"
+                        );
+                    },
+                });
+            }
+        });
+    });
 });

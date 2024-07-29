@@ -2,6 +2,7 @@
     <x-slot name="breadcrumb">
         Create Menu Navigation
     </x-slot>
+    <x-slot name="head"></x-slot>
     <div class="col-lg-12">
         <div class="card m-b-30">
             <div class="card-body">
