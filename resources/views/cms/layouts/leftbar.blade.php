@@ -83,7 +83,7 @@
                         <i class="ion ion-ios-settings"></i><span>Settings</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="list_page.php">Pages</a></li>
+                        <li><a href="{{ route('pages.list') }}">Pages</a></li>
                         <li><a href="list_subpage.php">Sub Pages</a></li>
                         <li><a href="{{ route('social-media.list') }}">Social Media</a></li>
                         <li><a href="{{ route('marketplace.list') }}">Market Place</a></li>

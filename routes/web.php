@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Cms\MenuController;
+use App\Http\Controllers\Cms\PageController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,7 @@ Route::get('/socmed-marketplace/update/{id}', [SocmedmarketController::class, 'u
 Route::post('/socmed-marketplace/update', [SocmedmarketController::class, 'update']);
 Route::post('/socmed-marketplace/store', [SocmedmarketController::class, 'store'])->name('socmed-marketplace.store');
 Route::delete('/socmed-marketplace/destroy/{id}', [SocmedmarketController::class, 'destroy'])->name('socmed-marketplace.destroy');
+
+//pages
+Route::get('/pages', [PageController::class, 'index'])->name('pages.list');
+Route::get('/pages/create', [PageController::class, 'create'])->name('pages.create');
