@@ -1,11 +1,10 @@
-/*
---------------------------------
-    : Custom - Validate js :
---------------------------------
-*/
 "use strict";
-jQuery("#back").on("click", () => {
-    window.location.href = "/menu";
+var path = window.location.pathname;
+jQuery("#back-socmed").on("click", () => {
+    window.location.href = "/social-media";
+});
+jQuery("#back-marketplace").on("click", () => {
+    window.location.href = "/marketplace";
 });
 jQuery(".form-validate").validate({
     ignore: [],
@@ -34,87 +33,99 @@ jQuery(".form-validate").validate({
             jQuery(e).remove();
     },
     rules: {
-        parent: {
+        instagram: {
             required: true,
         },
-        pages_title: {
+        facebook: {
             required: true,
         },
-        category: {
+        tiktok: {
             required: true,
         },
-        urlwebsite: {
+        youtube: {
             required: true,
         },
-        urlcms: {
+        twitter: {
             required: true,
         },
-        iconcms: {
+        shopee: {
             required: true,
         },
-        language: {
+        tokopedia: {
             required: true,
         },
-        display_sequence: {
+        lazada: {
+            required: true,
+        },
+        tiktokshop: {
             required: true,
         },
     },
     messages: {
-        parent: {
-            required: "Please select the parent",
+        instagram: {
+            required: "Please enter the link",
         },
-        pages_title: {
-            required: "Please enter the title",
+        facebook: {
+            required: "Please enter the link",
         },
-        category: {
-            required: "Please select the category",
+        tiktok: {
+            required: "Please enter the link",
         },
-        urlwebsite: {
-            required: "Please enter url website",
+        youtube: {
+            required: "Please enter the link",
         },
-        urlcms: {
-            required: "Please enter url cms",
+        twitter: {
+            required: "Please enter the link",
         },
-        iconcms: {
-            required: "Please enter icon cms",
+        shopee: {
+            required: "Please enter the link",
         },
-        language: {
-            required: "Please select a language",
+        tokopedia: {
+            required: "Please enter the link",
         },
-        display_sequence: {
-            required: "Please select a display sequence",
+        lazada: {
+            required: "Please enter the link",
+        },
+        tiktokshop: {
+            required: "Please enter the link",
         },
     },
-    submitHandler: function (form) {
-        if (window.location.pathname == "/menu/create") {
+    submitHandler: (form) => {
+        if (path == "/socmed-marketplace/create") {
+            let data = jQuery(".form-validate").serialize();
+            data += "&path=" + encodeURIComponent(path);
             jQuery.ajax({
-                url: "/menu/store",
+                url: "/socmed-marketplace/store",
                 type: "POST",
-                data: jQuery(".form-validate").serialize(),
+                data: data,
                 success: (data) => {
                     if (data.message) {
                         Swal.fire({
                             title: "Save Successfully.",
-                            text: "Continue to input other language?",
+                            text: "Continue to input other social media and marketplace?",
                             icon: "success",
-
                             showCancelButton: true,
                             showConfirmButton: true,
+                            showDenyButton: true,
+
                             customClass: {
                                 confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-danger m-l-10",
+                                cancelButton: "btn btn-info m-l-10",
+                                denyButton: "btn btn-info m-l-10",
                             },
                             confirmButtonText: "Yes Continue",
-                            cancelButtonText: "No",
-                        }).then((value) => {
-                            // if (value.isDenied) {
-                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            // }
+                            cancelButtonText: "Back to Market Place",
+                            denyButtonText: "Back to Social Media",
+                        }).then(function (value) {
+                            if (value.isDenied) {
+                                window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                            }
                             if (value.isConfirmed) {
-                                window.location.href = "/menu/create"; // Ganti dengan URL tujuan Anda
+                                window.location.href =
+                                    "/socmed-marketplace/create"; // Ganti dengan URL tujuan Anda
                             }
                             if (value.isDismissed) {
-                                window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
+                                window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
                             }
                         });
                     } else if (data.error) {
@@ -126,31 +137,39 @@ jQuery(".form-validate").validate({
                 },
             });
         } else {
+            let data = jQuery(".form-validate").serialize();
+            data += "&path=" + encodeURIComponent(path);
             jQuery.ajax({
-                url: "/menu/update",
+                url: "/socmed-marketplace/update",
                 type: "POST",
-                data: jQuery(".form-validate").serialize(),
+                data: data,
                 success: (data) => {
                     if (data.message) {
                         Swal.fire({
                             title: "Save Successfully.",
-                            text: "Continue Edit?",
+                            text: "Continue to edit?",
                             icon: "success",
-
                             showCancelButton: true,
                             showConfirmButton: true,
+                            showDenyButton: true,
+
                             customClass: {
                                 confirmButton: "btn btn-success",
+                                denyButton: "btn btn-info m-l-10",
                                 cancelButton: "btn btn-info m-l-10",
                             },
                             confirmButtonText: "Yes Continue",
-                            cancelButtonText: "Back to Menu Navigation List",
-                        }).then((value) => {
+                            cancelButtonText: "Back to Market Place",
+                            denyButtonText: "Back to Social Media",
+                        }).then(function (value) {
+                            if (value.isDenied) {
+                                window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                            }
                             if (value.isConfirmed) {
                                 window.location.reload(); // Ganti dengan URL tujuan Anda
                             }
                             if (value.isDismissed) {
-                                window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
+                                window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
                             }
                         });
                     } else if (data.error) {
@@ -164,14 +183,45 @@ jQuery(".form-validate").validate({
         }
     },
 });
-if (window.location.pathname == "/menu") {
+if (path == "/social-media" || path == "/marketplace") {
     jQuery(document).ready(() => {
-        jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
-            e.preventDefault();
-            var row = jQuery(this).closest("tr");
-            var id = jQuery(this).data("id");
+        jQuery("#datatable-socmed")
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "6%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+        jQuery("#datatable-marketplace")
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "6%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+    });
 
-            console.log({ row, id });
+    document
+        .querySelector(".table .delete-row")
+        .addEventListener("click", (e) => {
+            const button = e.target.closest(".delete-row");
+            const row = e.target.closest("tr");
+            const id = button.dataset.id;
 
             Swal.fire({
                 title: "Are you sure?",
@@ -187,7 +237,7 @@ if (window.location.pathname == "/menu") {
             }).then((value) => {
                 if (value.isConfirmed) {
                     jQuery.ajax({
-                        url: "/menu/destroy/" + id,
+                        url: "/socmed-marketplace/destroy/" + id,
                         type: "DELETE",
                         data: {
                             _token: jQuery('meta[name="csrf-token"]').attr(
@@ -221,5 +271,11 @@ if (window.location.pathname == "/menu") {
                 }
             });
         });
-    });
+    // jQuery(".table .delete-row").on("click", (e) => {
+    //     e.preventDefault();
+    //     var row = jQuery(this).closest("tr");
+    //     var id = jQuery(this).data("id");
+    //     console.log(row.data("id"));
+
+    // });
 }

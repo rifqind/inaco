@@ -17,7 +17,8 @@
 <script src="{{asset('assets/js/custom/custom-validate.js')}}"></script>
 <script src="{{asset('assets/js/custom/custom-form-validation.js')}}"></script>
 <!-- Sweet-Alert js -->
-<script src="{{asset('assets/plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
+<!-- <script src="{{asset('assets/plugins/sweet-alert2/sweetalert2.min.js')}}"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
 <!-- <script src="{{asset('assets/js/custom/custom-sweet-alert.js')}}"></script> -->
 <!-- Core js -->
 <script src="{{asset('assets/js/core.js')}}"></script>

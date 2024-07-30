@@ -108,7 +108,7 @@
                 </form>
             </div>
         </div>
-        <div id="back" type="button" class="btn btn-success">Kembali</div>
+        <div id="back" type="button" class="btn btn-success">Back to Menu Navigation List</div>
     </div>
     <x-slot name="script">
         <script src="{{ asset('assets/js/custom/custom-menu-form.js')}}"></script>

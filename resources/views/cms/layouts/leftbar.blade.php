@@ -85,10 +85,10 @@
                     <ul class="vertical-submenu">
                         <li><a href="list_page.php">Pages</a></li>
                         <li><a href="list_subpage.php">Sub Pages</a></li>
-                        <li><a href="#">Social Media</a></li>
-                        <li><a href="#">Market Place</a></li>
+                        <li><a href="{{ route('social-media.list') }}">Social Media</a></li>
+                        <li><a href="{{ route('marketplace.list') }}">Market Place</a></li>
                         <li><a href="#">Language</a></li>
-                        <li><a href="{{url('/menu')}}">Menu Navigation</a></li>
+                        <li><a href="{{ route('menu.list') }}">Menu Navigation</a></li>
                     </ul>
                 </li>
                 <li>
