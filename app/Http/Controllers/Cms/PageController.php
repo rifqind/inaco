@@ -143,7 +143,7 @@ class PageController extends Controller
                     $updatePage->update([
                         'pages_image' => $fileName
                     ]);
-                    
+
                     //update file 
                     $file->move(public_path('data/pages'), $fileName);
                     //previous path & delete it
@@ -170,7 +170,29 @@ class PageController extends Controller
         }
     }
 
-    public function destroy()
+    public function destroy(String $id)
     {
+        try {
+            //code...
+            DB::beginTransaction();
+            $deletePageTranslation = PageTranslation::where('pages_translation_id', $id);
+            $getPage = $deletePageTranslation->value('pages_id');
+            $deletePage = Page::where('pages_id', $getPage);
+
+            $deletePageTranslation->delete();
+            $deletePage->delete();
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Successfully deleted'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+
+            return response()->json([
+                'error' => 'Error while deleting ' . $th->getMessage()
+            ]);
+        }
     }
 }

@@ -174,10 +174,6 @@ jQuery("#create-page").validate({
     },
 });
 
-document.getElementById("back").addEventListener("click", () => {
-    window.location.href = "/pages";
-});
-
 // Revalidate select2 on change
 $("#val-page").on("change", function () {
     $(this).valid();
@@ -198,5 +194,64 @@ if (path == "/pages") {
             .buttons()
             .container()
             .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+        document.querySelectorAll(".table .delete-row").forEach((button) => {
+            button.addEventListener("click", (e) => {
+                const button = e.target.closest(".delete-row");
+                const row = e.target.closest("tr");
+                const id = button.dataset.id;
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger m-l-10",
+                    },
+                    confirmButtonText: "Yes, delete it!",
+                }).then((value) => {
+                    if (value.isConfirmed) {
+                        jQuery.ajax({
+                            url: "/pages/destroy/" + id,
+                            type: "DELETE",
+                            data: {
+                                _token: jQuery('meta[name="csrf-token"]').attr(
+                                    "content"
+                                ),
+                            },
+                            success: function (data) {
+                                if (data.message) {
+                                    row.remove();
+                                    Swal.fire(
+                                        "Deleted!",
+                                        "Your data has been deleted.",
+                                        "success"
+                                    );
+                                } else if (data.error) {
+                                    Swal.fire(
+                                        "Error!",
+                                        "There was a problem deleting your data.",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function () {
+                                Swal.fire(
+                                    "Error!",
+                                    "There was a problem with the server.",
+                                    "error"
+                                );
+                            },
+                        });
+                    }
+                });
+            });
+        });
+    });
+} else {
+    document.getElementById("back").addEventListener("click", () => {
+        window.location.href = "/pages";
     });
 }

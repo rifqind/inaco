@@ -216,9 +216,8 @@ if (path == "/social-media" || path == "/marketplace") {
             .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 
-    document
-        .querySelector(".table .delete-row")
-        .addEventListener("click", (e) => {
+    document.querySelectorAll(".table .delete-row").forEach((button) => {
+        button.addEventListener("click", (e) => {
             const button = e.target.closest(".delete-row");
             const row = e.target.closest("tr");
             const id = button.dataset.id;
@@ -271,6 +270,7 @@ if (path == "/social-media" || path == "/marketplace") {
                 }
             });
         });
+    });
     // jQuery(".table .delete-row").on("click", (e) => {
     //     e.preventDefault();
     //     var row = jQuery(this).closest("tr");

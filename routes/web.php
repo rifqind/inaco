@@ -31,6 +31,7 @@ Route::delete('/socmed-marketplace/destroy/{id}', [SocmedmarketController::class
 //pages
 Route::get('/pages', [PageController::class, 'index'])->name('pages.list');
 Route::get('/pages/create', [PageController::class, 'create'])->name('pages.create');
+Route::post('/pages/store', [PageController::class, 'store'])->name('pages.store');
 Route::get('/pages/update/{id}', [PageController::class, 'update'])->name('pages.update');
 Route::post('/pages/update', [PageController::class, 'update']);
-Route::post('/pages/store', [PageController::class, 'store'])->name('pages.store');
+Route::delete('/pages/destroy/{id}', [PageController::class, 'destroy'])->name('pages.destroy');

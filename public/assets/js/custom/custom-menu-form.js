@@ -166,59 +166,62 @@ jQuery(".form-validate").validate({
 });
 if (window.location.pathname == "/menu") {
     jQuery(document).ready(() => {
-        jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
-            e.preventDefault();
-            var row = jQuery(this).closest("tr");
-            var id = jQuery(this).data("id");
-
-            console.log({ row, id });
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                showConfirmButton: true,
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger m-l-10",
-                },
-                confirmButtonText: "Yes, delete it!",
-            }).then((value) => {
-                if (value.isConfirmed) {
-                    jQuery.ajax({
-                        url: "/menu/destroy/" + id,
-                        type: "DELETE",
-                        data: {
-                            _token: jQuery('meta[name="csrf-token"]').attr(
-                                "content"
-                            ),
-                        },
-                        success: function (data) {
-                            if (data.message) {
-                                row.remove();
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Your data has been deleted.",
-                                    "success"
-                                );
-                            } else if (data.error) {
+        // jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
+        // e.preventDefault();
+        // var row = jQuery(this).closest("tr");
+        // var id = jQuery(this).data("id");
+        document.querySelectorAll(".table .delete-row").forEach((button) => {
+            button.addEventListener("click", (e) => {
+                const button = e.target.closest(".delete-row");
+                const row = e.target.closest("tr");
+                const id = button.dataset.id;
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger m-l-10",
+                    },
+                    confirmButtonText: "Yes, delete it!",
+                }).then((value) => {
+                    if (value.isConfirmed) {
+                        jQuery.ajax({
+                            url: "/menu/destroy/" + id,
+                            type: "DELETE",
+                            data: {
+                                _token: jQuery('meta[name="csrf-token"]').attr(
+                                    "content"
+                                ),
+                            },
+                            success: function (data) {
+                                if (data.message) {
+                                    row.remove();
+                                    Swal.fire(
+                                        "Deleted!",
+                                        "Your data has been deleted.",
+                                        "success"
+                                    );
+                                } else if (data.error) {
+                                    Swal.fire(
+                                        "Error!",
+                                        "There was a problem deleting your data.",
+                                        "error"
+                                    );
+                                }
+                            },
+                            error: function () {
                                 Swal.fire(
                                     "Error!",
-                                    "There was a problem deleting your data.",
+                                    "There was a problem with the server.",
                                     "error"
                                 );
-                            }
-                        },
-                        error: function () {
-                            Swal.fire(
-                                "Error!",
-                                "There was a problem with the server.",
-                                "error"
-                            );
-                        },
-                    });
-                }
+                            },
+                        });
+                    }
+                });
             });
         });
     });
