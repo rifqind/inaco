@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
-        Create Pages
+        Update Pages : {{ $data->pages_title }}
     </x-slot>
     <x-slot name="head">
         <!-- Summernote css -->

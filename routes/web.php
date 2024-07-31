@@ -3,6 +3,7 @@
 use App\Http\Controllers\Cms\MenuController;
 use App\Http\Controllers\Cms\PageController;
 use App\Http\Controllers\Cms\SocmedmarketController;
+use App\Http\Controllers\Cms\SubpageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,3 +36,11 @@ Route::post('/pages/store', [PageController::class, 'store'])->name('pages.store
 Route::get('/pages/update/{id}', [PageController::class, 'update'])->name('pages.update');
 Route::post('/pages/update', [PageController::class, 'update']);
 Route::delete('/pages/destroy/{id}', [PageController::class, 'destroy'])->name('pages.destroy');
+
+//subpages
+Route::get('/subpages', [SubpageController::class, 'index'])->name('subpages.list');
+Route::get('/subpages/create', [SubpageController::class, 'create'])->name('subpages.create');
+Route::post('/subpages/store', [SubpageController::class, 'store'])->name('subpages.store');
+Route::get('/subpages/update/{id}', [SubpageController::class, 'update'])->name('subpages.update');
+Route::post('/subpages/update', [SubpageController::class, 'update']);
+Route::delete('/subpages/destroy/{id}', [SubpageController::class, 'destroy'])->name('subpages.destroy');

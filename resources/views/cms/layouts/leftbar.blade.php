@@ -84,7 +84,7 @@
                     </a>
                     <ul class="vertical-submenu">
                         <li><a href="{{ route('pages.list') }}">Pages</a></li>
-                        <li><a href="list_subpage.php">Sub Pages</a></li>
+                        <li><a href="{{ route('subpages.list') }}">Sub Pages</a></li>
                         <li><a href="{{ route('social-media.list') }}">Social Media</a></li>
                         <li><a href="{{ route('marketplace.list') }}">Market Place</a></li>
                         <li><a href="#">Language</a></li>
