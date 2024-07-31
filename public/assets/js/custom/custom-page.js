@@ -6,7 +6,7 @@
 "use strict";
 
 var path = window.location.pathname;
-jQuery(".form-validate").validate({
+jQuery("#create-page").validate({
     ignore: [],
     errorClass: "invalid-feedback animated fadeInDown",
     errorElement: "div",
@@ -73,29 +73,109 @@ jQuery(".form-validate").validate({
         },
     },
     submitHandler: function (form) {
+        event.preventDefault();
         if (path == "/pages/create") {
-            console.log(jQuery(".form-validate").serialize())
-            // swal({
-            //     title: "Save Successfully.",
-            //     text: "Continue to input other language?",
-            //     type: "success",
-            //     showCancelButton: true,
-            //     confirmButtonClass: "btn btn-success",
-            //     confirmButtonText: "Yes Continue",
-            //     cancelButtonClass: "btn btn-danger m-l-10",
-            //     cancelButtonText: "No",
-            // }).then(
-            //     function () {
-            //         window.location.href = "create_page.php"; // Ganti dengan URL tujuan Anda
-            //     },
-            //     function (dismiss) {
-            //         if (dismiss === "cancel") {
-            //             window.location.href = "list_page.php"; // Ganti dengan URL tujuan Anda
-            //         }
-            //     }
-            // );
+            const form = document.getElementById("create-page");
+            let formData = new FormData(form);
+            jQuery.ajax({
+                url: "/pages/store",
+                type: "POST",
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                processData: false,
+                contentType: false,
+                success: (data) => {
+                    if (data.message) {
+                        Swal.fire({
+                            title: "Save Successfully.",
+                            text: "Continue to input another page?",
+                            icon: "success",
+
+                            showCancelButton: true,
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-danger m-l-10",
+                            },
+                            confirmButtonText: "Yes Continue",
+                            cancelButtonText: "No",
+                        }).then((value) => {
+                            // if (value.isDenied) {
+                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                            // }
+                            if (value.isConfirmed) {
+                                window.location.href = "/pages/create"; // Ganti dengan URL tujuan Anda
+                            }
+                            if (value.isDismissed) {
+                                window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
+                            }
+                        });
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            });
+        } else {
+            const form = document.getElementById("create-page");
+            let formData = new FormData(form);
+            jQuery.ajax({
+                url: "/pages/update",
+                type: "POST",
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                processData: false,
+                contentType: false,
+                success: (data) => {
+                    if (data.message) {
+                        Swal.fire({
+                            title: "Save Successfully.",
+                            text: "Continue to update page?",
+                            icon: "success",
+
+                            showCancelButton: true,
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-danger m-l-10",
+                            },
+                            confirmButtonText: "Yes Continue",
+                            cancelButtonText: "No",
+                        }).then((value) => {
+                            // if (value.isDenied) {
+                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                            // }
+                            if (value.isConfirmed) {
+                                window.location.reload(); // Ganti dengan URL tujuan Anda
+                            }
+                            if (value.isDismissed) {
+                                window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
+                            }
+                        });
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            });
         }
     },
+});
+
+document.getElementById("back").addEventListener("click", () => {
+    window.location.href = "/pages";
 });
 
 // Revalidate select2 on change

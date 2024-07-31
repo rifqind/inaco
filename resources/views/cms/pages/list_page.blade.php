@@ -32,7 +32,7 @@
                                 <td>{{ $value->pages_title }}</td>
                                 <td>{{ $value->pages_description }}</td>
                                 <td>{{ $value->language_name }}</td>
-                                <td><a href="  " class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                <td><a href="{{ route('pages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
                                 </td>
                             </tr>
