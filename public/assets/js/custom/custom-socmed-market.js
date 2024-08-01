@@ -91,96 +91,56 @@ jQuery(".form-validate").validate({
         },
     },
     submitHandler: (form) => {
-        if (path == "/socmed-marketplace/create") {
-            let data = jQuery(".form-validate").serialize();
-            data += "&path=" + encodeURIComponent(path);
-            jQuery.ajax({
-                url: "/socmed-marketplace/store",
-                type: "POST",
-                data: data,
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue to input other social media and marketplace?",
-                            icon: "success",
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            showDenyButton: true,
+        event.preventDefault();
+        let data = jQuery(".form-validate").serialize();
+        data += "&path=" + encodeURIComponent(path);
+        jQuery.ajax({
+            url:
+                path == "/socmed-marketplace/create"
+                    ? "/socmed-marketplace/store"
+                    : "/socmed-marketplace/update",
+            type: "POST",
+            data: data,
+            success: (data) => {
+                if (data.message) {
+                    Swal.fire({
+                        title: "Save Successfully.",
+                        text: "Continue to input other social media and marketplace?",
+                        icon: "success",
+                        showCancelButton: true,
+                        showConfirmButton: true,
+                        showDenyButton: true,
 
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-info m-l-10",
-                                denyButton: "btn btn-info m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "Back to Market Place",
-                            denyButtonText: "Back to Social Media",
-                        }).then(function (value) {
-                            if (value.isDenied) {
-                                window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isConfirmed) {
-                                window.location.href =
-                                    "/socmed-marketplace/create"; // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        } else {
-            let data = jQuery(".form-validate").serialize();
-            data += "&path=" + encodeURIComponent(path);
-            jQuery.ajax({
-                url: "/socmed-marketplace/update",
-                type: "POST",
-                data: data,
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue to edit?",
-                            icon: "success",
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            showDenyButton: true,
-
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                denyButton: "btn btn-info m-l-10",
-                                cancelButton: "btn btn-info m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "Back to Market Place",
-                            denyButtonText: "Back to Social Media",
-                        }).then(function (value) {
-                            if (value.isDenied) {
-                                window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isConfirmed) {
-                                window.location.reload(); // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        }
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-info m-l-10",
+                            denyButton: "btn btn-info m-l-10",
+                        },
+                        confirmButtonText: "Yes Continue",
+                        cancelButtonText: "Back to Market Place",
+                        denyButtonText: "Back to Social Media",
+                    }).then(function (value) {
+                        if (value.isDenied) {
+                            window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                        }
+                        if (value.isConfirmed) {
+                            path == "/socmed-marketplace/create"
+                                ? (window.location.href =
+                                      "/socmed-marketplace/create")
+                                : window.location.reload(); // Ganti dengan URL tujuan Anda
+                        }
+                        if (value.isDismissed) {
+                            window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
+                        }
+                    });
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            },
+            error: (data) => {
+                alert(data);
+            },
+        });
     },
 });
 if (path == "/social-media" || path == "/marketplace") {

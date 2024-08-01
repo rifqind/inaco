@@ -12,7 +12,7 @@
         <div class="card m-b-30">
             <div class="card-header pt-0">
                 <div class="d-sm-flex justify-content-between">
-                    <a href="" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
+                    <a href="{{ route('subpages.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
                 </div>
             </div>
             <div class="card-body">
@@ -34,7 +34,7 @@
                                 <td>{{ $value->sub_pages_title }}</td>
                                 <td>{{ $value->sub_pages_description }}</td>
                                 <td>{{ $value->language_name }}</td>
-                                <td><a href="{{ route('pages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                <td><a href="{{ route('subpages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
                                 </td>
                             </tr>

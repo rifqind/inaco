@@ -86,82 +86,50 @@ jQuery(".form-validate").validate({
         },
     },
     submitHandler: function (form) {
-        if (window.location.pathname == "/menu/create") {
-            jQuery.ajax({
-                url: "/menu/store",
-                type: "POST",
-                data: jQuery(".form-validate").serialize(),
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue to input other language?",
-                            icon: "success",
+        event.preventDefault();
+        jQuery.ajax({
+            url:
+                window.location.pathname == "/menu/create"
+                    ? "/menu/store"
+                    : "/menu/update",
+            type: "POST",
+            data: jQuery(".form-validate").serialize(),
+            success: (data) => {
+                if (data.message) {
+                    Swal.fire({
+                        title: "Save Successfully.",
+                        text: "Continue to input other language?",
+                        icon: "success",
 
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-danger m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "No",
-                        }).then((value) => {
-                            // if (value.isDenied) {
-                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            // }
-                            if (value.isConfirmed) {
-                                window.location.href = "/menu/create"; // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        } else {
-            jQuery.ajax({
-                url: "/menu/update",
-                type: "POST",
-                data: jQuery(".form-validate").serialize(),
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue Edit?",
-                            icon: "success",
-
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-info m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "Back to Menu Navigation List",
-                        }).then((value) => {
-                            if (value.isConfirmed) {
-                                window.location.reload(); // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        }
+                        showCancelButton: true,
+                        showConfirmButton: true,
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger m-l-10",
+                        },
+                        confirmButtonText: "Yes Continue",
+                        cancelButtonText: "No",
+                    }).then((value) => {
+                        // if (value.isDenied) {
+                        //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                        // }
+                        if (value.isConfirmed) {
+                            window.location.pathname == "/menu/create"
+                                ? (window.location.href = "/menu/create")
+                                : window.location.reload(); // Ganti dengan URL tujuan Anda
+                        }
+                        if (value.isDismissed) {
+                            window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
+                        }
+                    });
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            },
+            error: (data) => {
+                alert(data);
+            },
+        });
     },
 });
 if (window.location.pathname == "/menu") {

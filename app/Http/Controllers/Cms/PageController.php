@@ -56,7 +56,7 @@ class PageController extends Controller
                 $filePath = 'data/pages/' . $fileName;
 
                 $insertPage = Page::create([
-                    'create_data' => date('Y-m-d H:i:s'),
+                    'create_date' => date('Y-m-d H:i:s'),
                     'pages_image' => $fileName,
                     'pages_status' => $data['pages_status']
                 ]);

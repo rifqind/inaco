@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="pages_image">Page Image<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="">Page Image<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <input type="file" class="form-control-file" id="pages_image" name="pages_image">
                             <div class="invalid-feedback">Please select an image</div>

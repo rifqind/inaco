@@ -72,105 +72,57 @@ jQuery("#create-page").validate({
             required: "Please select the page status",
         },
     },
-    submitHandler: function (form) {
+    submitHandler: function () {
         event.preventDefault();
-        if (path == "/pages/create") {
-            const form = document.getElementById("create-page");
-            let formData = new FormData(form);
-            jQuery.ajax({
-                url: "/pages/store",
-                type: "POST",
-                data: formData,
-                headers: {
-                    "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                },
-                processData: false,
-                contentType: false,
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue to input another page?",
-                            icon: "success",
+        const form = document.getElementById("create-page");
+        let formData = new FormData(form);
+        jQuery.ajax({
+            url: path == "/pages/create" ? "/pages/store" : "/pages/update",
+            type: "POST",
+            data: formData,
+            headers: {
+                "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                if (data.message) {
+                    Swal.fire({
+                        title: "Save Successfully.",
+                        text: "Continue to input another page?",
+                        icon: "success",
 
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-danger m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "No",
-                        }).then((value) => {
-                            // if (value.isDenied) {
-                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            // }
-                            if (value.isConfirmed) {
-                                window.location.href = "/pages/create"; // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        } else {
-            const form = document.getElementById("create-page");
-            let formData = new FormData(form);
-            jQuery.ajax({
-                url: "/pages/update",
-                type: "POST",
-                data: formData,
-                headers: {
-                    "X-CSRF-TOKEN": jQuery('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                },
-                processData: false,
-                contentType: false,
-                success: (data) => {
-                    if (data.message) {
-                        Swal.fire({
-                            title: "Save Successfully.",
-                            text: "Continue to update page?",
-                            icon: "success",
-
-                            showCancelButton: true,
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: "btn btn-success",
-                                cancelButton: "btn btn-danger m-l-10",
-                            },
-                            confirmButtonText: "Yes Continue",
-                            cancelButtonText: "No",
-                        }).then((value) => {
-                            // if (value.isDenied) {
-                            //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
-                            // }
-                            if (value.isConfirmed) {
-                                window.location.reload(); // Ganti dengan URL tujuan Anda
-                            }
-                            if (value.isDismissed) {
-                                window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
-                            }
-                        });
-                    } else if (data.error) {
-                        alert(data.error);
-                    }
-                },
-                error: (data) => {
-                    alert(data);
-                },
-            });
-        }
+                        showCancelButton: true,
+                        showConfirmButton: true,
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger m-l-10",
+                        },
+                        confirmButtonText: "Yes Continue",
+                        cancelButtonText: "No",
+                    }).then((value) => {
+                        // if (value.isDenied) {
+                        //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                        // }
+                        if (value.isConfirmed) {
+                            path == "/pages/create"
+                                ? (window.location.href = "/pages/create")
+                                : window.location.reload(); // Ganti dengan URL tujuan Anda
+                        }
+                        if (value.isDismissed) {
+                            window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
+                        }
+                    });
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            },
+            error: (data) => {
+                alert(data);
+            },
+        });
     },
 });
 
