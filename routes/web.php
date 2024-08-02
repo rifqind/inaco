@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cms\LanguageController;
 use App\Http\Controllers\Cms\MenuController;
 use App\Http\Controllers\Cms\PageController;
 use App\Http\Controllers\Cms\SocmedmarketController;
@@ -44,3 +45,11 @@ Route::post('/subpages/store', [SubpageController::class, 'store'])->name('subpa
 Route::get('/subpages/update/{id}', [SubpageController::class, 'update'])->name('subpages.update');
 Route::post('/subpages/update', [SubpageController::class, 'update']);
 Route::delete('/subpages/destroy/{id}', [SubpageController::class, 'destroy'])->name('subpages.destroy');
+
+//language
+Route::get('/language', [LanguageController::class, 'index'])->name('language.list');
+Route::get('/language/create', [LanguageController::class, 'create'])->name('language.create');
+Route::post('/language/store', [LanguageController::class, 'store'])->name('language.store');
+Route::get('/language/update/{id}', [LanguageController::class, 'update'])->name('language.update');
+Route::post('/language/update', [LanguageController::class, 'update']);
+Route::delete('/language/destroy/{id}', [LanguageController::class, 'destroy'])->name('language.destroy');

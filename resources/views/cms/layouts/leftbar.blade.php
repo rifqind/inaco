@@ -87,7 +87,7 @@
                         <li><a href="{{ route('subpages.list') }}">Sub Pages</a></li>
                         <li><a href="{{ route('social-media.list') }}">Social Media</a></li>
                         <li><a href="{{ route('marketplace.list') }}">Market Place</a></li>
-                        <li><a href="#">Language</a></li>
+                        <li><a href="{{ route('language.list') }}">Language</a></li>
                         <li><a href="{{ route('menu.list') }}">Menu Navigation</a></li>
                     </ul>
                 </li>

@@ -11,4 +11,5 @@ class AppLanguage extends Model
     protected $table = 'app_language';
     protected $timestamp = false;
     protected $fillable = ['code', 'name', 'icon_image'];
+    public $timestamps = false;
 }
