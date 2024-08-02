@@ -52,7 +52,9 @@
                                     @endif
                                 </td>
                                 <td>{{ $value->language_name }}</td>
-                                <td><a href=" {{ route('menu.update', ['id' => $value->id]) }} " class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                <td>
+                                    <a href=" {{ route('menu.update', ['id' => $value->id]) }} " class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                    <a href="{{ route('menu.create') }}?menu_id={{ $value->menu_id }}&language_code={{ $value->language_code }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
                                 </td>
                             </tr>

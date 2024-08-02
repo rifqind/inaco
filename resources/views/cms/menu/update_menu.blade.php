@@ -90,7 +90,8 @@
                         <div class="col-lg-6">
                             <select class="form-control" id="display_sequence" name="display_sequence" style="width:200px;">
                                 <option value="">Please select</option>
-                                @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}</option>
                                     @endfor
                             </select>
                         </div>

@@ -23,7 +23,8 @@ class MenuController extends Controller
             'menu_title',
             'menu_category',
             'on_website',
-            'al.name as language_name'
+            'al.name as language_name',
+            'al.code as language_code'
         ]);
 
         //sementara
@@ -43,16 +44,36 @@ class MenuController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $languages = AppLanguage::select('code as value', 'name as label')->get();
         $query = MenuNavigationTranslation::query();
         $query->join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id');
         $parent = $query->where('mn.parent_menu', 0)->select('menu_title as label', 'mn.menu_id as value')->get();
 
-        $languages = AppLanguage::select('code as value', 'name as label')->get();
+        if ($request) {
+            $data = MenuNavigation::where('menu_id', $request->menu_id)->first();
+            if ($data) {
+                $data->parent_check = 1;
+                $data->language_code = $request->language_code;
+                return view('cms.menu.create_menu', [
+                    'data' => $data,
+                    'parent' => $parent,
+                    'languages' => $languages
+                ]);
+            }
+        }
+        $data = MenuNavigation::first();
+        $fillable = $data->getFillable();
+        foreach ($fillable as $key) {
+            $data->$key = null;
+        }
+        $data->parent_check = null;
+        $data->language_code = null;
         return view('cms.menu.create_menu', [
             'parent' => $parent,
             'languages' => $languages,
+            'data' => $data
         ]);
     }
 
@@ -88,7 +109,9 @@ class MenuController extends Controller
             ]);
             DB::commit();
             return response()->json([
-                'message' => 'Success'
+                'message' => 'Success',
+                'id' => $insertMenuNavigation->menu_id,
+                'code' => $data['language_code']
             ]);
         } catch (\Throwable $th) {
             //throw $th;
@@ -166,7 +189,8 @@ class MenuController extends Controller
         }
     }
 
-    public function destroy(String $id) {
+    public function destroy(String $id)
+    {
         try {
             //code...
             DB::beginTransaction();

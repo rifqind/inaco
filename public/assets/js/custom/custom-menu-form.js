@@ -115,7 +115,11 @@ jQuery(".form-validate").validate({
                         // }
                         if (value.isConfirmed) {
                             window.location.pathname == "/menu/create"
-                                ? (window.location.href = "/menu/create")
+                                ? (window.location.href =
+                                      "/menu/create?menu_id=" +
+                                      data.id +
+                                      "&language_code=" +
+                                      data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {

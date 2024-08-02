@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
-        Create Menu Navigation
+        {{ ($data->language_code) ? 'Add Another Language' : 'Create Menu Navigation' }}
     </x-slot>
     <x-slot name="head"></x-slot>
     <div class="col-lg-12">
@@ -12,10 +12,10 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="parent_menu">Parent Menu<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <select class="form-control" id="parent_menu" name="parent_menu" style="width:200px;">
+                            <select class="form-control" id="parent_menu" name="parent_menu" style="width:200px;" {{ ($data->parent_check) ? 'disabled' : '' }}>
                                 <option value="0">As Parent</option>
                                 @foreach ($parent as $value)
-                                <option value="{{$value->value}}">{{ $value->label }}</option>
+                                <option value="{{ $value->value }}" {{ ($data->parent_menu == $value->value) ? 'selected' : '' }}>{{ $value->label }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -29,15 +29,15 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="menu_category">Menu Category<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <select class="form-control" id="menu_category" name="menu_category" style="width:200px;">
-                                <option value="" disabled selected>Please Select</option>
-                                <option value="1">Pages</option>
-                                <option value="2">News</option>
-                                <option value="3">Products</option>
+                            <select class="form-control" id="menu_category" name="menu_category" style="width:200px;" {{ ($data->menu_category) ? 'disabled' : '' }}>
+                                <option value="" disabled>Please Select</option>
+                                <option {{ ($data->menu_category == 1) ? 'selected' : '' }} value="1">Pages</option>
+                                <option {{ ($data->menu_category == 2) ? 'selected' : '' }} value="2">News</option>
+                                <option {{ ($data->menu_category == 3) ? 'selected' : '' }} value="3">Products</option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row {{ ($data->menu_category) ? 'd-none' : '' }}">
                         <label class="col-lg-3 col-form-label" for="val-phoneus">Display on Website<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <div class="form-check form-check-inline">
@@ -65,7 +65,7 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="icon_on_cms">Icon on CMS<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="icon_on_cms" name="icon_on_cms" placeholder="Enter Script Icon">
+                            <input {{ ($data->icon_on_cms) ? 'disabled' : '' }} value="{{ ($data->icon_on_cms) ? $data->icon_on_cms : '' }}" type="text" class="form-control" id="icon_on_cms" name="icon_on_cms" placeholder="Enter Script Icon">
                         </div>
                         <div class="col-lg-1  col-form-label"><a href="#" data-toggle="modal" data-target=".bd-example-modal-lg" title="INFO ICON"><i class="feather icon-info"></i></a></div>
                         @include('cms.layouts.icon')
@@ -76,7 +76,7 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" disabled selected>Please select</option>
                                 @foreach ($languages as $value)
-                                <option value="{{$value->value}}">{{ $value->label }}</option>
+                                <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'hidden' : '' }}>{{ $value->label }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -84,18 +84,10 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="display_sequence">Display Sequence<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <select class="form-control" id="display_sequence" name="display_sequence" style="width:200px;">
+                            <select class="form-control" id="display_sequence" name="display_sequence" style="width:200px;" {{ ($data->display_sequence) ? 'disabled' : '' }}>
                                 <option value="">Please select</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                @for ($i = 1; $i <= 10; $i++) <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
                             </select>
                         </div>
                     </div>

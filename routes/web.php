@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Cms\LanguageController;
 use App\Http\Controllers\Cms\MenuController;
+use App\Http\Controllers\Cms\NewsController;
 use App\Http\Controllers\Cms\PageController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
@@ -53,3 +54,11 @@ Route::post('/language/store', [LanguageController::class, 'store'])->name('lang
 Route::get('/language/update/{id}', [LanguageController::class, 'update'])->name('language.update');
 Route::post('/language/update', [LanguageController::class, 'update']);
 Route::delete('/language/destroy/{id}', [LanguageController::class, 'destroy'])->name('language.destroy');
+
+//news
+Route::get('/news', [NewsController::class, 'index'])->name('news.list');
+Route::get('/news/create', [NewsController::class, 'create'])->name('news.create');
+Route::post('/news/store', [NewsController::class, 'store'])->name('news.store');
+Route::get('/news/update/{id}', [NewsController::class, 'update'])->name('news.update');
+Route::post('/news/update', [NewsController::class, 'update']);
+Route::delete('/news/destroy/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
