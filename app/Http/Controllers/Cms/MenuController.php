@@ -32,11 +32,12 @@ class MenuController extends Controller
         foreach ($data as $key => $value) {
             # code...
             if ($value->parent_menu == 0) {
-                $label = MenuNavigationTranslation::where('menu_id', $value->menu_id)->value('menu_title');
-                $value->parent_title = $label;
+                // $label = MenuNavigationTranslation::where('menu_id', $value->menu_id)->value('menu_title');
+                $value->parent_title = 'As Parent';
             } else {
                 $label = MenuNavigationTranslation::where('menu_id', $value->parent_menu)->value('menu_title');
-                $value->parent_title = $label;
+                $language = MenuNavigationTranslation::where('menu_id', $value->parent_menu)->value('language_code');
+                $value->parent_title = $label . ' (' . $language . ')';
             }
         }
         return view('cms.menu.list_menu', [
@@ -54,12 +55,20 @@ class MenuController extends Controller
         if ($request) {
             $data = MenuNavigation::where('menu_id', $request->menu_id)->first();
             if ($data) {
+                $menuTitleList = MenuNavigationTranslation::where('menu_id', $data->menu_id)
+                    ->get(['menu_title', 'language_code']);
+                foreach ($menuTitleList as $key => $value) {
+                    # code...
+                    $value->titles = $value->menu_title . ' (' . $value->language_code . ')';
+                }
+                $titles = $menuTitleList->pluck('titles');
                 $data->parent_check = 1;
-                $data->language_code = $request->language_code;
+                $data->language_code = $menuTitleList->pluck('language_code');
                 return view('cms.menu.create_menu', [
                     'data' => $data,
                     'parent' => $parent,
-                    'languages' => $languages
+                    'languages' => $languages,
+                    'titles' => $titles
                 ]);
             }
         }
@@ -68,6 +77,7 @@ class MenuController extends Controller
         foreach ($fillable as $key) {
             $data->$key = null;
         }
+        $data->menu_id = null;
         $data->parent_check = null;
         $data->language_code = null;
         return view('cms.menu.create_menu', [
@@ -83,6 +93,7 @@ class MenuController extends Controller
             //code...
             DB::beginTransaction();
             $data = $request->validate([
+                'menu_id' => ['sometimes', 'integer'],
                 'parent_menu' => ['required', 'integer'],
                 'menu_title' => ['required', 'string'],
                 'menu_category' => ['required', 'integer'],
@@ -93,25 +104,40 @@ class MenuController extends Controller
                 'language_code' => ['required', 'string'],
                 'display_sequence' => ['required', 'integer'],
             ]);
-            $insertMenuNavigation = MenuNavigation::create([
-                'parent_menu' => $data['parent_menu'],
-                'on_website' => $data['on_website'],
-                'menu_category' => $data['menu_category'],
-                'icon_on_cms' => $data['icon_on_cms'],
-                'display_sequence' => $data['display_sequence']
-            ]);
-            $insertMenuNavigationTranslation = MenuNavigationTranslation::create([
-                'menu_id' => $insertMenuNavigation->menu_id,
-                'language_code' => $data['language_code'],
-                'menu_title' => $data['menu_title'],
-                'menu_web_url' => $data['menu_web_url'],
-                'menu_cms_url' => $data['menu_cms_url']
-            ]);
+            $menu_id_used = null;
+            if ($request->menu_id) {
+                $insertMenuNavigationTranslation = MenuNavigationTranslation::create([
+                    'menu_id' => $data['menu_id'],
+                    'language_code' => $data['language_code'],
+                    'menu_title' => $data['menu_title'],
+                    'menu_web_url' => $data['menu_web_url'],
+                    'menu_cms_url' => $data['menu_cms_url']
+                ]);
+                $menu_id_used = $data['menu_id'];
+            } else {
+                $insertMenuNavigation = MenuNavigation::create([
+                    'parent_menu' => $data['parent_menu'],
+                    'on_website' => $data['on_website'],
+                    'menu_category' => $data['menu_category'],
+                    'icon_on_cms' => $data['icon_on_cms'],
+                    'display_sequence' => $data['display_sequence']
+                ]);
+                $insertMenuNavigationTranslation = MenuNavigationTranslation::create([
+                    'menu_id' => $insertMenuNavigation->menu_id,
+                    'language_code' => $data['language_code'],
+                    'menu_title' => $data['menu_title'],
+                    'menu_web_url' => $data['menu_web_url'],
+                    'menu_cms_url' => $data['menu_cms_url']
+                ]);
+                $menu_id_used = $insertMenuNavigation->menu_id;
+            }
+            $languageList = MenuNavigationTranslation::where('menu_id', $menu_id_used)
+                ->pluck('language_code');
             DB::commit();
             return response()->json([
                 'message' => 'Success',
-                'id' => $insertMenuNavigation->menu_id,
-                'code' => $data['language_code']
+                'id' => $menu_id_used,
+                'code' => $languageList
             ]);
         } catch (\Throwable $th) {
             //throw $th;

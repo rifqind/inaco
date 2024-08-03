@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
-        Update Menu Navigation : {{ $data->menu_title }}
+        Update Menu Navigation (Some Data Will Change to All Possible Language) : {{ $data->menu_title }}
     </x-slot>
     <x-slot name="head"></x-slot>
     <div class="col-lg-12">
@@ -106,7 +106,7 @@
                 </form>
             </div>
         </div>
-        <div id="back" type="button" class="btn btn-success">Kembali</div>
+        <div id="back" type="button" class="btn btn-success">Back to Menu List</div>
     </div>
     <x-slot name="script">
         <script src="{{ asset('assets/js/custom/custom-menu-form.js')}}"></script>
