@@ -104,7 +104,10 @@ $("#create-subpage").validate({
                 if (data.message) {
                     Swal.fire({
                         title: "Save Successfully.",
-                        text: "Continue to input another page?",
+                        text:
+                            path == "/subpages/create"
+                                ? "Continue to input another language?"
+                                : "Continue to edit?",
                         icon: "success",
 
                         showCancelButton: true,
@@ -121,7 +124,11 @@ $("#create-subpage").validate({
                         // }
                         if (value.isConfirmed) {
                             path == "/subpages/create"
-                                ? (window.location.href = "/subpages/create")
+                                ? (window.location.href =
+                                      "/subpages/create?sub_pages_id=" +
+                                      data.id +
+                                      "&language_code=" +
+                                      data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
@@ -142,11 +149,11 @@ $("#create-subpage").validate({
 if (path == "/subpages") {
     jQuery(document).ready(() => {
         jQuery("#datatable-subpages").DataTable({
-            responsive: true,
+            responsive: false,
             columns: [
                 { width: "5%" },
                 { width: "5%" },
-                { width: "30%" },
+                { width: "25%" },
                 { width: "5%" },
                 { width: "5%" },
             ],

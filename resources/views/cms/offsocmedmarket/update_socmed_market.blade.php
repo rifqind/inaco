@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
-        Update Menu Navigation : {{ $data->menu_title }}
+        Update Social Media & Marketplace
     </x-slot>
     <x-slot name="head"></x-slot>
     <div class="col-lg-12">

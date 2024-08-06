@@ -98,7 +98,10 @@ jQuery(".form-validate").validate({
                 if (data.message) {
                     Swal.fire({
                         title: "Save Successfully.",
-                        text: "Continue to input other language?",
+                        text:
+                            window.location.pathname == "/menu/create"
+                                ? "Continue to input another language?"
+                                : "Continue to edit?",
                         icon: "success",
 
                         showCancelButton: true,

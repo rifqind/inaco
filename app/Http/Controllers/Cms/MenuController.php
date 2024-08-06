@@ -39,6 +39,8 @@ class MenuController extends Controller
                 $language = MenuNavigationTranslation::where('menu_id', $value->parent_menu)->value('language_code');
                 $value->parent_title = $label . ' (' . $language . ')';
             }
+            $languageList = MenuNavigationTranslation::where('menu_id', $value->menu_id)->pluck('language_code');
+            $value->languageList = $languageList;
         }
         return view('cms.menu.list_menu', [
             'data' => $data
@@ -158,7 +160,16 @@ class MenuController extends Controller
                 ->join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
                 ->first();
 
-            $languages = AppLanguage::select('code as value', 'name as label')->get();
+            //only shows remaining languages
+            $usedLang = MenuNavigationTranslation::where('menu_id', $data->menu_id)
+                ->where('menu_translation_id', '!=', $id)
+                ->pluck('language_code');
+            $lang = AppLanguage::pluck('code');
+            $remainingLang = $lang->diff($usedLang);
+            // $remainingLang->prepend($data->language_code);
+            // dd($remainingLang);
+            $languages = AppLanguage::whereIn('code', $remainingLang)
+                ->select('code as value', 'name as label')->get();
 
             return view('cms.menu.update_menu', [
                 'parent' => $parent,
@@ -222,10 +233,13 @@ class MenuController extends Controller
             DB::beginTransaction();
             $deleteMenuNavigationTranslation = MenuNavigationTranslation::where('menu_translation_id', $id);
             $getMenuNav = $deleteMenuNavigationTranslation->first();
-            $deleteMenuNavigation = MenuNavigation::where('menu_id', $getMenuNav->menu_id);
+            $sumOfMenuNavTrans = MenuNavigationTranslation::where('menu_id', $getMenuNav->menu_id)->count();
 
             $deleteMenuNavigationTranslation->delete();
-            $deleteMenuNavigation->delete();
+            if ($sumOfMenuNavTrans == 1) {
+                $deleteMenuNavigation = MenuNavigation::where('menu_id', $getMenuNav->menu_id);
+                $deleteMenuNavigation->delete();
+            }
             DB::commit();
 
             return response()->json([

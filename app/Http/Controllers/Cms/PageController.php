@@ -20,21 +20,52 @@ class PageController extends Controller
         $query->join('pages as p', 'p.pages_id', '=', 'pages_translation.pages_id');
         $query->join('app_language as al', 'al.code', '=', 'pages_translation.language_code');
         $query->select([
-            'pages_translation_id as id', 'pages_title', 'pages_description', 'al.name as language_name'
+            'pages_translation_id as id', 'p.pages_id', 'pages_title', 'pages_description', 'al.name as language_name'
         ]);
 
         //sementara
         $data = $query->get();
+        foreach ($data as $key => $value) {
+            # code...
+            $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
+            $value->languageList = $languageList;
+        }
         return view('cms.pages.list_page', [
             'data' => $data
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $languages = AppLanguage::select('code as value', 'name as label')->get();
+        if ($request) {
+            $data = Page::where('pages_id', $request->pages_id)->first();
+            if ($data) {
+                $pageTitleList = PageTranslation::where('pages_id', $data->pages_id)
+                    ->get(['pages_title', 'language_code']);
+                foreach ($pageTitleList as $key => $value) {
+                    # code...
+                    $value->titles = $value->pages_title . ' (' . $value->language_code . ')';
+                }
+                $titles = $pageTitleList->pluck('titles');
+                $data->language_code = $pageTitleList->pluck('language_code');
+                return view('cms.pages.create_page', [
+                    'languages' => $languages,
+                    'data' => $data,
+                    'titles' => $titles
+                ]);
+            }
+        }
+        $data = Page::first();
+        $fillable = $data->getFillable();
+        foreach ($fillable as $key) {
+            $data->$key = null;
+        }
+        $data->pages_id = null;
+        $data->language_code = null;
         return view('cms.pages.create_page', [
             'languages' => $languages,
+            'data' => $data
         ]);
     }
 
@@ -44,36 +75,60 @@ class PageController extends Controller
             //code...
             DB::beginTransaction();
             $data = $request->validate([
+                'pages_id' => ['sometimes', 'integer'],
                 'pages_title' => ['required', 'string', 'max:100'],
                 'pages_description' => ['required', 'string'],
                 'language_code' => ['required', 'string'],
                 'pages_status' => ['required', 'integer'],
-                'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
+                // 'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
-            if ($request->hasFile('pages_image')) {
-                $file = $request->file('pages_image');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = 'data/pages/' . $fileName;
-
-                $insertPage = Page::create([
-                    'create_date' => date('Y-m-d H:i:s'),
-                    'pages_image' => $fileName,
-                    'pages_status' => $data['pages_status']
+            $pages_id_used = null;
+            $pages_slug = Str::slug($data['pages_title'], '-');
+            if ($request->pages_id) {
+                $data['pages_image'] = $request->validate([
+                    'pages_image' => 'required',
                 ]);
-                $pages_slug = Str::slug($data['pages_title'], '-');
                 $insertPageTranslation = PageTranslation::create([
-                    'pages_id' => $insertPage->pages_id,
+                    'pages_id' => $data['pages_id'],
                     'language_code' => $data['language_code'],
                     'pages_title' => $data['pages_title'],
                     'pages_description' => $data['pages_description'],
                     'pages_slug' => $pages_slug,
                 ]);
-                $file->move(public_path('data/pages'), $fileName);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Success'
+                $pages_id_used = $data['pages_id'];
+            } else {
+                $data['pages_image'] = $request->validate([
+                    'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
                 ]);
+                if ($request->hasFile('pages_image')) {
+                    $file = $request->file('pages_image');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $filePath = 'data/pages/' . $fileName;
+
+                    $insertPage = Page::create([
+                        'create_date' => date('Y-m-d H:i:s'),
+                        'pages_image' => $fileName,
+                        'pages_status' => $data['pages_status']
+                    ]);
+                    $insertPageTranslation = PageTranslation::create([
+                        'pages_id' => $insertPage->pages_id,
+                        'language_code' => $data['language_code'],
+                        'pages_title' => $data['pages_title'],
+                        'pages_description' => $data['pages_description'],
+                        'pages_slug' => $pages_slug,
+                    ]);
+                    $file->move(public_path('data/pages'), $fileName);
+                    $pages_id_used = $insertPage->pages_id;
+                }
             }
+            $languageList = PageTranslation::where('pages_id', $pages_id_used)
+                ->pluck('language_code');
+            DB::commit();
+            return response()->json([
+                'message' => 'Success',
+                'id' => $pages_id_used,
+                'code' => $languageList
+            ]);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollback();
@@ -89,7 +144,6 @@ class PageController extends Controller
     public function update(Request $request, String $id = null)
     {
         if ($request->isMethod('get')) {
-            $languages = AppLanguage::select('code as value', 'name as label')->get();
             $query = PageTranslation::query();
             $query->join('pages as p', 'p.pages_id', '=', 'pages_translation.pages_id');
             $query->where('pages_translation_id', $id)
@@ -103,6 +157,16 @@ class PageController extends Controller
                     'pages_title'
                 ]);
             $data = $query->first();
+
+            //only show remaining languages
+            $usedLang = PageTranslation::where('pages_id', $data->pages_id)
+                ->where('pages_translation_id', '!=', $id)
+                ->pluck('language_code');
+            $lang = AppLanguage::pluck('code');
+            $remainingLang = $lang->diff($usedLang);
+            $languages = AppLanguage::whereIn('code', $remainingLang)
+                ->select('code as value', 'name as label')
+                ->get();
             return view('cms.pages.update_page', [
                 'languages' => $languages,
                 'data' => $data
@@ -176,11 +240,19 @@ class PageController extends Controller
             //code...
             DB::beginTransaction();
             $deletePageTranslation = PageTranslation::where('pages_translation_id', $id);
-            $getPage = $deletePageTranslation->value('pages_id');
-            $deletePage = Page::where('pages_id', $getPage);
+            $getPage = $deletePageTranslation->first();
+            $sumOfPageTrans = PageTranslation::where('pages_id', $getPage->pages_id)->count();
 
             $deletePageTranslation->delete();
-            $deletePage->delete();
+            if ($sumOfPageTrans == 1) {
+                $deletePage = Page::where('pages_id', $getPage->pages_id);
+                $fileName = $deletePage->first();
+                $filePath = 'data/subpages/' . $fileName->sub_pages_image;
+                if (isset($filePath) && File::exists(public_path($filePath))) {
+                    File::delete(public_path($filePath));
+                }
+                $deletePage->delete();
+            }
 
             DB::commit();
             return response()->json([

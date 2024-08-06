@@ -91,7 +91,10 @@ jQuery("#create-page").validate({
                 if (data.message) {
                     Swal.fire({
                         title: "Save Successfully.",
-                        text: "Continue to input another page?",
+                        text:
+                            path == "/pages/create"
+                                ? "Continue to input another language?"
+                                : "Continue to edit?",
                         icon: "success",
 
                         showCancelButton: true,
@@ -108,7 +111,11 @@ jQuery("#create-page").validate({
                         // }
                         if (value.isConfirmed) {
                             path == "/pages/create"
-                                ? (window.location.href = "/pages/create")
+                                ? (window.location.href =
+                                      "/pages/create?pages_id=" +
+                                      data.id +
+                                      "&language_code=" +
+                                      data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {

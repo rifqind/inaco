@@ -32,7 +32,9 @@
                                 <td>{{ $value->pages_title }}</td>
                                 <td>{{ $value->pages_description }}</td>
                                 <td>{{ $value->language_name }}</td>
-                                <td><a href="{{ route('pages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                <td>
+                                    <a href="{{ route('pages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                    <a href="{{ route('pages.create') }}?pages_id={{ $value->pages_id }}&language_code={{ $value->languageList }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
                                 </td>
                             </tr>
