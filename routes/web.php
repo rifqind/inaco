@@ -4,6 +4,9 @@ use App\Http\Controllers\Cms\LanguageController;
 use App\Http\Controllers\Cms\MenuController;
 use App\Http\Controllers\Cms\NewsController;
 use App\Http\Controllers\Cms\PageController;
+use App\Http\Controllers\Cms\ProductcategoryController;
+use App\Http\Controllers\Cms\ProductController;
+use App\Http\Controllers\Cms\RecipeController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
 use Illuminate\Support\Facades\Route;
@@ -62,3 +65,27 @@ Route::post('/news/store', [NewsController::class, 'store'])->name('news.store')
 Route::get('/news/update/{id}', [NewsController::class, 'update'])->name('news.update');
 Route::post('/news/update', [NewsController::class, 'update']);
 Route::delete('/news/destroy/{id}', [NewsController::class, 'destroy'])->name('news.destroy');
+
+//recipe
+Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.list');
+Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
+Route::post('/recipes/store', [RecipeController::class, 'store'])->name('recipes.store');
+Route::get('/recipes/update/{id}', [RecipeController::class, 'update'])->name('recipes.update');
+Route::post('/recipes/update', [RecipeController::class, 'update']);
+Route::delete('/recipes/destroy/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
+
+//products
+Route::get('/products', [ProductController::class, 'index'])->name('products.list');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/update/{id}', [ProductController::class, 'update'])->name('products.update');
+Route::post('/products/update', [ProductController::class, 'update']);
+Route::delete('/products/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+//product-category
+Route::get('/products-category', [ProductcategoryController::class, 'index'])->name('products-category.list');
+Route::get('/products-category/create', [ProductcategoryController::class, 'create'])->name('products-category.create');
+Route::post('/products-category/store', [ProductcategoryController::class, 'store'])->name('products-category.store');
+Route::get('/products-category/update/{id}', [ProductcategoryController::class, 'update'])->name('products-category.update');
+Route::post('/products-category/update', [ProductcategoryController::class, 'update']);
+Route::delete('/products-category/destroy/{id}', [ProductcategoryController::class, 'destroy'])->name('products-category.destroy');
