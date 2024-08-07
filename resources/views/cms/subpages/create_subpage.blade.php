@@ -20,7 +20,7 @@
                 <!-- h6 class="card-subtitle">Basic form validation.</h6 -->
                 <form class="form-validate" id="create-subpage" action="" method="post" enctype="multipart/form-data">
                     @csrf
-                    {{ $data }}
+                    <!-- {{ $data }} -->
                     @if ($data->sub_pages_id)
                     <input type="hidden" value="{{ $data->sub_pages_id }}" name="sub_pages_id">
                     @endif

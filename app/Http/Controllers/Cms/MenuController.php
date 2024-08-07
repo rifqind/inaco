@@ -74,7 +74,7 @@ class MenuController extends Controller
                 ]);
             }
         }
-        $data = MenuNavigation::first();
+        $data = new MenuNavigation();
         $fillable = $data->getFillable();
         foreach ($fillable as $key) {
             $data->$key = null;

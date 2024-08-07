@@ -104,7 +104,7 @@ class SubpageController extends Controller
                 ]);
             }
         }
-        $data = Subpage::first();
+        $data = new Subpage();
         $fillable = $data->getFillable();
         foreach ($fillable as $key) {
             $data->$key = null;

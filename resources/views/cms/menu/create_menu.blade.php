@@ -17,7 +17,7 @@
                 <!-- h6 class="card-subtitle">Basic form validation.</h6 -->
                 <form class="form-validate" action="{{ route('menu.store') }}" method="post">
                     @csrf
-                    {{ $data }}
+                    <!-- {{ $data }} -->
                     @if ($data->menu_id)
                     <input type="hidden" value="{{ $data->menu_id }}" name="menu_id">
                     @endif

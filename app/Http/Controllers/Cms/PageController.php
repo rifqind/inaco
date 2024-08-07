@@ -56,7 +56,7 @@ class PageController extends Controller
                 ]);
             }
         }
-        $data = Page::first();
+        $data = new Page();
         $fillable = $data->getFillable();
         foreach ($fillable as $key) {
             $data->$key = null;
@@ -247,7 +247,7 @@ class PageController extends Controller
             if ($sumOfPageTrans == 1) {
                 $deletePage = Page::where('pages_id', $getPage->pages_id);
                 $fileName = $deletePage->first();
-                $filePath = 'data/subpages/' . $fileName->sub_pages_image;
+                $filePath = 'data/pages/' . $fileName->pages_image;
                 if (isset($filePath) && File::exists(public_path($filePath))) {
                     File::delete(public_path($filePath));
                 }

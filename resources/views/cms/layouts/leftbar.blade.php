@@ -65,8 +65,8 @@
                         <i class="ion ion-ios-book"></i><span>News</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="list_news.php?article">Articles</a></li>
-                        <li><a href="list_news.php?press_release">Press Release</a></li>
+                        <li><a href="{{ route('news.list') }}?news_category=1">Articles</a></li>
+                        <li><a href="{{ route('news.list') }}?news_category=2">Press Release</a></li>
                     </ul>
                 </li>
 
