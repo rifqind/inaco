@@ -33,7 +33,7 @@
                         <i class="ion ion-logo-buffer"></i><span>Products</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="list_product_category.php">Category</a></li>
+                        <li><a href="{{ route('products-category.list') }}">Category</a></li>
                         <li><a href="list_product.php">SKU</a></li>
                     </ul>
                 </li>

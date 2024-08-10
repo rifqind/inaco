@@ -109,7 +109,7 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">News Image<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="file" class="form-control-file" id="news_image" name="news_image">
+                            <input type="file" style="width:200px;" class="form-control-file" id="news_image" name="news_image">
                             <div class="invalid-feedback">Please select an image</div>
                         </div>
                     </div>

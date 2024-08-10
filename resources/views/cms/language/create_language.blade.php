@@ -29,7 +29,7 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">Icon Image<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="file" class="form-control-file" id="icon_image" name="icon_image">
+                            <input type="file" style="width:200px;" class="form-control-file" id="icon_image" name="icon_image">
                             <div class="invalid-feedback">Please select an image</div>
                         </div>
                     </div>
