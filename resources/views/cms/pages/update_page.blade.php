@@ -68,9 +68,9 @@
                         </div>
                     </div>
                 </form>
+                <div id="back" type="button" class="btn btn-success">Back to Pages List</div>
             </div>
         </div>
-        <div id="back" type="button" class="btn btn-success">Back to Pages List</div>
     </div>
     <x-slot name="script">
         <script src="{{ asset('assets/js/custom/custom-page.js')}}"></script>

@@ -3,7 +3,9 @@
         Dashboard
     </x-slot>
     <x-slot name="head"></x-slot>
-    <h1>Hello World</h1>
+    <div class="container-fluid">
+        <h1>Halaman Belum Ada</h1>
+    </div>
     <x-slot name="script">
 
     </x-slot>

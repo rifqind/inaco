@@ -12,7 +12,7 @@
         <div class="navigationbar">
             <ul class="vertical-menu">
                 <li>
-                    <a href="{{url('/')}}">
+                    <a href="/">
                         <i class="ion ion-md-home"></i><span>Home - Banner</span>
                     </a>
                 </li>
@@ -21,11 +21,11 @@
                         <i class="ion ion-ios-business"></i><span>Company</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Company Profile</a></li>
-                        <li><a href="#">Factory Tour</a></li>
-                        <li><a href="#">Awards</a></li>
-                        <li><a href="#">Find Us</a></li>
+                        <li><a href="/">About Us</a></li>
+                        <li><a href="/">Company Profile</a></li>
+                        <li><a href="/">Factory Tour</a></li>
+                        <li><a href="/">Awards</a></li>
+                        <li><a href="/">Find Us</a></li>
                     </ul>
                 </li>
                 <li>
@@ -47,8 +47,8 @@
                         <i class="ion ion-ios-map"></i><span>Distributors</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="#">Local</a></li>
-                        <li><a href="#">Abroad</a></li>
+                        <li><a href="/">Local</a></li>
+                        <li><a href="/">Abroad</a></li>
                     </ul>
                 </li>
                 <li>
@@ -56,8 +56,8 @@
                         <i class="ion ion-ios-globe"></i><span>International Market</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="#">Country</a></li>
-                        <li><a href="#">Products Export</a></li>
+                        <li><a href="/">Country</a></li>
+                        <li><a href="/">Products Export</a></li>
                     </ul>
                 </li>
                 <li>
@@ -96,9 +96,9 @@
                         <i class="ion ion-md-people"></i><span>Users Management</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="#">Roles</a></li>
-                        <li><a href="#">Permissions</a></li>
-                        <li><a href="#">Users</a></li>
+                        <li><a href="/">Roles</a></li>
+                        <li><a href="/">Permissions</a></li>
+                        <li><a href="/">Users</a></li>
                     </ul>
                 </li>
                 <li>

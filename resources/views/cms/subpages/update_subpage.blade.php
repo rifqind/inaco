@@ -10,32 +10,39 @@
         <div class="card m-b-30">
             <div class="card-body">
                 <!-- h6 class="card-subtitle">Basic form validation.</h6 -->
-                <form class="form-validate" id="create-subpage" action="" method="post" enctype="multipart/form-data">
+                <form class="form-validate" id="create-subpage" action="" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <input id="data-id" name="sub_pages_translation_id" type="hidden" value="{{ $data->id }}">
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="pages_id">Page<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="pages_id">Page<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <select class="select2-single form-control" id="pages_id" name="pages_id" style="width:200px;">
+                            <select class="select2-single form-control" id="pages_id" name="pages_id"
+                                style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($pages as $value)
-                                <option value="{{ $value->value }}" {{ $data->pages_id == $value->value ? 'selected' : '' }}>
-                                    {{ $value->label }}
-                                </option>
+                                    <option value="{{ $value->value }}"
+                                        {{ $data->pages_id == $value->value ? 'selected' : '' }}>
+                                        {{ $value->label }}
+                                    </option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select the page</div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="sub_pages_title">Title<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="sub_pages_title">Title<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" value="{{ $data->sub_pages_title }}" class="form-control" id="sub_pages_title" name="sub_pages_title" placeholder="Enter Title">
+                            <input type="text" value="{{ $data->sub_pages_title }}" class="form-control"
+                                id="sub_pages_title" name="sub_pages_title" placeholder="Enter Title">
                             <div class="invalid-feedback">Please enter the title</div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="sub_pages_description">Content Description <span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="sub_pages_description">Content Description <span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <textarea id="summernote" name="sub_pages_description" rows="5" placeholder="Enter Content." class="form-control">
                                 {{ $data->sub_pages_description }}
@@ -44,33 +51,43 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="language_code">Language<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="language_code">Language<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" disabled selected>Please select</option>
                                 @foreach ($languages as $value)
-                                <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'selected' : '' }}>{{ $value->label }}</option>
+                                    <option value="{{ $value->value }}"
+                                        {{ $data->language_code == $value->value ? 'selected' : '' }}>
+                                        {{ $value->label }}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="">Sub Page Image<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="">Sub Page Image<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="file" class="form-control-file" id="sub_pages_image" name="sub_pages_image_update">
+                            <input type="file" class="form-control-file" id="sub_pages_image"
+                                name="sub_pages_image_update">
                             <div class="">Please select an updated image if exists</div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="val-phoneus">Sub Page Status<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="val-phoneus">Sub Page Status<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="sub_pages_status" id="sub_pages_status1" value="1" {{ $data->sub_pages_status == 1 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="sub_pages_status"
+                                    id="sub_pages_status1" value="1"
+                                    {{ $data->sub_pages_status == 1 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="sub_pages_status1">Active</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="sub_pages_status" id="sub_pages_status2" value="0" {{ $data->sub_pages_status == 0 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="sub_pages_status"
+                                    id="sub_pages_status2" value="0"
+                                    {{ $data->sub_pages_status == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="sub_pages_status2">Inactive</label>
                             </div>
                         </div>
@@ -82,12 +99,12 @@
                         </div>
                     </div>
                 </form>
+                <div id="back" type="button" class="btn btn-success">Back to Sub Pages List</div>
             </div>
         </div>
-        <div id="back" type="button" class="btn btn-success">Back to Sub Pages List</div>
     </div>
     <x-slot name="script">
-        <script src="{{ asset('assets/js/custom/custom-subpage.js')}}"></script>
+        <script src="{{ asset('assets/js/custom/custom-subpage.js') }}"></script>
         <!-- Summernote JS -->
         <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
         <script src="{{ asset('assets/js/custom/custom-form-editor.js') }}"></script>

@@ -191,6 +191,7 @@ code {
 .contentbar {
   padding: 15px;
   margin-bottom: 30px;
+  /* overflow-y: scroll; */
 }
 
 .footerbar {

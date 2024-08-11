@@ -11,58 +11,76 @@
                     @csrf
                     <h4 class="m-b-30">Social Media</h4>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="instagram">Instagram Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="instagram">Instagram Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="instagram" name="instagram" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="instagram" name="instagram"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="facebook">Facebook Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="facebook">Facebook Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="facebook" name="facebook" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="facebook" name="facebook"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="tiktok">Tiktok Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="tiktok">Tiktok Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="tiktok" name="tiktok" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="tiktok" name="tiktok"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="youtube">Youtube Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="youtube">Youtube Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="youtube" name="youtube" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="youtube" name="youtube"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row m-b-30">
-                        <label class="col-lg-3 col-form-label" for="twitter">Twitter Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="twitter">Twitter Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="twitter" name="twitter" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="twitter" name="twitter"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <h4 class="m-b-30">Marketplace</h4>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="shopee">Shopee Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="shopee">Shopee Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="shopee" name="shopee" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="shopee" name="shopee"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="tokopedia">Tokopedia Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="tokopedia">Tokopedia Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="tokopedia" name="tokopedia" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="tokopedia" name="tokopedia"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="lazada">Lazada Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="lazada">Lazada Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="lazada" name="lazada" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="lazada" name="lazada"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="tiktokshop">Tiktokshop Link<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="tiktokshop">Tiktokshop Link<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="tiktokshop" name="tiktokshop" placeholder="Enter Link">
+                            <input type="text" class="form-control" id="tiktokshop" name="tiktokshop"
+                                placeholder="Enter Link">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -72,12 +90,12 @@
                         </div>
                     </div>
                 </form>
+                <div id="back-socmed" type="button" class="btn btn-success m-r-10">Back to Social Media</div>
+                <div id="back-marketplace" type="button" class="btn btn-info">Back to Marketplace</div>
             </div>
         </div>
-        <div id="back-socmed" type="button" class="btn btn-success m-r-10">Back to Social Media</div>
-        <div id="back-marketplace" type="button" class="btn btn-info">Back to Marketplace</div>
     </div>
     <x-slot name="script">
-        <script src="{{ asset('assets/js/custom/custom-socmed-market.js')}}"></script>
+        <script src="{{ asset('assets/js/custom/custom-socmed-market.js') }}"></script>
     </x-slot>
 </x-app-layout>
