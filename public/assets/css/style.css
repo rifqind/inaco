@@ -30893,6 +30893,81 @@ canvas {
 
 /* 
 --------------------------------------
+    : Custom - Login css :
+--------------------------------------
+*/
+.login-box .form-control {
+  background-color: #F2F2F2;
+  font-size: 14px;
+  color: #8A98AC;
+  border: 0;
+  border-radius: 7px;
+  padding: 11px 16px;
+  height: auto;
+  border: 1px solid #e5e5e5;
+}
+.login-box button {
+  font-weight: bold !important;
+  text-transform: uppercase;
+  border-radius: 6px;
+  padding: 11px 0;
+  background: linear-gradient(270deg, #ed1f24, #960d11);
+  border: 0;
+  font-size: 16px !important;
+  margin-top: 30px;
+}
+.login-box label {
+    color: #444;
+    text-align: left !important;
+    font-weight: 600;
+    display: block;
+    font-size: 10pt;
+    padding-left: 10px;
+    margin-bottom: 4px;
+}
+.login-box .form-head {
+  border: 0 !important;
+  margin: 0 0 10px !important;
+  text-align: center;
+}
+.login-box .form-footer {
+  border: 0 !important;
+  margin: 0 !important;
+  padding-bottom: 0 !important;
+  text-align: center;
+  margin-top: 30px !important;
+}
+.login-box h4.page-title.my-4 {
+  text-align: center;
+  font-weight: 900;
+  margin-top: 0 !important;
+  font-size: 22pt;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+.login-box .form-head img {
+  height: 50px;
+  width: auto !important;
+}
+.auth-box.login-box .auth-box-right .card {
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 20px;
+}
+.auth-box.login-box .auth-box-right .card .card-body {
+  padding: 40px 50px 0;
+}
+img.img-maskot {
+  position: relative;
+  height: 140px !important;
+  right: 0;
+  bottom: 0;
+  margin-bottom: -15px;
+}
+
+
+/* 
+--------------------------------------
     : Custom - Form Elements css :
 --------------------------------------
 */
@@ -33289,6 +33364,7 @@ input[type=range]:focus {
   background-size: cover;
   background-position: center;
   min-height: 100vh;
+  background: #f2f5fa;
 }
 
 .auth-box > .row {

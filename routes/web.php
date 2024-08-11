@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('cms.dashboard');
 });
+Route::get('/login', function () {
+    return view('cms.login');
+});
 
 //menu
 Route::get('/menu', [MenuController::class, 'index'])->name('menu.list');
