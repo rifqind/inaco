@@ -22,3 +22,23 @@
 <!-- <script src="{{asset('assets/js/custom/custom-sweet-alert.js')}}"></script> -->
 <!-- Core js -->
 <script src="{{asset('assets/js/core.js')}}"></script>
+<script type="text/javascript">
+    document.getElementById('logout').addEventListener('click', () => {
+        $.ajax({
+            url: 'logout',
+            type: 'POST',
+            data: {
+                _token: jQuery('meta[name="csrf-token"]').attr(
+                    "content"
+                ),
+            },
+            success: () => {
+                console.log('Logged out')
+                window.location.href = '/'
+            },
+            error: () => {
+                alert('Something went wrong')
+            }
+        });
+    })
+</script>

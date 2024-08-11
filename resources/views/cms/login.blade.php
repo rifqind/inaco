@@ -35,15 +35,16 @@
                             </div>
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="list_page.php">
+                                    <form action="{{ route('login') }}" method="POST" id="form-login">
+                                        @csrf
                                         <h4 class="page-title my-4">CMS - Login</h4>
                                         <div class="form-group">
-                                            <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" placeholder="Enter Email here" required>
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email here" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" placeholder="Enter Password here" required>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password here" required>
                                         </div>
                                         <button type="submit" class="btn btn-danger btn-lg btn-block font-18">Login</button>
                                     </form>
@@ -70,6 +71,25 @@
     <script src="{{ asset('assets/js/modernizr.min.js') }}"></script>
     <script src="{{ asset('assets/js/detect.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.slimscroll.js') }}"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('form-login').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const data = $('#form-login').serialize();
+                $.ajax({
+                    url: '/login',
+                    data: data,
+                    method: 'POST',
+                    success: (data) => {
+                        window.location.href = '/'
+                    },
+                    error: () => {
+
+                    }
+                })
+            })
+        })
+    </script>
     <!-- End js -->
 </body>
 

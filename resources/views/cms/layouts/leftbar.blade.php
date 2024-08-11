@@ -38,7 +38,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="list_recipe.php">
+                    <a href="{{ route('recipes.list') }}">
                         <i class="ion ion-md-wine"></i><span>Recipe</span>
                     </a>
                 </li>
@@ -105,11 +105,14 @@
                     <hr />
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="ion ion-ios-log-out"></i><span>Logout</span>
+                    <a href="javaScript:void();" id="logout">
+                        <i class="ion ion-ios-log-out">
+                            <form action="{{ route('logout') }}" method="POST" id="logout-button">
+                            </form>
+                        </i>
+                        <span>Logout</span>
                     </a>
                 </li>
-
             </ul>
         </div>
         <!-- End Navigationbar -->
