@@ -34,7 +34,7 @@
                     </a>
                     <ul class="vertical-submenu">
                         <li><a href="{{ route('products-category.list') }}">Category</a></li>
-                        <li><a href="list_product.php">SKU</a></li>
+                        <li><a href="{{ route('products.list') }}">SKU</a></li>
                     </ul>
                 </li>
                 <li>
