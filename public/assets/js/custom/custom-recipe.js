@@ -93,7 +93,7 @@ $(document).ready(function () {
             }).then((value) => {
                 if (value.isConfirmed) {
                     jQuery.ajax({
-                        url: "/recipes/destroy/" + id,
+                        url: "/webappcms/recipes/destroy/" + id,
                         type: "DELETE",
                         data: {
                             _token: jQuery('meta[name="csrf-token"]').attr(

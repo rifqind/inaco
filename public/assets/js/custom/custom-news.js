@@ -83,7 +83,7 @@ jQuery("#create-news").validate({
         const form = document.getElementById("create-news");
         let formData = new FormData(form);
         jQuery.ajax({
-            url: path == "/news/create" ? "/news/store" : "/news/update",
+            url: path == "/webappcms/news/create" ? "/webappcms/news/store" : "/webappcms/news/update",
             type: "POST",
             data: formData,
             headers: {
@@ -98,7 +98,7 @@ jQuery("#create-news").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/news/create"
+                            path == "/webappcms/news/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -116,9 +116,9 @@ jQuery("#create-news").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/news/create"
+                            path == "/webappcms/news/create"
                                 ? (window.location.href =
-                                      "/news/create?news_id=" +
+                                      "/webappcms/news/create?news_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
@@ -126,7 +126,7 @@ jQuery("#create-news").validate({
                         }
                         if (value.isDismissed) {
                             window.location.href =
-                                "/news?news_category=" + data.category; // Ganti dengan URL tujuan Anda
+                                "/webappcms/news?news_category=" + data.category; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -139,7 +139,7 @@ jQuery("#create-news").validate({
         });
     },
 });
-if (path == "/news") {
+if (path == "/webappcms/news") {
     document.addEventListener("DOMContentLoaded", () => {
         jQuery("#datatable-news")
             .DataTable({
@@ -176,7 +176,7 @@ if (path == "/news") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/news/destroy/" + id,
+                            url: "/webappcms/news/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(
@@ -217,6 +217,6 @@ if (path == "/news") {
         const params = new URLSearchParams(window.location.search);
         const category = params.get("news_category");
 
-        window.location.href = "/news?news_category=" + category;
+        window.location.href = "/webappcms/news?news_category=" + category;
     });
 }

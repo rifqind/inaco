@@ -1,7 +1,7 @@
 "use strict";
 var path = window.location.pathname;
 
-if (path == "/products-category") {
+if (path == "/webappcms/products-category") {
     document.addEventListener("DOMContentLoaded", () => {
         jQuery("#datatable-products-category")
             .DataTable({
@@ -36,7 +36,7 @@ if (path == "/products-category") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/products-category/destroy/" + id,
+                            url: "/webappcms/products-category/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(
@@ -74,7 +74,7 @@ if (path == "/products-category") {
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {
-        window.location.href = "/products-category";
+        window.location.href = "/webappcms/products-category";
     });
 }
 
@@ -150,9 +150,9 @@ jQuery("#create-products-category").validate({
         let formData = new FormData(form);
         jQuery.ajax({
             url:
-                path == "/products-category/create"
-                    ? "/products-category/store"
-                    : "/products-category/update",
+                path == "/webappcms/products-category/create"
+                    ? "/webappcms/products-category/store"
+                    : "/webappcms/products-category/update",
             type: "POST",
             data: formData,
             headers: {
@@ -167,7 +167,7 @@ jQuery("#create-products-category").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/products-category/create"
+                            path == "/webappcms/products-category/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -185,16 +185,16 @@ jQuery("#create-products-category").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/products-category/create"
+                            path == "/webappcms/products-category/create"
                                 ? (window.location.href =
-                                      "/products-category/create?category_id=" +
+                                      "/webappcms/products-category/create?category_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/products-category"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/products-category"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {

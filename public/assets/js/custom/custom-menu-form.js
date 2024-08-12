@@ -5,7 +5,7 @@
 */
 "use strict";
 jQuery("#back").on("click", () => {
-    window.location.href = "/menu";
+    window.location.href = "/webappcms/menu";
 });
 jQuery(".form-validate").validate({
     ignore: [],
@@ -89,9 +89,9 @@ jQuery(".form-validate").validate({
         event.preventDefault();
         jQuery.ajax({
             url:
-                window.location.pathname == "/menu/create"
-                    ? "/menu/store"
-                    : "/menu/update",
+                window.location.pathname == "/webappcms/menu/create"
+                    ? "/webappcms/menu/store"
+                    : "/webappcms/menu/update",
             type: "POST",
             data: jQuery(".form-validate").serialize(),
             success: (data) => {
@@ -99,7 +99,7 @@ jQuery(".form-validate").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            window.location.pathname == "/menu/create"
+                            window.location.pathname == "/webappcms/menu/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -117,16 +117,16 @@ jQuery(".form-validate").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            window.location.pathname == "/menu/create"
+                            window.location.pathname == "/webappcms/menu/create"
                                 ? (window.location.href =
-                                      "/menu/create?menu_id=" +
+                                      "/webappcms/menu/create?menu_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/menu"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/menu"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -139,7 +139,7 @@ jQuery(".form-validate").validate({
         });
     },
 });
-if (window.location.pathname == "/menu") {
+if (window.location.pathname == "/webappcms/menu") {
     jQuery(document).ready(() => {
         // jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
         // e.preventDefault();
@@ -164,7 +164,7 @@ if (window.location.pathname == "/menu") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/menu/destroy/" + id,
+                            url: "/webappcms/menu/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(

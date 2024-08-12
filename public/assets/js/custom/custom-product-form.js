@@ -107,9 +107,9 @@ jQuery(".form-validate").validate({
         let formData = new FormData(form);
         jQuery.ajax({
             url:
-                path == "/products/create"
-                    ? "/products/store"
-                    : "/products/update",
+                path == "/webappcms/products/create"
+                    ? "/webappcms/products/store"
+                    : "/webappcms/products/update",
             type: "POST",
             data: formData,
             headers: {
@@ -124,7 +124,7 @@ jQuery(".form-validate").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/products/create"
+                            path == "/webappcms/products/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -142,16 +142,16 @@ jQuery(".form-validate").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/products/create"
+                            path == "/webappcms/products/create"
                                 ? (window.location.href =
-                                      "/products/create?product_id=" +
+                                      "/webappcms/products/create?product_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/products"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/products"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -199,5 +199,5 @@ $("#imageContainer").on("click", ".removeImage", function () {
 });
 
 document.getElementById("back").addEventListener("click", () => {
-    window.location.href = "/products";
+    window.location.href = "/webappcms/products";
 });

@@ -77,11 +77,11 @@
                 e.preventDefault();
                 const data = $('#form-login').serialize();
                 $.ajax({
-                    url: '/login',
+                    url: 'login',
                     data: data,
                     method: 'POST',
                     success: (data) => {
-                        window.location.href = '/'
+                        window.location.href = '/webappcms'
                     },
                     error: () => {
 

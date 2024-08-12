@@ -1,10 +1,10 @@
 "use strict";
 var path = window.location.pathname;
 jQuery("#back-socmed").on("click", () => {
-    window.location.href = "/social-media";
+    window.location.href = "/webappcms/social-media";
 });
 jQuery("#back-marketplace").on("click", () => {
-    window.location.href = "/marketplace";
+    window.location.href = "/webappcms/marketplace";
 });
 jQuery(".form-validate").validate({
     ignore: [],
@@ -121,7 +121,7 @@ jQuery(".form-validate").validate({
                         denyButtonText: "Back to Social Media",
                     }).then(function (value) {
                         if (value.isDenied) {
-                            window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/social-media"; // Ganti dengan URL tujuan Anda
                         }
                         if (value.isConfirmed) {
                             path == "/socmed-marketplace/create"
@@ -130,7 +130,7 @@ jQuery(".form-validate").validate({
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/marketplace"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/marketplace"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -143,7 +143,7 @@ jQuery(".form-validate").validate({
         });
     },
 });
-if (path == "/social-media" || path == "/marketplace") {
+if (path == "/webappcms/social-media" || path == "/webappcms/marketplace") {
     jQuery(document).ready(() => {
         jQuery("#datatable-socmed")
             .DataTable({

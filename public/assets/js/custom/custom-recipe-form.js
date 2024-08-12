@@ -59,7 +59,7 @@ $(document).ready(function () {
     });
 
     document.getElementById("back").addEventListener("click", () => {
-        window.location.href = "/recipes";
+        window.location.href = "/webappcms/recipes";
     });
 });
 jQuery(".form-validate").validate({
@@ -134,9 +134,9 @@ jQuery(".form-validate").validate({
         let formData = new FormData(form);
         jQuery.ajax({
             url:
-                path == "/recipes/create"
-                    ? "/recipes/store"
-                    : "/recipes/update",
+                path == "/webappcms/recipes/create"
+                    ? "/webappcms/recipes/store"
+                    : "/webappcms/recipes/update",
             type: "POST",
             data: formData,
             headers: {
@@ -151,7 +151,7 @@ jQuery(".form-validate").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/recipes/create"
+                            path == "/webappcms/recipes/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -169,16 +169,16 @@ jQuery(".form-validate").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/recipes/create"
+                            path == "/webappcms/recipes/create"
                                 ? (window.location.href =
-                                      "/recipes/create?recipe_id=" +
+                                      "/webappcms/recipes/create?recipe_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/recipes"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/recipes"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {

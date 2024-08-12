@@ -68,7 +68,7 @@ $(document).ready(function () {
             }).then((value) => {
                 if (value.isConfirmed) {
                     jQuery.ajax({
-                        url: "/products/destroy/" + id,
+                        url: "/webappcms/products/destroy/" + id,
                         type: "DELETE",
                         data: {
                             _token: jQuery('meta[name="csrf-token"]').attr(

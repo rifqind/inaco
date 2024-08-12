@@ -56,9 +56,9 @@ jQuery("#create-language").validate({
         let formData = new FormData(form);
         jQuery.ajax({
             url:
-                path == "/language/create"
-                    ? "/language/store"
-                    : "/language/update",
+                path == "/webappcms/language/create"
+                    ? "/webappcms/language/store"
+                    : "/webappcms/language/update",
             type: "POST",
             data: formData,
             headers: {
@@ -88,13 +88,13 @@ jQuery("#create-language").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/language/create"
-                                ? (window.location.href = "/language/create")
+                            path == "/webappcms/language/create"
+                                ? (window.location.href = "/webappcms/language/create")
                                 : (window.location.href =
-                                      "/language/update/" + data.code); // Ganti dengan URL tujuan Anda
+                                      "/webappcms/language/update/" + data.code); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/language"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/language"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -108,7 +108,7 @@ jQuery("#create-language").validate({
     },
 });
 
-if (path == "/language") {
+if (path == "/webappcms/language") {
     document.addEventListener("DOMContentLoaded", () => {
         jQuery("#datatable-language")
             .DataTable({
@@ -143,7 +143,7 @@ if (path == "/language") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/language/destroy/" + id,
+                            url: "/webappcms/language/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(
@@ -181,6 +181,6 @@ if (path == "/language") {
     });
 } else {
     document.getElementById("back").addEventListener("click", (e) => {
-        window.location.href = "/language";
+        window.location.href = "/webappcms/language";
     });
 }

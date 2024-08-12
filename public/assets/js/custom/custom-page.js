@@ -77,7 +77,7 @@ jQuery("#create-page").validate({
         const form = document.getElementById("create-page");
         let formData = new FormData(form);
         jQuery.ajax({
-            url: path == "/pages/create" ? "/pages/store" : "/pages/update",
+            url: path == "/webappcms/pages/create" ? "/webappcms/pages/store" : "/webappcms/pages/update",
             type: "POST",
             data: formData,
             headers: {
@@ -92,7 +92,7 @@ jQuery("#create-page").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/pages/create"
+                            path == "/webappcms/pages/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -110,16 +110,16 @@ jQuery("#create-page").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/pages/create"
+                            path == "/webappcms/pages/create"
                                 ? (window.location.href =
-                                      "/pages/create?pages_id=" +
+                                      "/webappcms/pages/create?pages_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/pages"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/pages"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -138,7 +138,7 @@ $("#val-page").on("change", function () {
     $(this).valid();
 });
 
-if (path == "/pages") {
+if (path == "/webappcms/pages") {
     jQuery(document).ready(() => {
         jQuery("#datatable-pages")
             .DataTable({
@@ -173,7 +173,7 @@ if (path == "/pages") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/pages/destroy/" + id,
+                            url: "/webappcms/pages/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(
@@ -211,6 +211,6 @@ if (path == "/pages") {
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {
-        window.location.href = "/pages";
+        window.location.href = "/webappcms/pages";
     });
 }

@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::CMSHOME);
         // return redirect;
     }
 
@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->intended('login');
+        return redirect()->intended('webappcms/login');
         // return Inertia::render('/');
         // ->intended(RouteServiceProvider::HOME);
     }

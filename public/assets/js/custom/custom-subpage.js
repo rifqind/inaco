@@ -88,9 +88,9 @@ $("#create-subpage").validate({
         let formData = new FormData(form);
         jQuery.ajax({
             url:
-                path == "/subpages/create"
-                    ? "/subpages/store"
-                    : "/subpages/update",
+                path == "/webappcms/subpages/create"
+                    ? "/webappcms/subpages/store"
+                    : "/webappcms/subpages/update",
             type: "POST",
             data: formData,
             headers: {
@@ -105,7 +105,7 @@ $("#create-subpage").validate({
                     Swal.fire({
                         title: "Save Successfully.",
                         text:
-                            path == "/subpages/create"
+                            path == "/webappcms/subpages/create"
                                 ? "Continue to input another language?"
                                 : "Continue to edit?",
                         icon: "success",
@@ -123,16 +123,16 @@ $("#create-subpage").validate({
                         //     window.location.href = "/social-media"; // Ganti dengan URL tujuan Anda
                         // }
                         if (value.isConfirmed) {
-                            path == "/subpages/create"
+                            path == "/webappcms/subpages/create"
                                 ? (window.location.href =
-                                      "/subpages/create?sub_pages_id=" +
+                                      "/webappcms/subpages/create?sub_pages_id=" +
                                       data.id +
                                       "&language_code=" +
                                       data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/subpages"; // Ganti dengan URL tujuan Anda
+                            window.location.href = "/webappcms/subpages"; // Ganti dengan URL tujuan Anda
                         }
                     });
                 } else if (data.error) {
@@ -146,7 +146,7 @@ $("#create-subpage").validate({
     },
 });
 
-if (path == "/subpages") {
+if (path == "/webappcms/subpages") {
     jQuery(document).ready(() => {
         jQuery("#datatable-subpages").DataTable({
             responsive: false,
@@ -178,7 +178,7 @@ if (path == "/subpages") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/subpages/destroy/" + id,
+                            url: "/webappcms/subpages/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(
@@ -216,6 +216,6 @@ if (path == "/subpages") {
     });
 } else {
     document.getElementById("back").addEventListener("click", (e) => {
-        window.location.href = "/subpages";
+        window.location.href = "/webappcms/subpages";
     });
 }
