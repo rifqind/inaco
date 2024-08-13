@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Cms\AuthenticatedSessionController;
+use App\Http\Controllers\Cms\DistributorController;
 use App\Http\Controllers\Cms\LanguageController;
 use App\Http\Controllers\Cms\MenuController;
 use App\Http\Controllers\Cms\NewsController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Cms\ProductController;
 use App\Http\Controllers\Cms\RecipeController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/webappcms/login', function () {
@@ -101,4 +103,45 @@ Route::middleware('auth')->group(function () {
     Route::get('/webappcms/products-category/update/{id}', [ProductcategoryController::class, 'update'])->name('products-category.update');
     Route::post('/webappcms/products-category/update', [ProductcategoryController::class, 'update']);
     Route::delete('/webappcms/products-category/destroy/{id}', [ProductcategoryController::class, 'destroy'])->name('products-category.destroy');
+
+    //distributors
+    Route::get('/webappcms/distributor', [DistributorController::class, 'index'])->name('distributor.list');
+    Route::get('/webappcms/distributor/create', [DistributorController::class, 'create'])->name('distributor.create');
+    Route::post('/webappcms/distributor/store', [DistributorController::class, 'store'])->name('distributor.store');
+    Route::get('/webappcms/distributor/update/{id}', [DistributorController::class, 'update'])->name('distributor.update');
+    Route::post('/webappcms/distributor/update', [DistributorController::class, 'update']);
+    Route::delete('/webappcms/distributor/destroy/{id}', [DistributorController::class, 'destroy'])->name('distributor.destroy');
+
+    Route::get('/fetch/province/{id}', function (String $id) {
+        $target = DB::table('ref_province')->where('country_id', $id)
+            ->get([
+                'code as value',
+                'name as label'
+            ]);
+        return response()->json($target);
+    });
+    Route::get('/fetch/city/{id}', function (String $id) {
+        $target = DB::table('ref_city')->where('province_id', $id)
+            ->get([
+                'code as value',
+                'name as label'
+            ]);
+        return response()->json($target);
+    });
+    Route::get('/fetch/district/{id}', function (String $id) {
+        $target = DB::table('ref_district')->where('city_id', $id)
+            ->get([
+                'code as value',
+                'name as label'
+            ]);
+        return response()->json($target);
+    });
+    Route::get('/fetch/subdistrict/{id}', function (String $id) {
+        $target = DB::table('ref_subdistrict')->where('district', $id)
+            ->get([
+                'code as value',
+                'name as label'
+            ]);
+        return response()->json($target);
+    });
 });

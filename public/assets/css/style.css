@@ -236,6 +236,18 @@ code {
   background: transparent;
 }
 
+
+
+/* 
+-------------------------------
+    : Custom - Datatables :
+-------------------------------
+*/
+div#datatable-subpages_wrapper td:last-child,div#datatable-menu td:last-child,table#datatable-socmed td:last-child,.table.dataTable td:last-child{
+    white-space: nowrap;
+}
+
+
 /* 
 -------------------------------
     : Custom - Helper css :

@@ -20,13 +20,29 @@ class PageController extends Controller
         $query->join('pages as p', 'p.pages_id', '=', 'pages_translation.pages_id');
         $query->join('app_language as al', 'al.code', '=', 'pages_translation.language_code');
         $query->select([
-            'pages_translation_id as id', 'p.pages_id', 'pages_title', 'pages_description', 'al.name as language_name'
+            'pages_translation_id as id',
+            'p.pages_id',
+            'pages_title',
+            'pages_description',
+            'al.name as language_name'
         ]);
 
         //sementara
         $data = $query->get();
         foreach ($data as $key => $value) {
             # code...
+            $text = $value->pages_description;
+            $cleanText = strip_tags($text);
+            $words = explode(' ', $cleanText);
+
+            // Check if the word count is greater than 10
+            if (count($words) > 10) {
+                $firstTenWords = implode(' ', array_slice($words, 0, 10));
+                $value->pages_description = $firstTenWords . '...';
+            } else {
+                $value->pages_description = $cleanText;
+            }
+            
             $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
             $value->languageList = $languageList;
         }

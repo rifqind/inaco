@@ -21,8 +21,8 @@
                         <i class="ion ion-ios-business"></i><span>Company</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="/">About Us</a></li>
-                        <li><a href="/">Company Profile</a></li>
+                        <li><a href="https://inaco.havordigital.com/webappcms/pages/update/7">About Us</a></li>
+                        <li><a href="https://inaco.havordigital.com/webappcms/pages/update/8">Company Profile</a></li>
                         <li><a href="/">Factory Tour</a></li>
                         <li><a href="/">Awards</a></li>
                         <li><a href="/">Find Us</a></li>
@@ -43,22 +43,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javaScript:void();">
-                        <i class="ion ion-ios-map"></i><span>Distributors</span><i class="feather icon-chevron-right pull-right"></i>
+                    <a href="{{ route('distributor.list') }}">
+                        <i class="ion ion-ios-map"></i><span>Distributors</span>
                     </a>
-                    <ul class="vertical-submenu">
-                        <li><a href="/">Local</a></li>
-                        <li><a href="/">Abroad</a></li>
-                    </ul>
                 </li>
                 <li>
-                    <a href="javaScript:void();">
-                        <i class="ion ion-ios-globe"></i><span>International Market</span><i class="feather icon-chevron-right pull-right"></i>
+                    <a href="/">
+                        <i class="ion ion-ios-globe"></i><span>International Market</span>
                     </a>
-                    <ul class="vertical-submenu">
-                        <li><a href="/">Country</a></li>
-                        <li><a href="/">Products Export</a></li>
-                    </ul>
                 </li>
                 <li>
                     <a href="javaScript:void();">
