@@ -12,7 +12,7 @@
         <div class="navigationbar">
             <ul class="vertical-menu">
                 <li>
-                    <a href="/">
+                    <a href="{{route('banner.list')}}">
                         <i class="ion ion-md-home"></i><span>Home - Banner</span>
                     </a>
                 </li>

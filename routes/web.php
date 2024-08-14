@@ -11,6 +11,7 @@ use App\Http\Controllers\Cms\ProductController;
 use App\Http\Controllers\Cms\RecipeController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
+use App\Http\Controllers\HomebannerController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -111,6 +112,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/webappcms/distributor/update/{id}', [DistributorController::class, 'update'])->name('distributor.update');
     Route::post('/webappcms/distributor/update', [DistributorController::class, 'update']);
     Route::delete('/webappcms/distributor/destroy/{id}', [DistributorController::class, 'destroy'])->name('distributor.destroy');
+    
+    //homebanner
+    Route::get('/webappcms/banner', [HomebannerController::class, 'index'])->name('banner.list');
+    Route::get('/webappcms/banner/create', [HomebannerController::class, 'create'])->name('banner.create');
+    Route::post('/webappcms/banner/store', [HomebannerController::class, 'store'])->name('banner.store');
+    Route::get('/webappcms/banner/update/{id}', [HomebannerController::class, 'update'])->name('banner.update');
+    Route::post('/webappcms/banner/update', [HomebannerController::class, 'update']);
+    Route::delete('/webappcms/banner/destroy/{id}', [HomebannerController::class, 'destroy'])->name('banner.destroy');
+
+
 
     Route::get('/fetch/province/{id}', function (String $id) {
         $target = DB::table('ref_province')->where('country_id', $id)
