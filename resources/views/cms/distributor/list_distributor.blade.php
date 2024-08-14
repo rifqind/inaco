@@ -20,20 +20,26 @@
                     <table id="datatable-distributor" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Country, City</th>
+                                <th>Province</th>
+                                <th>City</th>
+                                <th>Ditributor Type</th>
                                 <th>Distributor Name</th>
-                                <th>Address</th>
-                                <th>Phone</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $value)
                             <tr data-id="{{ $value->distributor_id }}">
-                                <td>{{ $value->city_country }}</td>
+                                <td>{{ $value->province_name }}</td>
+                                <td>{{ $value->city_name }}</td>
+                                <td>
+                                    @if ($value->distributor_type == 1)
+                                    Big City
+                                    @elseif ($value->distributor_type == 2)
+                                    Small City
+                                    @endif
+                                </td>
                                 <td>{{ $value->distributor_name }}</td>
-                                <td>{{ $value->address }}</td>
-                                <td>{{ $value->phone }}</td>
                                 <td>
                                     <a href="{{ route('distributor.update', ['id' => $value->distributor_id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->distributor_id }}"><i class="feather icon-trash-2"></i></button>

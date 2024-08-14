@@ -123,7 +123,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/fetch/city/{id}', function (String $id) {
         $target = DB::table('ref_city')->where('province_id', $id)
             ->get([
-                'code as value',
+                'id as value',
+                'code',
                 'name as label'
             ]);
         return response()->json($target);

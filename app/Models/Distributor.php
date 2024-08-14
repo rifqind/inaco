@@ -14,8 +14,17 @@ class Distributor extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     protected $fillable = [
-        'country', 'province', 'city', 'district', 'subdistrict',
-        'distributor_name', 'address', 'phone', 'latitude', 'longitude',
+        'country',
+        'province',
+        'city',
+        'district',
+        'subdistrict',
+        'distributor_name',
+        'address',
+        'phone',
+        'latitude',
+        'longitude',
+        'distributor_type'
     ];
     public $timestamps = false;
 }

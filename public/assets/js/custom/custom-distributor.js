@@ -5,10 +5,10 @@ if (path == "/webappcms/distributor") {
             .DataTable({
                 responsive: false,
                 columns: [
+                    { width: "15%" },
+                    { width: "15%" },
                     { width: "10%" },
                     { width: "20%" },
-                    { width: "30%" },
-                    { width: "10%" },
                     { width: "5%" },
                 ],
             })
@@ -109,7 +109,7 @@ if (path == "/webappcms/distributor") {
                 console.error("Error when fetching data", error);
             }
         };
-        const fetchCity = async (province) => {
+        const fetchCity = async (province, trick) => {
             try {
                 const response = await axios.get("/fetch/city/" + province);
                 cityFetched = response.data;
@@ -119,13 +119,17 @@ if (path == "/webappcms/distributor") {
                     .append('<option value="" disabled>Please Select</option>');
                 cityFetched.forEach((element) => {
                     citySelect.append(
-                        `<option value="${element.value}">${element.label}</option>`
+                        `<option value="${element.value}" data-code="${element.code}">${element.label}</option>`
                     );
                 });
                 districtSelect.empty();
                 subdistrictSelect.empty();
+                if (trick) {
+                    const cityValue = $("#city-update").val();
+                    citySelect.val(cityValue);
+                }
             } catch (error) {
-                console.error("Error when fetching data");
+                console.error("Error when fetching data", error);
             }
         };
         const fetchDistrict = async (city) => {
@@ -182,14 +186,20 @@ if (path == "/webappcms/distributor") {
         });
 
         provinceSelect.on("change", () => {
-            fetchCity(provinceSelect.val());
+            // console.log(provinceSelect[0]);
+            fetchCity(
+                provinceSelect[0].options[
+                    provinceSelect[0].selectedIndex
+                ].getAttribute("data-code")
+            );
+            // fetchCity(provinceSelect.val());
         });
-        citySelect.on("change", () => {
-            fetchDistrict(citySelect.val());
-        });
-        districtSelect.on("change", () => {
-            fetchSubdistrict(districtSelect.val());
-        });
+        // citySelect.on("change", () => {
+        //     fetchDistrict(citySelect.val());
+        // });
+        // districtSelect.on("change", () => {
+        //     fetchSubdistrict(districtSelect.val());
+        // });
 
         // Call the function
 
@@ -199,15 +209,20 @@ if (path == "/webappcms/distributor") {
 
         if (basePath === "/webappcms/distributor/update") {
             const trickUpdate = basePath === "/webappcms/distributor/update";
-
-            if (countrySelect.val() === "100") {
-                fetchProvince(countrySelect.val(), trickUpdate);
-            } else {
-                provinceSelect.prop("disabled", true).empty();
-                citySelect.prop("disabled", true).empty();
-                districtSelect.prop("disabled", true).empty();
-                subdistrictSelect.prop("disabled", true).empty();
-            }
+            // if (countrySelect.val() === "100") {
+            //     fetchProvince(countrySelect.val(), trickUpdate);
+            // } else {
+            //     provinceSelect.prop("disabled", true).empty();
+            //     citySelect.prop("disabled", true).empty();
+            //     districtSelect.prop("disabled", true).empty();
+            //     subdistrictSelect.prop("disabled", true).empty();
+            // }
+            fetchCity(
+                provinceSelect[0].options[
+                    provinceSelect[0].selectedIndex
+                ].getAttribute("data-code"),
+                trickUpdate
+            );
         }
 
         document.getElementById("back").addEventListener("click", () => {
@@ -244,43 +259,55 @@ if (path == "/webappcms/distributor") {
                 jQuery(e).remove();
         },
         rules: {
-            distributor_name: {
+            // phone: {
+            //     required: true,
+            // },
+            // country: {
+            //     required: true,
+            // },
+            // address: {
+            //     required: true,
+            // },
+            // latitude: {
+            //     required: true,
+            // },
+            // longitude: {
+            //     required: true,
+            // },
+            province: {
                 required: true,
             },
-            phone: {
+            city: {
                 required: true,
             },
-            country: {
-                required: true,
-            },
-            address: {
-                required: true,
-            },
-            latitude: {
-                required: true,
-            },
-            longitude: {
+            distributor_type: {
                 required: true,
             },
         },
         messages: {
-            distributor_name: {
-                required: "Please enter distributor name",
+            // phone: {
+            //     required: "Please enter phone number",
+            // },
+            // country: {
+            //     required: "Please select country",
+            // },
+            // address: {
+            //     required: "Please enter address",
+            // },
+            // latitude: {
+            //     required: "Please enter latitude",
+            // },
+            // longitude: {
+            //     required: "Please enter longitude",
+            // },
+            province: {
+                required: "Please select province",
             },
-            phone: {
-                required: "Please enter phone number",
+            city: {
+                required: "Please select city",
             },
-            country: {
-                required: "Please select country",
-            },
-            address: {
-                required: "Please enter address",
-            },
-            latitude: {
-                required: "Please enter latitude",
-            },
-            longitude: {
-                required: "Please enter longitude",
+            distributor_type: {
+                required: "Please select distributor type",
             },
         },
         submitHandler: function () {

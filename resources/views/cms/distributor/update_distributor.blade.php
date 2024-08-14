@@ -13,49 +13,22 @@
                     <input type="hidden" name="distributor_id" value="{{ $data->distributor_id }}" />
                     <input type="hidden" id="province-update" value="{{ $data->province }}" />
                     <input type="hidden" id="city-update" value="{{ $data->city }}" />
-                    <input type="hidden" id="district-update" value="{{ $data->district }}" />
-                    <input type="hidden" id="subdistrict-update" value="{{ $data->subdistrict }}" />
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="distributor_name">Distributor Name<span
+                        <label class="col-lg-3 col-form-label" for="province">Select Province<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="distributor_name"
-                                value="{{ $data->distributor_name }}" name="distributor_name" placeholder="Enter Name">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="phone">Phone<span
-                                class="text-danger">*</span></label>
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control" id="phone" value="{{ $data->phone }}"
-                                name="phone" placeholder="Enter Phone">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="country">Select Country<span
-                                class="text-danger">*</span></label>
-                        <div class="col-lg-6">
-                            <select class="form-control select2-single" id="country" name="country"
+                            <select class="form-control select2-single" id="province" name="province"
                                 style="width:200px;">
-                                <option value="" disabled selected>Please select</option>
-                                @foreach ($country as $value)
-                                    <option value="{{ $value->value }}"
-                                        {{ $data->country == $value->value ? 'selected' : '' }}>
-                                        {{ $value->label }}</option>
+                                <option value="" disabled selected>Please Select</option>
+                                @foreach ($province as $value)
+                                <option value="{{ $value->value }}" {{ $data->province == $value->value ? 'selected' : '' }} data-code="{{ $value->code }}">{{ $value->label }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="province">Select Province</label>
-                        <div class="col-lg-6">
-                            <select class="form-control select2-single" id="province" name="province"
-                                style="width:200px;">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="city">Select City</label>
+                        <label class="col-lg-3 col-form-label" for="city">Select City<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <select class="form-control select2-single" id="city" name="city"
                                 style="width:200px;">
@@ -63,43 +36,26 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="district">Select District</label>
-                        <div class="col-lg-6">
-                            <select class="form-control select2-single" id="district" name="district"
-                                style="width:200px;">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="subdistrict">Select Subdistrict</label>
-                        <div class="col-lg-6">
-                            <select class="form-control select2-single" id="subdistrict" name="subdistrict"
-                                style="width:200px;">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="address">Address<span
+                        <label class="col-lg-3 col-form-label" for="distributor_type">Distributor Type<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <textarea class="form-control" id="address" name="address" placeholder="Enter Address">{{ $data->address }}
-                            </textarea>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="distributor_type" id="distributor_type1"
+                                    value="1" {{ $data->distributor_type == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="distributor_type1">Big City</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="distributor_type" id="distributor_type2"
+                                    value="2" {{ $data->distributor_type == '2' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="distributor_type2">Small City</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="latitude">Latitude<span
-                                class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="distributor_name">Distributor Name</label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" id="latitude" value="{{ $data->latitude }}"
-                                name="latitude" placeholder="Enter Latitude">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="longitude">Longitude<span
-                                class="text-danger">*</span></label>
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control" id="longitude" value="{{ $data->longitude }}"
-                                name="longitude" placeholder="Enter Longitude">
+                            <input type="text" class="form-control" value="{{ $data->distributor_name }}" id="distributor_name" name="distributor_name"
+                                placeholder="Enter Name">
                         </div>
                     </div>
                     <div class="form-group row">
