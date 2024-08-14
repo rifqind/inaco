@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/">
+                    <a href="{{route('inter-market.list')}}">
                         <i class="ion ion-ios-globe"></i><span>International Market</span>
                     </a>
                 </li>

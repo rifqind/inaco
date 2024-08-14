@@ -12,6 +12,7 @@ use App\Http\Controllers\Cms\RecipeController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
 use App\Http\Controllers\HomebannerController;
+use App\Http\Controllers\IntermarketController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +121,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/webappcms/banner/update/{id}', [HomebannerController::class, 'update'])->name('banner.update');
     Route::post('/webappcms/banner/update', [HomebannerController::class, 'update']);
     Route::delete('/webappcms/banner/destroy/{id}', [HomebannerController::class, 'destroy'])->name('banner.destroy');
+
+    //intermarket
+    Route::get('/webappcms/inter-market', [IntermarketController::class, 'index'])->name('inter-market.list');
+    Route::get('/webappcms/inter-market/create', [IntermarketController::class, 'create'])->name('inter-market.create');
+    Route::post('/webappcms/inter-market/store', [IntermarketController::class, 'store'])->name('inter-market.store');
+    Route::get('/webappcms/inter-market/update/{id}', [IntermarketController::class, 'update'])->name('inter-market.update');
+    Route::post('/webappcms/inter-market/update', [IntermarketController::class, 'update']);
+    Route::delete('/webappcms/inter-market/destroy/{id}', [IntermarketController::class, 'destroy'])->name('inter-market.destroy');
 
 
 
