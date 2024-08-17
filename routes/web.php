@@ -11,6 +11,7 @@ use App\Http\Controllers\Cms\ProductController;
 use App\Http\Controllers\Cms\RecipeController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
+use App\Http\Controllers\Cms\UserController;
 use App\Http\Controllers\HomebannerController;
 use App\Http\Controllers\IntermarketController;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,27 @@ Route::middleware('auth')->group(function () {
     })->name('home.webappcms');
     Route::post('webappcms/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+
+    //user, role and permission
+    Route::get('/webappcms/user', [UserController::class, 'index'])->name('user.list');
+    Route::get('/webappcms/roles', [UserController::class, 'roleIndex'])->name('user-role.list');
+    Route::get('/webappcms/permissions', [UserController::class, 'permissionIndex'])->name('user-permission.list');
+    Route::get('/webappcms/user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/webappcms/user/create', [UserController::class, 'create']);
+    Route::get('/webappcms/role/create', [UserController::class, 'roleCreate'])->name('user-role.create');
+    Route::post('/webappcms/role/create', [UserController::class, 'roleCreate']);
+    Route::get('/webappcms/permissions/create', [UserController::class, 'permissionCreate'])->name('user-permission.create');
+    Route::post('/webappcms/permissions/create', [UserController::class, 'permissionCreate']);
+    Route::post('/webappcms/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/webappcms/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::get('/webappcms/role/update/{id}', [UserController::class, 'updateRole'])->name('user-role.update');
+    Route::post('/webappcms/role/update', [UserController::class, 'updateRole']);
+    Route::post('/webappcms/user/update', [UserController::class, 'update']);
+    Route::delete('/webappcms/user/destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::delete('/webappcms/permission/destroy/{id}', [UserController::class, 'permissionDestroy'])->name('user-permission.destroy');
+    Route::delete('/webappcms/role/destroy/{id}', [UserController::class, 'roleDestroy'])->name('user-role.destroy');
+    //menu
     Route::get('/webappcms/menu', [MenuController::class, 'index'])->name('menu.list');
     Route::get('/webappcms/menu/create', [MenuController::class, 'create'])->name('menu.create');
     Route::post('/webappcms/menu/store', [MenuController::class, 'store'])->name('menu.store');
@@ -41,7 +63,6 @@ Route::middleware('auth')->group(function () {
 
     //official social media - marketplace
     Route::get('/webappcms/social-media', [SocmedmarketController::class, 'index'])->name('social-media.list');
-
     Route::get('/webappcms/marketplace', [SocmedmarketController::class, 'index'])->name('marketplace.list');
 
     Route::get('/webappcms/socmed-marketplace/create', [SocmedmarketController::class, 'create'])->name('socmed-marketplace.create');
@@ -113,7 +134,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/webappcms/distributor/update/{id}', [DistributorController::class, 'update'])->name('distributor.update');
     Route::post('/webappcms/distributor/update', [DistributorController::class, 'update']);
     Route::delete('/webappcms/distributor/destroy/{id}', [DistributorController::class, 'destroy'])->name('distributor.destroy');
-    
+
     //homebanner
     Route::get('/webappcms/banner', [HomebannerController::class, 'index'])->name('banner.list');
     Route::get('/webappcms/banner/create', [HomebannerController::class, 'create'])->name('banner.create');

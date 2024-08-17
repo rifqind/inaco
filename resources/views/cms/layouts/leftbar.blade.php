@@ -11,12 +11,12 @@
         <!-- Start Navigationbar -->
         <div class="navigationbar">
             <ul class="vertical-menu">
-                <li>
+                <!-- <li>
                     <a href="{{route('banner.list')}}">
                         <i class="ion ion-md-home"></i><span>Home - Banner</span>
                     </a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a href="javaScript:void();">
                         <i class="ion ion-ios-business"></i><span>Company</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
@@ -27,8 +27,30 @@
                         <li><a href="/">Awards</a></li>
                         <li><a href="/">Find Us</a></li>
                     </ul>
-                </li>
+                </li> -->
+                @foreach ($sidebarItems as $value)
                 <li>
+                    @if ($value->parent_menu == 0)
+                    @if($value->hasChildren)
+                    <a href="javaScript:void();">
+                        <i class="{{ $value->icon_on_cms }}"></i><span>{{ $value->menu_title }}</span><i class="feather icon-chevron-right pull-right"></i>
+                    </a>
+                    <ul class="vertical-submenu">
+                        @foreach ($childrenItems as $child)
+                        @if($child->parent_menu == $value->menu_id)
+                        <li><a href="{{ $child->menu_cms_url }}">{{ $child->menu_title }}</a></li>
+                        @endif
+                        @endforeach
+                    </ul>
+                    @else
+                    <a href="{{ $value->menu_cms_url }}">
+                        <i class="{{ $value->icon_on_cms }}"></i><span>{{ $value->menu_title }}</span>
+                    </a>
+                    @endif
+                    @endif
+                </li>
+                @endforeach
+                <!-- <li>
                     <a href="javaScript:void();">
                         <i class="ion ion-logo-buffer"></i><span>Products</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
@@ -60,13 +82,13 @@
                         <li><a href="{{ route('news.list') }}?news_category=1">Articles</a></li>
                         <li><a href="{{ route('news.list') }}?news_category=2">Press Release</a></li>
                     </ul>
-                </li>
+                </li> -->
 
-                <li>
+                <!-- <li>
                     <a href="#">
                         <i class="ion ion-ios-school"></i><span>Careers</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <hr />
                 </li>
@@ -88,9 +110,9 @@
                         <i class="ion ion-md-people"></i><span>Users Management</span><i class="feather icon-chevron-right pull-right"></i>
                     </a>
                     <ul class="vertical-submenu">
-                        <li><a href="/">Roles</a></li>
-                        <li><a href="/">Permissions</a></li>
-                        <li><a href="/">Users</a></li>
+                        <li><a href="{{ route('user-role.list') }}">Roles</a></li>
+                        <li><a href="{{ route('user-permission.list') }}">Permissions</a></li>
+                        <li><a href="{{route('user.list')}}">Users</a></li>
                     </ul>
                 </li>
                 <li>
