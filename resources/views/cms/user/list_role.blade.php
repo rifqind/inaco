@@ -12,7 +12,7 @@
         <div class="card m-b-30">
             <div class="card-header pt-0">
                 <div class="d-sm-flex justify-content-between">
-                    <a href="{{ route('user-role.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
+                    <a href="{{ route('user.role.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
                 </div>
             </div>
             <div class="card-body">
@@ -43,7 +43,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('user-role.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                    <a href="{{ route('user.role.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
                                 </td>
                             </tr>
@@ -56,6 +56,7 @@
     </div>
     <x-slot name="script">
         <!-- Datatable js -->
+        <script src="{{ asset('assets/js/custom/custom-role.js')}}"></script>
         <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
@@ -68,6 +69,5 @@
         <script src="{{ asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom-role.js')}}"></script>
     </x-slot>
 </x-app-layout>

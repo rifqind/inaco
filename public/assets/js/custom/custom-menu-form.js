@@ -145,6 +145,9 @@ if (window.location.pathname == "/webappcms/menu") {
         // e.preventDefault();
         // var row = jQuery(this).closest("tr");
         // var id = jQuery(this).data("id");
+        // $('.delete-row').on('click', function (e) {
+            
+        // })
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -182,7 +185,7 @@ if (window.location.pathname == "/webappcms/menu") {
                                 } else if (data.error) {
                                     Swal.fire(
                                         "Error!",
-                                        "There was a problem deleting your data.",
+                                        data.error,
                                         "error"
                                     );
                                 }

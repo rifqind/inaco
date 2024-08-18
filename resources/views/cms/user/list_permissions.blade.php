@@ -12,7 +12,7 @@
         <div class="card m-b-30">
             <div class="card-header pt-0">
                 <div class="d-sm-flex justify-content-between">
-                    <a href="{{ route('user-permission.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
+                    <a href="{{ route('user.permission.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
                 </div>
             </div>
             <div class="card-body">
@@ -41,6 +41,7 @@
     </div>
     <x-slot name="script">
         <!-- Datatable js -->
+        <script src="{{ asset('assets/js/custom/custom-permission.js')}}"></script>
         <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
@@ -53,6 +54,5 @@
         <script src="{{ asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom-permission.js')}}"></script>
     </x-slot>
 </x-app-layout>

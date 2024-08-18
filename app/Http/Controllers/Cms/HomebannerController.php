@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Cms\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\AppLanguage;
 use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;

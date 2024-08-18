@@ -55,7 +55,9 @@
                                 <td>
                                     <a href=" {{ route('menu.update', ['id' => $value->id]) }} " class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <a href="{{ route('menu.create') }}?menu_id={{ $value->menu_id }}&language_code={{ $value->languageList }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>
+                                    @if ($value->menu_title != 'Settings')
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -67,6 +69,7 @@
     </div>
     <x-slot name="script">
         <!-- Datatable js -->
+        <script src="{{ asset('assets/js/custom/custom-menu-form.js')}}"></script>
         <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
@@ -80,6 +83,5 @@
         <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('assets/js/custom/custom-table-datatable.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom-menu-form.js')}}"></script>
     </x-slot>
 </x-app-layout>

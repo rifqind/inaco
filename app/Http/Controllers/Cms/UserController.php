@@ -209,7 +209,10 @@ class UserController extends Controller
         if ($request->isMethod('get')) {
             $data = Roles::where('id', $id)->first();
             $permissions = DB::table('permissions')->get(['id', 'permission_name']);
-            $permission_list = DB::table('roles_permissions')->pluck('permission_id')->toArray();
+            $permission_list = DB::table('roles_permissions')
+                ->where('role_id', $id)
+                ->pluck('permission_id')
+                ->toArray();
             return view('cms.user.update_role', [
                 'permissions' => $permissions,
                 'data' => $data,
@@ -258,6 +261,10 @@ class UserController extends Controller
         try {
             //code...
             DB::beginTransaction();
+            if (DB::table('roles_permissions')->where('permission_id', $id)->exists())
+                return response()->json([
+                    'error' => 'Error, this permission is used on roles'
+                ]);
             DB::table('permissions')->where('id', $id)->delete();
             DB::commit();
             return response()->json([
@@ -296,6 +303,10 @@ class UserController extends Controller
         try {
             //code...
             DB::beginTransaction();
+            if (User::where('id', $id)->where('name', 'Super Admin')->first())
+                return response()->json([
+                    'error' => 'Error, You cant delete this'
+                ]);
             DB::table('users')->where('id', $id)->delete();
             DB::commit();
             return response()->json([

@@ -4,6 +4,7 @@ namespace App\Http\View\Composers;
 
 use App\Models\MenuNavigation;
 use App\Models\MenuNavigationTranslation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SidebarComposer
@@ -14,7 +15,18 @@ class SidebarComposer
         $children_check = MenuNavigation::where('parent_menu', '!=', 0)
             ->distinct()
             ->pluck('parent_menu');
-        $data = MenuNavigation::where('parent_menu', 0)->orderBy('display_sequence')->get(); // Replace this with your actual data retrieval logic
+        $role = DB::table('roles_permissions')
+            ->join('permissions as p', 'p.id', '=', 'roles_permissions.permission_id')
+            ->where('role_id', auth()->user()->role_id)
+            ->pluck('permission_name')->toArray();
+        $data = MenuNavigation::where('parent_menu', 0)
+            ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
+            ->where('mn.menu_title', '!=', 'Settings')
+            ->whereIn('mn.menu_title', $role)
+            ->orderBy('display_sequence')
+            ->get();
+        // dd($data->pluck('menu_id')->toArray());
+        // Replace this with your actual data retrieval logic
         foreach ($data as $key => $value) {
             # code...
             if (in_array($value->menu_id, $children_check->toArray())) {
@@ -30,7 +42,11 @@ class SidebarComposer
             $value->menu_cms_url = $translation->menu_cms_url;
         }
         $sidebarItems = $data;
-        $childrenItems = MenuNavigation::where('parent_menu', '!=', 0)->orderBy('display_sequence')->get();
+        $childrenItems = MenuNavigation::where('parent_menu', '!=', 0)
+            // ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
+            ->whereIn('parent_menu', $data->pluck('menu_id')->toArray())
+            ->orderBy('display_sequence')
+            ->get();
         foreach ($childrenItems as $key => $value) {
             # code...
             //search available languague, english is priority
@@ -43,11 +59,13 @@ class SidebarComposer
             $value->menu_cms_url = $translation->menu_cms_url;
         }
 
-        // dd($sidebarItems);
+        $showSettings = in_array('Settings', $role);
+        // dd($showSettings);
         // Share the data with the view
         $view->with([
             'sidebarItems' => $sidebarItems,
-            'childrenItems' => $childrenItems
+            'childrenItems' => $childrenItems,
+            'showSettings' => $showSettings
         ]);
     }
 }

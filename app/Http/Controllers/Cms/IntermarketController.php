@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Cms\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\InternationalMarket;
 use App\Models\Product;
 use App\Models\ProductTranslation;

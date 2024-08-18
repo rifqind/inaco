@@ -234,7 +234,32 @@ class MenuController extends Controller
             $deleteMenuNavigationTranslation = MenuNavigationTranslation::where('menu_translation_id', $id);
             $getMenuNav = $deleteMenuNavigationTranslation->first();
             $sumOfMenuNavTrans = MenuNavigationTranslation::where('menu_id', $getMenuNav->menu_id)->count();
-
+            if (
+                $deleteMenuNavigationTranslation
+                ->first()
+                ->menu_title == 'Settings'
+            )
+                return response()->json(['error' => 'You cant delete it']);
+            $parent_menu_check = MenuNavigation::where('menu_id', $deleteMenuNavigationTranslation->first()->menu_id)
+                ->where('parent_menu', '!=', 0)->value('parent_menu');
+            if ($parent_menu_check) {
+                $nextCheck = MenuNavigationTranslation::where('menu_id', $parent_menu_check)
+                    ->pluck('menu_title')
+                    ->toArray();
+                foreach ($nextCheck as $key => $value) {
+                    # code...
+                    // dd($value);
+                    $isIt = in_array($value, DB::table('permissions')->pluck('permission_name')->toArray());
+                    if ($isIt)
+                        return response()->json(['error' => 'You cant delete it, this menu used on permissions']);
+                }
+            }
+            if (DB::table('permissions')->where('permission_name', $deleteMenuNavigationTranslation
+                ->first()
+                ->menu_title)
+                ->exists()
+            )
+                return response()->json(['error' => 'You cant delete it, this menu used on permissions']);
             $deleteMenuNavigationTranslation->delete();
             if ($sumOfMenuNavTrans == 1) {
                 $deleteMenuNavigation = MenuNavigation::where('menu_id', $getMenuNav->menu_id);

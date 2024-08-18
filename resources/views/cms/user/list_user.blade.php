@@ -42,7 +42,9 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('user.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                    @if ($value->role_name != 'Super Admin')
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -54,6 +56,7 @@
     </div>
     <x-slot name="script">
         <!-- Datatable js -->
+        <script src="{{ asset('assets/js/custom/custom-user.js')}}"></script>
         <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
@@ -66,6 +69,5 @@
         <script src="{{ asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom-user.js')}}"></script>
     </x-slot>
 </x-app-layout>

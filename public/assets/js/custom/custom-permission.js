@@ -47,7 +47,7 @@ if (path == "/webappcms/permissions") {
                                 } else if (data.error) {
                                     Swal.fire(
                                         "Error!",
-                                        "There was a problem deleting your data.",
+                                        data.error,
                                         "error"
                                     );
                                 }
