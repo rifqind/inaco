@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Cms\Controllers;
+namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternationalMarket;

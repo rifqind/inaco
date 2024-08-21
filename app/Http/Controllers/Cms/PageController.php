@@ -33,6 +33,7 @@ class PageController extends Controller
             # code...
             $text = $value->pages_description;
             $cleanText = strip_tags($text);
+            $cleanText = html_entity_decode($cleanText);
             $words = explode(' ', $cleanText);
 
             // Check if the word count is greater than 10
@@ -42,7 +43,7 @@ class PageController extends Controller
             } else {
                 $value->pages_description = $cleanText;
             }
-            
+
             $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
             $value->languageList = $languageList;
         }

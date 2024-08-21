@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Cms\Controllers;
+namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppLanguage;
@@ -31,6 +31,7 @@ class HomebannerController extends Controller
             # code...
             $text = $value->banner_caption;
             $cleanText = strip_tags($text);
+            $cleanText = html_entity_decode($cleanText);
             $words = explode(' ', $cleanText);
 
             // Check if the word count is greater than 10

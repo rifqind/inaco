@@ -1,0 +1,47 @@
+<!-- ======= Footer ======= -->
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-7">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ asset('assets/web/images/logo.png') }}" class="me-4">
+                        <div>
+                            <h4>Inaco</h4>
+                            <p>Jalan Raya Bekasi Tambun KM.39.5, Jatimulya, Kec. Tambun Sel., Kabupaten Bekasi, Jawa Barat 17510</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-6">
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Recipe</a></li>
+                        <li><a href="#">Distributors</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="col-md-3 col-6 ps-0">
+                    <ul>
+                        <li><a href="#">International Market</a></li>
+                        <li><a href="#">News</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-5 ps-md-0 mt-3 mt-md-0">All rights reserved - Inaco © 2024</div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer -->
