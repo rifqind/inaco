@@ -30,7 +30,7 @@
                                     <div class="image-thumbnail"><img src="{{ asset('data/news') . '/' .$value->news_image }}"></div>
                                     <div class="content-thumbnail">
                                         <div class="title-thumbnail">
-                                            <h4><a href="{{ route('web.news', ['id' => $id]) . '?title=' . $value->news_slug }}">{{$value->news_title}}</a></h4>
+                                            <h4><a href="{{ route('web.news', ['code'=>$code,'id' => $id]) . '?title=' . $value->news_slug }}">{{$value->news_title}}</a></h4>
                                         </div>
                                         <div class="caption-thumbnail">
                                             <p>{{$value->news_description}}</p>
@@ -51,7 +51,7 @@
                                 <div class="content-popular">
                                     <div class="update-article">{{$value->create_date}}</div>
                                     <div class="title-list-article">
-                                        <h4><a href="{{ route('web.news', ['id' => $id]) . '?title=' . $value->news_slug }}">{{$value->news_title}}</a></h4>
+                                        <h4><a href="{{ route('web.news', ['code'=>$code,'id' => $id]) . '?title=' . $value->news_slug }}">{{$value->news_title}}</a></h4>
                                     </div>
                                 </div>
                             </div>
@@ -68,20 +68,20 @@
                         <nav aria-label="Page navigation article">
                             <ul class="pagination  justify-content-md-end justify-content-center mt-4 mt-md-0">
                                 @if($news->currentPage() - 1 != 0)
-                                <li class="page-item"><a class="page-link" href="{{ route('web.news', ['id' => $id]) }}?currentPage={{ $news->currentPage() - 1 }}">
+                                <li class="page-item"><a class="page-link" href="{{ route('web.news', ['code'=>$code,'id' => $id]) }}?currentPage={{ $news->currentPage() - 1 }}">
                                         <
                                             </a>
                                 </li>
                                 @endif
                                 @for ($i = 1; $i <= $news->lastPage(); $i++)
                                     <li class="page-item {{ ($news->currentPage() == $i) ? 'active' : '' }} ">
-                                        <a class="page-link" href="{{ route('web.news', ['id' => $id]) }}?currentPage={{ $i }}">
+                                        <a class="page-link" href="{{ route('web.news', ['code'=>$code,'id' => $id]) }}?currentPage={{ $i }}">
                                             {{ $i }}
                                         </a>
                                     </li>
                                     @endfor
                                     @if($news->currentPage() + 1 < $news->lastPage())
-                                        <li class="page-item"><a class="page-link" href="{{ route('web.news', ['id' => $id]) }}?currentPage={{ $news->currentPage() + 1 }}">></a></li>
+                                        <li class="page-item"><a class="page-link" href="{{ route('web.news', ['code'=>$code,'id' => $id]) }}?currentPage={{ $news->currentPage() + 1 }}">></a></li>
                                         @endif
                             </ul>
                         </nav>

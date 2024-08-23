@@ -5,7 +5,6 @@
 
 <body>
     @include('web.layouts.header')
-    <!-- @include('web.layouts.cta-footer') -->
 
     {{ $slot }}
 

@@ -30,7 +30,7 @@
                              <div class="col-sm-9">
                                  <div class="row list-megamenu">
                                      <div class="col-sm-3">
-                                         <div class="megamenu-item"><a href="about.php">About Us</a></div>
+                                         <div class="megamenu-item"><a href="{{route('web.about', ['code' => $code])}}">About Us</a></div>
                                          <div class="megamenu-item"><a href="">Company Profile</a></div>
                                          <div class="megamenu-item"><a href="">Factory Tour</a></div>
                                          <div class="megamenu-item"><a href="awards.php">Awards</a></div>
@@ -52,45 +52,23 @@
                              </div>
                              <div class="col-sm-9">
                                  <div class="row list-megamenu">
+                                     @foreach ($category as $value)
                                      <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog.php">ALOE VERA</a></div>
+                                         <div class="megamenu-item"><a href="{{ route('web.catalog', ['id' => $value->segment, 'code' => $value->language_code, 'category_title' => $value->category_slug]) }}">{{$value->category_title}}</a></div>
                                      </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-remaja.php">CONFECTIONERY</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-anak.php">GT PRODUCTS</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-anak.php">MINI JELLY</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-anak.php">MINI PUDDING</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog.php">NATA DE COCO</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog.php">PUDDING</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-remaja.php">RTD</a></div>
-                                     </div>
-                                     <div class="col-sm-4">
-                                         <div class="megamenu-item"><a href="catalog-remaja.php">RTD POUCH</a></div>
-                                     </div>
+                                     @endforeach
                                  </div>
                              </div>
                          </div>
                      </div> <!-- dropdown-mega-menu.// -->
                  </li>
-                 <li class="nav-item"><a class="nav-link" href="recipe.php">Recipe</a></li>
+                 <li class="nav-item"><a class="nav-link" href="{{ route('web.recipe', ['code' => $code]) }}">Recipe</a></li>
 
-                 <li class="nav-item"><a class="nav-link" href="distributor.php">Distributors</a></li>
+                 <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">Distributors</a></li>
 
                  <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}"></a></li>
 
-                 <li class="nav-item"><a class="nav-link" href="market.php">International Market</a></li>
+                 <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">International Market</a></li>
 
                  <li class="nav-item dropdown has-megamenu">
                      <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> News </a>
@@ -104,8 +82,8 @@
                              <div class="col-sm-9">
                                  <div class="row list-megamenu">
                                      <div class="col-sm-3">
-                                         <div class="megamenu-item"><a href="news.php">Article</a></div>
-                                         <div class="megamenu-item"><a href="news-press-release.php">Press Release</a></div>
+                                         <div class="megamenu-item"><a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}">Article</a></div>
+                                         <div class="megamenu-item"><a href="{{route('web.news', ['id' => 'press-release', 'code' => $code])}}">Press Release</a></div>
                                      </div>
                                  </div>
                              </div>

@@ -25,9 +25,9 @@
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="filter-container text-center mb-5">
-                            <a href="{{route('web.recipe')}}" class="filter-button {{ ($product_id) ? '' : 'active' }}">Semua</a>
+                            <a href="{{route('web.recipe', ['code' => $code])}}" class="filter-button {{ ($product_id) ? '' : 'active' }}">Semua</a>
                             @foreach ($products as $value)
-                            <a href="{{ route('web.recipe') }}?currentPage={{ $recipes->currentPage() }}&product_id={{ $value->product_id }}" class="filter-button {{ $value->product_id == $product_id ? 'active' : '' }} ">{{$value->product_title}}</a>
+                            <a href="{{ route('web.recipe', ['code' => $code]) }}?currentPage={{ $recipes->currentPage() }}&product_id={{ $value->product_id }}" class="filter-button {{ $value->product_id == $product_id ? 'active' : '' }} ">{{$value->product_title}}</a>
                             @endforeach
                         </div>
                         <div class="recipe-list row">
@@ -44,7 +44,7 @@
                                         <div class="recipe-summamry">
                                             <p>{{$value->recipe_description}}</p>
                                         </div>
-                                        <a href="recipe-detail.php" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
+                                        <a href="{{route('web.recipe', ['code' => $code]) . '?title=' . $value->recipe_slug}}" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                     </div>
                                 </div>
                             </div>
@@ -60,20 +60,20 @@
                         <nav aria-label="Page navigation article">
                             <ul class="pagination  justify-content-md-end justify-content-center mt-4 mt-md-0">
                                 @if($recipes->currentPage() - 1 != 0)
-                                <li class="page-item"><a class="page-link" href="{{ route('web.recipe') }}?currentPage={{ $recipes->currentPage() - 1 }}">
+                                <li class="page-item"><a class="page-link" href="{{ route('web.recipe', ['code' => $code]) }}?currentPage={{ $recipes->currentPage() - 1 }}">
                                         <
                                             </a>
                                 </li>
                                 @endif
                                 @for ($i = 1; $i <= $recipes->lastPage(); $i++)
                                     <li class="page-item {{ ($recipes->currentPage() == $i) ? 'active' : '' }} ">
-                                        <a class="page-link" href="{{ route('web.recipe') }}?currentPage={{ $i }}">
+                                        <a class="page-link" href="{{ route('web.recipe', ['code' => $code]) }}?currentPage={{ $i }}">
                                             {{ $i }}
                                         </a>
                                     </li>
                                     @endfor
                                     @if($recipes->currentPage() + 1 < $recipes->lastPage())
-                                        <li class="page-item"><a class="page-link" href="{{ route('web.recipe') }}?currentPage={{ $recipes->currentPage() + 1 }}">></a></li>
+                                        <li class="page-item"><a class="page-link" href="{{ route('web.recipe', ['code' => $code]) }}?currentPage={{ $recipes->currentPage() + 1 }}">></a></li>
                                         @endif
                             </ul>
                         </nav>

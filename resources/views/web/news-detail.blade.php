@@ -18,7 +18,7 @@
                         <div id="breadcrumbs" class="breadcrumbs">
                             <ol>
                                 <li><a href="/">Home</a></li>
-                                <li><a href="{{route('web.news', ['id' => $id])}}">Artikel</a></li>
+                                <li><a href="{{route('web.news', ['code' => $code,'id' => $id])}}">Artikel</a></li>
                                 <li>{{$news->news_title}}</li>
                             </ol>
                         </div><!-- End Breadcrumbs -->
@@ -61,7 +61,7 @@
                             @endforeach
 
                             <div class="col-12 text-center">
-                                <a href="{{route('web.news', ['id' => $id])}}" class="btn btn-primary more">Lihat Lainnya</a>
+                                <a href="{{route('web.news', ['code' => $code,'id' => $id])}}" class="btn btn-primary more">Lihat Lainnya</a>
                             </div>
                         </div>
                     </div>

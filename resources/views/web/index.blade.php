@@ -7,9 +7,9 @@
                 <div class="col-12">
                     <div id="home-slide" class="owl-carousel owl-theme">
                         <div class="item"><img src="{{ asset('assets/web/images/slide1.jpg')}}?v=11"></div>
-                        <div class="item"><a href="{{ route('web.catalog', ['id' => 1]) }}"><img src="{{ asset('assets/web/images/slide2.jpg')}}?v=11"></a></div>
-                        <div class="item"><a href="{{ route('web.catalog', ['id' => 2]) }}"><img src="{{ asset('assets/web/images/slide3.jpg')}}?v=11"></a></div>
-                        <div class="item"><a href="{{ route('web.catalog', ['id' => 3]) }}"><img src="{{ asset('assets/web/images/slide4.jpg')}}?v=111"></a></div>
+                        <div class="item"><a href="{{ route('web.catalog', ['code' => $code,'id' => 'dewasa']) }}"><img src="{{ asset('assets/web/images/slide2.jpg')}}?v=11"></a></div>
+                        <div class="item"><a href="{{ route('web.catalog', ['code' => $code,'id' => 'remaja']) }}"><img src="{{ asset('assets/web/images/slide3.jpg')}}?v=11"></a></div>
+                        <div class="item"><a href="{{ route('web.catalog', ['code' => $code,'id' => 'anak']) }}"><img src="{{ asset('assets/web/images/slide4.jpg')}}?v=111"></a></div>
                         <div class="item"><a href="catalog-energel.php"><img src="{{ asset('assets/web/images/slide5.jpg')}}?v=11"></a></div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="item" data-aos="fade-up">
                                 <div class="about-wrapper">
-                                    <a href="about.php">
+                                    <a href="{{route('web.about', ['code' => $code])}}">
                                         <div class="image-about"><img src="{{ asset('assets/web/images/about.jpg') }}"></div>
                                         <div class="content-about">
                                             <div class="title-about">Tentang Kami</div>
@@ -89,7 +89,7 @@
                             <div class="item" data-aos="fade-up">
                                 <div class="catalog-thumbnail">
                                     <a href="#">
-                                        <div class="image-catalog"><img src="{{ asset('data/product'). '/' . $value->product_id . '/' . $value->product_image }}?v=1"></div>
+                                        <div class="image-catalog"><img src="{{ asset('data/product'). '/' . $value->product_id .  '/' . $value->product_image }}?v=1"></div>
                                         <div class="content-catalog">
                                             <div class="title-catalog">
                                                 <h4>{{$value->product_title}}</h4>
@@ -132,14 +132,14 @@
                                         <div class="recipe-summamry">
                                             <p>{{$value->recipe_description}}</p>
                                         </div>
-                                        <a href="recipe-detail.php" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
+                                        <a href="{{route('web.recipe', ['code' => $code]) . '?title=' . $value->recipe_slug}}" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                     </div>
                                 </div>
                             </div>
                             @endforeach
                         </div>
                         <div class="text-center" data-aos="fade-up">
-                            <a href="{{ route('web.recipe') }}" class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Semua Resep</a>
+                            <a href="{{ route('web.recipe', ['code' => $code]) }}" class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Semua Resep</a>
                         </div>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                             </div>
 
                             <div class="button-news-slide mb-4 pb-2 d-none d-md-block">
-                                <a href="{{route('web.news', ['id' => 'articles'])}}" class="btn btn-primary more border-0 text-red">Lihat Lainnya</a>
+                                <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more border-0 text-red">Lihat Lainnya</a>
                                 <div>
                                     <button id="prev-news"><i class="bi bi-chevron-left"></i></button>
                                     <button id="next-news"><i class="bi bi-chevron-right"></i></button>
@@ -172,7 +172,7 @@
                                     <div class="image-thumbnail"><img src="{{ asset('data/news') . '/' .$value->news_image }}"></div>
                                     <div class="content-thumbnail">
                                         <div class="title-thumbnail">
-                                            <h4><a href="article-detail.php">{{$value->news_title}}</a></h4>
+                                            <h4><a href="{{route('web.news', ['id' => $value->news_category, 'code' => $code]) . '?title=' . $value->news_slug}}">{{$value->news_title}}</a></h4>
                                         </div>
                                         <div class="caption-thumbnail">
                                             <p>{{$value->news_description}}</p>
@@ -185,7 +185,7 @@
                         </div>
 
                         <div class="text-center" data-aos="fade-up">
-                            <a href="{{route('web.news', ['id' => 'articles'])}}" class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Lainnya</a>
+                            <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Lainnya</a>
                         </div>
                     </div>
                 </div>
