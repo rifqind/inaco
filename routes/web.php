@@ -13,7 +13,10 @@ Route::prefix('{code?}')
         Route::get('/recipe', [HomeController::class, 'recipe'])->name('recipe');
         Route::get('/catalog/{id}/{category_title?}', [HomeController::class, 'catalog'])->name('catalog');
         Route::get('/news/{id}', [HomeController::class, 'news'])->name('news');
-        Route::get('/about', [HomeController::class, 'pages'])->name('about');
+        Route::get('/about', [HomeController::class, 'subPages'])->name('about');
+        Route::get('/awards', [HomeController::class, 'subPages'])->name('awards');
+        Route::get('/find-us', [HomeController::class, 'subPages'])->name('find-us');
+        Route::get('/careers', [HomeController::class, 'pages'])->name('careers');
         Route::get('/distributor', [HomeController::class, 'distributor'])->name('distributor');
         Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');
     });

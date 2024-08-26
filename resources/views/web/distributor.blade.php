@@ -145,6 +145,7 @@
         @include('web.layouts.cta-footer')
         <x-slot name="script">
             <script>
+                var cities = {{ Js::from($bigCity) }}
                 am5.ready(function() {
 
                     // Create root element
@@ -190,100 +191,12 @@
                         calculateAggregates: true
                     }));
 
-                    // Data cities
-                    var cities = [{
-                            name: "Medan",
-                            lat: 3.5952,
-                            lon: 98.6722
-                        },
-                        {
-                            name: "Aceh",
-                            lat: 5.5675,
-                            lon: 95.5271
-                        },
-                        {
-                            name: "Jambi",
-                            lat: -1.6121,
-                            lon: 103.6128
-                        },
-                        {
-                            name: "Lampung",
-                            lat: -5.4377,
-                            lon: 105.2580
-                        },
-                        {
-                            name: "Jakarta",
-                            lat: -6.2088,
-                            lon: 106.8456
-                        },
-                        {
-                            name: "Bandung",
-                            lat: -6.9147,
-                            lon: 107.6098
-                        },
-                        {
-                            name: "Surabaya",
-                            lat: -7.2504,
-                            lon: 112.7688
-                        },
-                        {
-                            name: "Ende",
-                            lat: -8.8474,
-                            lon: 121.6587
-                        },
-                        {
-                            name: "Pontianak",
-                            lat: -0.0219,
-                            lon: 109.3314
-                        },
-                        {
-                            name: "Palangkaraya",
-                            lat: -2.2115,
-                            lon: 113.9190
-                        },
-                        {
-                            name: "Makassar",
-                            lat: -5.1477,
-                            lon: 119.4328
-                        },
-                        {
-                            name: "Palu",
-                            lat: -0.8977,
-                            lon: 119.8572
-                        },
-                        {
-                            name: "Gorontalo",
-                            lat: 0.5604,
-                            lon: 123.0614
-                        },
-                        {
-                            name: "Ternate",
-                            lat: 0.7730,
-                            lon: 127.3700
-                        },
-                        {
-                            name: "Maluku",
-                            lat: -3.6881,
-                            lon: 128.3561
-                        },
-                        {
-                            name: "Timika",
-                            lat: -3.7000,
-                            lon: 138.8500
-                        },
-                        {
-                            name: "Merauke",
-                            lat: -8.4856,
-                            lon: 140.3661
-                        }
-                    ];
-
                     // Assign the cities data to the point series
                     pointSeries.data.setAll(cities.map(function(city) {
                         return {
                             geometry: {
                                 type: "Point",
-                                coordinates: [city.lon, city.lat]
+                                coordinates: [city.longitude, city.latitude]
                             },
                             title: city.name // Assigning title for each city
                         };

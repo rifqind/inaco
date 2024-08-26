@@ -2,6 +2,7 @@
 
 namespace App\Http\View\Composers;
 
+use App\Models\AppLanguage;
 use App\Models\ProductCategoryTranslation;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
@@ -28,6 +29,13 @@ class HeaderComposer
             };
             $value->segment = $categoryToShow;
         }
-        $view->with(['category' => $categories, 'code' => $lang]);
+        $languageList = AppLanguage::get();
+        $currentLangImage = AppLanguage::where('code', $lang)->first();
+        $view->with([
+            'category' => $categories,
+            'code' => $lang,
+            'languages' => $languageList,
+            'currentLangImage' => $currentLangImage,
+        ]);
     }
 }

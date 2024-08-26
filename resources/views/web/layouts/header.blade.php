@@ -33,8 +33,8 @@
                                          <div class="megamenu-item"><a href="{{route('web.about', ['code' => $code])}}">About Us</a></div>
                                          <div class="megamenu-item"><a href="">Company Profile</a></div>
                                          <div class="megamenu-item"><a href="">Factory Tour</a></div>
-                                         <div class="megamenu-item"><a href="awards.php">Awards</a></div>
-                                         <div class="megamenu-item"><a href="findus.php">Find Us</a></div>
+                                         <div class="megamenu-item"><a href="{{route('web.awards', ['code' => $code])}}">Awards</a></div>
+                                         <div class="megamenu-item"><a href="{{route('web.find-us', ['code' => $code])}}">Find Us</a></div>
                                      </div>
                                  </div>
                              </div>
@@ -90,20 +90,32 @@
                          </div>
                      </div> <!-- dropdown-mega-menu.// -->
                  </li>
-                 <li class="nav-item"><a class="nav-link" href="careers.php">Careers</a></li>
+                 <li class="nav-item"><a class="nav-link" href="{{ route('web.careers', ['code' => $code]) }}">Careers</a></li>
                  <li class="nav-item dropdown lang d-none d-sm-block">
                      <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                         <img title="Indonesia" src="{{ asset('assets/web/images/ind.png') }}">
+                         <img title="{{ $currentLangImage->name }}" src="{{ asset('data/language') . '/' . $currentLangImage->icon_image }}">
                      </a>
                      <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                         <li><a class="dropdown-item" href="#"><img title="Indonesia" src="{{ asset('assets/web/images/en.png') }}"></a></li>
-                         <li><a class="dropdown-item" href="index-ar.php"><img title="Indonesia" src="{{ asset('assets/web/images/arab.png') }}"></a></li>
-                         <li><a class="dropdown-item" href="#"><img title="Indonesia" src="{{ asset('assets/web/images/viet.png') }}"></a></li>
+                         @foreach ($languages as $value)
+                         <li class="changeLang"><a class="dropdown-item" href="#" id="change-to-{{strtolower($value->code)}}"><img title="{{ $value->name }}" src="{{ asset('data/language') . '/' . $value->icon_image }}"></a></li>
+                         @endforeach
                      </ul>
                  </li>
              </ul>
              <i class="bi bi-list mobile-nav-toggle"></i>
          </nav><!-- .navbar -->
-
      </div>
  </header><!-- End Header -->
+ <script type="text/javascript">
+     const route = window.location;
+     document.addEventListener('DOMContentLoaded', () => {
+         document.querySelectorAll('.changeLang').forEach((a) => {
+             a.addEventListener('click', (event) => {
+                 const a = event.target.closest('.dropdown-item')
+                 const code = a.id.split('-')[2]
+                 const newPath = `${route.origin}/${code}/${route.pathname.split('/').pop()}`
+                 window.location.href = newPath
+             });
+         })
+     })
+ </script>

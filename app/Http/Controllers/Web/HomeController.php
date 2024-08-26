@@ -11,6 +11,7 @@ use App\Models\ProductImage;
 use App\Models\ProductTranslation;
 use App\Models\RecipeTranslation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
@@ -234,7 +235,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function pages(Request $request, String $code = null)
+    public function subPages(Request $request, String $code = null)
     {
         $route = Route::currentRouteName();
         if ($route == 'web.about') {
@@ -242,19 +243,27 @@ class HomeController extends Controller
                 ->first();
             $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
             return view('web.about', ['page' => $page]);
-        }
+        } else if ($route == 'web.awards') return view('web.awards');
+        else if ($route == 'web.find-us') return view('web.find-us');
+    }
+
+    public function pages(Request $request, String $code = null)
+    {
+        $route = Route::currentRouteName();
+        if ($route == 'web.careers') return view('web.careers');
     }
 
     public function distributor(Request $request, String $code = null)
     {
         $distributor = Distributor::join('ref_province as rp', 'rp.id', '=', 'distributor.province')
             ->join('ref_city as rc', 'rc.id', '=', 'distributor.city')
-            ->get([
+            ->select([
                 'distributor.*',
                 'rp.id as province_id',
                 'rp.name as province_name',
                 'rc.id as city_id',
                 'rc.name as city_name',
+                'distributor_type'
             ]);
         foreach ($distributor as $key => $value) {
             # code...
@@ -263,10 +272,17 @@ class HomeController extends Controller
             $value->city_name = $city_name;
             //explode first word, how to?
         }
-        return view('web.distributor', ['distributor' => $distributor]);
+        $distributorList = $distributor->get();
+        $getBigCity = $distributor->where('distributor_type', 1)->pluck('city');
+        // dd($bigCity);
+        $bigCity = DB::table('ref_city')
+            ->whereIn('id', $getBigCity)
+            ->get();
+        return view('web.distributor', ['distributor' => $distributorList, 'bigCity' => $bigCity]);
     }
 
-    public function Intermarket(Request $request, String $code = null) {
+    public function Intermarket(Request $request, String $code = null)
+    {
         return view('web.intermarket');
     }
     private function getNewsDetail($slug)

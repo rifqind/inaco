@@ -72,7 +72,7 @@ jQuery("#create-language").validate({
                 if (data.message) {
                     Swal.fire({
                         title: "Save Successfully.",
-                        text: "Continue to input another page?",
+                        text: "Continue to input another language?",
                         icon: "success",
 
                         showCancelButton: true,
