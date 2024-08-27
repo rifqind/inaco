@@ -33,65 +33,52 @@
                 </div>
                 <div class="row text-center mt-4">
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>America</h3>
-                        <div class="list-market">Canada </div>
-                        <div class="list-market">USA </div>
-                        <div class="list-market">Trinidad & Tobago </div>
-                        <div class="list-market">Guyana </div>
-                        <div class="list-market">Suriname </div>
-                        <div class="list-market">Peru </div>
+                        <h3>NORTH AMERICA</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'North America')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Europe</h3>
-                        <div class="list-market">Netherland </div>
-                        <div class="list-market">Polandia </div>
-                        <div class="list-market">Rusia </div>
-                        <div class="list-market">Prancis</div>
-                        <div class="list-market">United Kingdom</div>
-
+                        <h3>SOUTH AMERICA</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'South America')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Middle East</h3>
-                        <div class="list-market">Palestina </div>
-                        <div class="list-market">Iraq </div>
-                        <div class="list-market">Iran </div>
-                        <div class="list-market">Bahrain </div>
-                        <div class="list-market">Kuwait </div>
-                        <div class="list-market">Qatar </div>
-                        <div class="list-market">Saudi Arabia </div>
+                        <h3>EUROPE</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'Europe')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach    
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Africa</h3>
-                        <div class="list-market">Somalia </div>
-                        <div class="list-market">South Africa </div>
-
+                        <h3>AFRICA</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'Africa')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Asia</h3>
-                        <div class="list-market">Pakistan </div>
-                        <div class="list-market">India </div>
-                        <div class="list-market">Myanmar </div>
-                        <div class="list-market">China </div>
-                        <div class="list-market">South Korea </div>
-                        <div class="list-market">Hongkong </div>
-                        <div class="list-market">Japan </div>
-                        <div class="list-market">Taiwan </div>
-                        <div class="list-market">Vietnam </div>
-                        <div class="list-market">Philippines </div>
-                        <div class="list-market">Brunei Darussalam </div>
-                        <div class="list-market">Cambodia </div>
-                        <div class="list-market">Malaysia </div>
-                        <div class="list-market">Singapore</div>
-                        <div class="list-market">Timor Leste </div>
+                        <h3>ASIA</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'Asia')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Pacific Island</h3>
-                        <div class="list-market">Papua new guinea </div>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3>Oceania</h3>
-                        <div class="list-market">Australia </div>
-                        <div class="list-market">Fiji</div>
+                        <h3>OCEANIA</h3>
+                        @foreach ($market as $value)
+                        @if ($value->continent == 'Oceania')
+                        <div class="list-market"> {{ $value->name }} </div>
+                        @endif
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -101,6 +88,7 @@
 
     <x-slot name="script">
         <script>
+            var activeCountries = {{ Js::from($countryISO) }}
             am5.ready(function() {
 
                 // Create root element
@@ -124,17 +112,6 @@
                     geoJSON: am5geodata_worldLow,
                     exclude: ["AQ"] // Exclude Antarctica
                 }));
-
-                // List of active countries
-                var activeCountries = [
-                    "CA", "US", "TT", "GY", "SR", "PE",
-                    "NL", "PL", "RU", "FR", "GB", "PS",
-                    "IQ", "IR", "BH", "KW", "QA", "SA",
-                    "SO", "ZA", "PK", "IN", "MM", "CN",
-                    "KR", "HK", "JP", "TW", "VN", "PH",
-                    "BN", "KH", "MY", "SG", "TL", "PG",
-                    "AU", "FJ"
-                ];
 
                 polygonSeries.mapPolygons.template.setAll({
                     interactive: true,

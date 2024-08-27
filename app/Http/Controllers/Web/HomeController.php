@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
+use App\Models\InternationalMarket;
 use App\Models\NewsTranslation;
 use App\Models\PageTranslation;
 use App\Models\ProductCategoryTranslation;
@@ -283,7 +284,13 @@ class HomeController extends Controller
 
     public function Intermarket(Request $request, String $code = null)
     {
-        return view('web.intermarket');
+        $market = InternationalMarket::join('ref_country as rc', 'rc.id', '=', 'international_market.country');
+        $countryISO = $market->pluck('iso');
+
+        return view('web.intermarket', [
+            'market' => $market->get(),
+            'countryISO' => $countryISO
+        ]);
     }
     private function getNewsDetail($slug)
     {

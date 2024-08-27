@@ -3,8 +3,8 @@
     <div class="sidebar">
         <!-- Start Logobar -->
         <div class="logobar d-flex align-items-center justify-content-center">
-            <a href="index.html" class="logo logo-large"><img src="{{ asset('assets/images/Logo_inaco.png')}}" style="height: 40px;width: auto;" class="img-fluid" alt="logo"></a>
-            <a href="index.html" class="logo logo-small"><img src="{{ asset('assets/images/Logo_inaco.png')}}" class="img-fluid" alt="logo"></a>
+            <a href="{{route('web.home')}}" class="logo logo-large"><img src="{{ asset('assets/images/Logo_inaco.png')}}" style="height: 40px;width: auto;" class="img-fluid" alt="logo"></a>
+            <a href="{{route('web.home')}}" class="logo logo-small"><img src="{{ asset('assets/images/Logo_inaco.png')}}" class="img-fluid" alt="logo"></a>
             <div class="logo logo-large ml-1 text-logo">- CMS</div>
         </div>
         <!-- End Logobar -->
