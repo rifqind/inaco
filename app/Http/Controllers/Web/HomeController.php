@@ -82,11 +82,32 @@ class HomeController extends Controller
             if ($value->news_category == 1) $value->news_category = 'articles';
             else $value->news_category = 'press-release';
         }
+
+        $texts = [
+            'ar' => [
+                'header' => 'تينتانغ INACO',
+                'items' => [
+                    ['title' => 'التقدير', 'desc' => 'جائزة INACO', 'image' => 'award.jpg', 'url' => '#'],
+                    ['title' => 'حولنا', 'desc' => 'عن شركة INACO', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
+                    ['title' => 'نموذج الشركة', 'desc' => 'معلومات عن ملف الشركة', 'image' => 'profile.jpg', 'url' => '#'],
+                ],
+            ],
+            'default' => [
+                'header' => 'Tentang INACO',
+                'items' => [
+                    ['title' => 'Penghargaan', 'desc' => 'Beberapa penghargaan Inaco', 'image' => 'award.jpg', 'url' => '#'],
+                    ['title' => 'Tentang Kami', 'desc' => 'Tentang perusahaan Inaco', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
+                    ['title' => 'Profil Perusahaan', 'desc' => 'Informasi tentang profil perusahaan', 'image' => 'profile.jpg', 'url' => '#'],
+                ],
+            ],
+        ];
+        $firstText = $texts[$code] ?? $texts['default'];
         return view('web.index', [
             'recipes' => $recipes,
             'products' => $products,
             'news' => $news,
             'code' => $code,
+            'firstText' => $firstText
         ]);
     }
 
@@ -239,11 +260,13 @@ class HomeController extends Controller
     public function subPages(Request $request, String $code = null)
     {
         $route = Route::currentRouteName();
+        $code ??= 'id';
         if ($route == 'web.about') {
             $page = PageTranslation::where('language_code', $code)
+                ->where('pages_slug', 'about')
                 ->first();
             $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
-            return view('web.about', ['page' => $page]);
+            return view('web.about', ['page' => $page, 'code' => $code]);
         } else if ($route == 'web.awards') return view('web.awards');
         else if ($route == 'web.find-us') return view('web.find-us');
     }

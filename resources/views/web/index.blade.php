@@ -24,60 +24,50 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10">
-                        <h1 class="page-header text-center mb-4" data-aos="fade-up">Tentang INACO</h1>
+                        <h1 class="page-header text-center mb-4" data-aos="fade-up">{{ $firstText['header'] }}</h1>
                         <div id="about-list" class="owl-carousel owl-theme">
+                            @foreach($firstText['items'] as $item)
                             <div class="item" data-aos="fade-up">
                                 <div class="about-wrapper">
-                                    <a href="#">
-                                        <div class="image-about"><img src="{{ asset('assets/web/images/award.jpg') }}"></div>
+                                    <a href="{{ $item['url'] }}">
+                                        <div class="image-about">
+                                            <img src="{{ asset('assets/web/images/' . $item['image']) }}">
+                                        </div>
                                         <div class="content-about">
-                                            <div class="title-about">Penghargaan</div>
-                                            <div class="desc-about">Beberapa penghargaan Inaco</div>
+                                            <div class="title-about">{{ $item['title'] }}</div>
+                                            <div class="desc-about">{{ $item['desc'] }}</div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            <div class="item" data-aos="fade-up">
-                                <div class="about-wrapper">
-                                    <a href="{{route('web.about', ['code' => $code])}}">
-                                        <div class="image-about"><img src="{{ asset('assets/web/images/about.jpg') }}"></div>
-                                        <div class="content-about">
-                                            <div class="title-about">Tentang Kami</div>
-                                            <div class="desc-about">Tentang perusahaan Inaco</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="item" data-aos="fade-up">
-                                <div class="about-wrapper">
-                                    <a href="#">
-                                        <div class="image-about"><img src="{{ asset('assets/web/images/profile.jpg') }}"></div>
-                                        <div class="content-about">
-                                            <div class="title-about">Profil Perusahaan</div>
-                                            <div class="desc-about">Informasi tentang profil perusahaan</div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-
         <!-- ======= Catalog ======= -->
         <section id="catalog-home" class="catalog-home">
             <div class="container">
                 <div class="row w-100" data-aos="fade-up">
                     <div class="col-12 col-md-4">
+                        @if($code == 'ar')
+                        <h1 class="page-header">المنتجات الرئيسية<br class="d-none d-md-block" /> من اختيارنا</h1>
+                        <h3 class="sub-header">بعض منتجات Inaco</h3>
+                        @else
                         <h1 class="page-header">Produk Utama <br class="d-none d-md-block" />Pilihan Kami</h1>
                         <h3 class="sub-header">Beberapa produk Inaco</h3>
+                        @endif
                         <div class="button-catalog-slide mb-4 pb-2 d-none d-sm-block">
                             <button id="prev-catalog"><i class="bi bi-chevron-left"></i></button>
                             <button id="next-catalog"><i class="bi bi-chevron-right"></i></button>
                         </div>
+                        @if ($code == 'ar')
+                        <a href="" class="btn btn-primary more filled-button d-none d-sm-inline">انظر جميع المنتجات</a>
+                        @else
                         <a href="" class="btn btn-primary more filled-button d-none d-sm-inline">Lihat Semua Produk</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -113,8 +103,13 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12">
+                        @if ($code == 'ar')
+                        <h1 class="page-header text-center mb-3" data-aos="fade-up">احرص على الاستمتاع بـ INACO</h1>
+                        <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">الملابس والملابس والمشروبات وغيرها الكثير من النصائح التي تجعل الأطعمة أكثر طعمًا مع INACO!</h3>
+                        @else
                         <h1 class="page-header text-center mb-3" data-aos="fade-up">Buat Lebih Enak Dengan INACO</h1>
                         <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">Salad, Kue, Minuman dan masih banyak lagi resep yang membuat hidangan lebih enak dengan INACO!</h3>
+                        @endif
                         <div id="recipe-list" class="owl-carousel owl-theme">
                             @foreach ($recipes as $value)
                             <div class="item" data-aos="fade-up">
@@ -153,12 +148,21 @@
                     <div class="col-md-12">
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
+                                @if ($code == 'ar')
+                                <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Prees Release من INACO</h1>
+                                <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">آخر الأخبار من INACO</h3>
+                                @else
                                 <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Info dari INACO</h1>
                                 <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">Berita terbaru dari Inaco</h3>
+                                @endif
                             </div>
 
                             <div class="button-news-slide mb-4 pb-2 d-none d-md-block">
+                                @if ($code == 'ar')
+                                <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more border-0 text-red">انظر جميع النصائح</a>
+                                @else
                                 <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more border-0 text-red">Lihat Lainnya</a>
+                                @endif
                                 <div>
                                     <button id="prev-news"><i class="bi bi-chevron-left"></i></button>
                                     <button id="next-news"><i class="bi bi-chevron-right"></i></button>
@@ -185,13 +189,17 @@
                         </div>
 
                         <div class="text-center" data-aos="fade-up">
+                            @if ($code =='ar')
+                            <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more filled-button mt-4 mt-md-5">انظر جميع النصائح</a>
+                            @else
                             <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}" class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Lainnya</a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-       @include('web.layouts.cta-footer')
+        @include('web.layouts.cta-footer')
     </main><!-- End #main -->
     <x-slot name="script"></x-slot>
 </x-web-layout>

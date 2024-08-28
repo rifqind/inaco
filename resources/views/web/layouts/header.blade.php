@@ -8,14 +8,12 @@
              <ul class=" w-100 justify-content-between">
                  <li class="nav-item dropdown lang d-sm-none">
                      <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                         <img title="Indonesia" src="{{ asset('assets/web/images/ind.png') }}">
+                         <img title="{{ $currentLangImage->name }}" src="{{ asset('data/language') . '/' . $currentLangImage->icon_image }}">
                      </a>
-                     <ul class="dropdown-menu mx-0 my-0" aria-labelledby="navbarScrollingDropdown">
-                         <li class="d-flex align-items-center justify-content-center">
-                             <a class="dropdown-item mx-2" href="#"><img title="Indonesia" src="{{ asset('assets/web/images/en.png') }}"></a>
-                             <a class="dropdown-item mx-2" href="index-ar.php"><img title="Indonesia" src="{{ asset('assets/web/images/arab.png') }}"></a>
-                             <a class="dropdown-item mx-2" href="#"><img title="Indonesia" src="{{ asset('assets/web/images/viet.png') }}"></a>
-                         </li>
+                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                         @foreach ($languages as $value)
+                         <li class="changeLang"><a class="dropdown-item" href="#" id="change-to-{{strtolower($value->code)}}"><img title="{{ $value->name }}" src="{{ asset('data/language') . '/' . $value->icon_image }}"></a></li>
+                         @endforeach
                      </ul>
                  </li>
                  <li class="nav-item dropdown has-megamenu">
@@ -82,8 +80,8 @@
                              <div class="col-sm-9">
                                  <div class="row list-megamenu">
                                      <div class="col-sm-3">
-                                         <div class="megamenu-item"><a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}">Article</a></div>
-                                         <div class="megamenu-item"><a href="{{route('web.news', ['id' => 'press-release', 'code' => $code])}}">Press Release</a></div>
+                                         <div class="megamenu-item"><a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}">Article</a></div>
+                                         <div class="megamenu-item"><a href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}">Press Release</a></div>
                                      </div>
                                  </div>
                              </div>

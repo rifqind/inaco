@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{$code}}" dir="{{$code == 'ar' ? 'rtl' : ''}}">
 @include('web.layouts.head')
 {{ $head }}
 
 <body>
+    @if ($code == 'ar')
+    @include('web.layouts.header-arabic')
+    @else
     @include('web.layouts.header')
+    @endif
 
     {{ $slot }}
 
