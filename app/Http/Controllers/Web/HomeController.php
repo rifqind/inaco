@@ -4,33 +4,43 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
+use App\Models\Homebanner;
+use App\Models\HomebannerTranslation;
 use App\Models\InternationalMarket;
 use App\Models\NewsTranslation;
+use App\Models\OfficialSocmedMarketplace;
 use App\Models\PageTranslation;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductCategoryTranslation;
 use App\Models\ProductImage;
 use App\Models\ProductTranslation;
+use App\Models\RecipeImage;
 use App\Models\RecipeTranslation;
+use App\Models\SubpageTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
     //
     public function index(String $code = null)
     {
-        if ($code == 'webappcms') {
-            // dd($code);
-            return redirect()->route('login');
-        }
         $code ??= 'id';
+        $banner = HomebannerTranslation::where('language_code', $code)
+            ->join('homebanner as h', 'h.banner_id', '=', 'homebanner_translation.banner_id')
+            ->where('banner_status', 1)
+            ->orderBy('display_sequence', 'asc')
+            ->get();
         $recipes = RecipeTranslation::where('recipe_translation.language_code', $code)
             ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
-            ->join('products_translation as p', 'p.product_id', '=', 'recipe_translation.product_id')
-            ->where('p.language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
+            ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
+            ->where('pct.language_code', $code)
             ->where('r.recipe_status', 1)
-            ->get(['recipe_translation.*', 'r.*', 'p.product_title']);
+            ->get(['recipe_translation.*', 'r.*', 'pct.category_title as product_title']);
 
         $products = ProductTranslation::where('language_code', $code)
             ->where('p.product_status', 1)
@@ -56,6 +66,9 @@ class HomeController extends Controller
             $text = $value->recipe_description;
             $cleanText = strip_tags($text);
             $value->recipe_description = html_entity_decode($cleanText);
+            $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+            $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                ->value('image_filename');
         }
 
         foreach ($products as $key => $value) {
@@ -87,7 +100,7 @@ class HomeController extends Controller
             'ar' => [
                 'header' => 'تينتانغ INACO',
                 'items' => [
-                    ['title' => 'التقدير', 'desc' => 'جائزة INACO', 'image' => 'award.jpg', 'url' => '#'],
+                    ['title' => 'التقدير', 'desc' => 'جائزة INACO', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'حولنا', 'desc' => 'عن شركة INACO', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
                     ['title' => 'نموذج الشركة', 'desc' => 'معلومات عن ملف الشركة', 'image' => 'profile.jpg', 'url' => '#'],
                 ],
@@ -95,7 +108,7 @@ class HomeController extends Controller
             'default' => [
                 'header' => 'Tentang INACO',
                 'items' => [
-                    ['title' => 'Penghargaan', 'desc' => 'Beberapa penghargaan Inaco', 'image' => 'award.jpg', 'url' => '#'],
+                    ['title' => 'Penghargaan', 'desc' => 'Beberapa penghargaan Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'Tentang Kami', 'desc' => 'Tentang perusahaan Inaco', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
                     ['title' => 'Profil Perusahaan', 'desc' => 'Informasi tentang profil perusahaan', 'image' => 'profile.jpg', 'url' => '#'],
                 ],
@@ -107,40 +120,82 @@ class HomeController extends Controller
             'products' => $products,
             'news' => $news,
             'code' => $code,
-            'firstText' => $firstText
+            'firstText' => $firstText,
+            'banner' => $banner,
         ]);
     }
 
-    public function recipe(Request $request, String $code = null)
+    public function recipe(Request $request, String $code = null, $title = null)
     {
+        $code ??= 'id';
+        if ($code == 'id') {
+            if ($request->currentPage) {
+                $link = route('web.id.resep', ['title' => $title]) . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
+                return redirect($link);
+            } else return redirect()->route('web.id.resep', ['title' => $title]);
+        }
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'resep')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
         $paginated = $request->paginated ?? 12;
         $currentPage = $request->currentPage ?? 1;
-        $code ??= 'id';
 
-        if ($request->title) {
+        if ($title) {
             $query = RecipeTranslation::query();
             $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
                 ->select(['recipe_translation.*', 'r.*']);
             $recipeList = $query->where('language_code', $code)
-                ->where('r.recipe_status', 1)->get();
+                ->orderBy('r.create_date', 'desc')
+                ->where('r.recipe_status', 1)->take(4)->get();
             foreach ($recipeList as $key => $value) {
                 # code...
                 $text = $value->recipe_description;
                 $cleanText = strip_tags($text);
                 $value->recipe_description = html_entity_decode($cleanText);
             }
-            $recipe = $query->where('recipe_slug', $request->title)->first();
+            $recipe = $query->where('recipe_slug', $title)->first();
+            $image = RecipeImage::where('recipe_id', $recipe->recipe_id)->get();
+            $res = 4 - $image->count();
+            // dd($res);
+            if ($res > 0) {
+                for ($i = 0; $i < $res; $i++) {
+                    foreach ($image as $item) {
+                        $image->push($item); // Duplicate the item and add it to the collection
+                        if ($image->count() >= 4) {
+                            break 2; // Exit both loops if we reach 4 items
+                        }
+                    }
+                }
+            }
             $recipe->create_date = $this->formatDate($recipe->create_date);
             return view('web.recipe-detail', [
                 'recipe' => $recipe,
                 'recipeList' => $recipeList,
                 'code' => $code,
+                'image' => $image,
             ]);
         }
 
-        $productList = ProductTranslation::where('language_code', $code)
-            ->whereIn('product_id', RecipeTranslation::distinct()->pluck('product_id')->toArray())
-            ->get(['product_id', 'product_title']);
+        $productList = RecipeTranslation::where('language_code', $code)
+            ->distinct()->pluck('product_id')->toArray();
+        $categoryList = ProductTranslation::where('language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->whereIn('p.product_id', $productList)
+            ->distinct()->pluck('category_id')->toArray();
+        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
+            ->whereIn('category_id', $categoryList)
+            ->get(['category_title', 'category_id']);
+        // dd($categoryShow);
         $query = RecipeTranslation::query();
         $query->where('recipe_translation.language_code', $code)
             ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
@@ -148,28 +203,156 @@ class HomeController extends Controller
             ->where('p.language_code', $code)
             ->where('r.recipe_status', 1)
             ->select(['recipe_translation.*', 'r.*', 'p.product_title']);
-        if ($request->product_id) {
-            if (!empty($request->product_id)) $query->where('recipe_translation.product_id', $request->product_id);
+        if ($request->category) {
+            if (!empty($request->category)) {
+                $fetchProductList = Product::where('category_id', $request->category)
+                    ->distinct()->pluck('product_id')->toArray();
+                $query->whereIn('recipe_translation.product_id', $fetchProductList);
+            }
         }
         $recipes = $query->paginate($paginated, ['*'], 'page', $currentPage);
         $recipes->getCollection()->transform(function ($value) {
             $text = $value->recipe_description;
             $cleanText = strip_tags($text);
             $value->recipe_description = html_entity_decode($cleanText);
+            $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+            $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                ->value('image_filename');
             return $value;
         });
         return view('web.recipe', [
             'recipes' => $recipes,
             'currentSum' => $recipes->count(),
-            'products' => $productList,
-            'product_id' => $request->product_id,
+            'category' => $categoryShow,
+            'category_id' => $request->category,
             'code' => $code,
+            'page' => $page,
+            'section' => $section,
         ]);
     }
 
-    public function catalog(Request $request, String $code = null, String $id, String $cat_title = null)
+    public function resep(Request $request, $title = null)
     {
-        $code ??= 'id';
+        $paginated = $request->paginated ?? 12;
+        $currentPage = $request->currentPage ?? 1;
+        $code = 'id';
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'resep')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
+        if ($title) {
+            $query = RecipeTranslation::query();
+            $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->leftJoin('recipe_image as ri', 'r.recipe_id', '=', 'ri.recipe_id')
+                ->select(['recipe_translation.*', 'r.*', 'ri.image_filename', 'ri.image_cover'])
+                ->where('ri.image_cover', '!=', null) // Only join images that have a cover
+                ->where('language_code', $code)
+                ->where('r.recipe_status', 1)
+                ->orderBy('r.create_date', 'desc')
+                ->take(4);
+
+            $recipeList = $query->get();
+
+            // Loop through the recipe list to sanitize descriptions and assign images
+            foreach ($recipeList as $recipe) {
+                $text = $recipe->recipe_description;
+                $cleanText = strip_tags($text);
+                $recipe->recipe_description = html_entity_decode($cleanText);
+
+                // Get the image filename for the cover image
+                if ($recipe->image_cover) {
+                    $recipe->recipe_image = $recipe->image_filename; // image already available from join
+                } else {
+                    $recipe->recipe_image = null; // In case there's no image
+                }
+            }
+
+            // Fetch single recipe based on slug
+            $recipe = RecipeTranslation::join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->where('recipe_slug', $title)
+                ->where('language_code', $code)
+                ->first();
+                
+            $image = RecipeImage::where('recipe_id', $recipe->recipe_id)->get();
+            $res = 4 - $image->count();
+            // dd($res);
+            if ($res > 0) {
+                for ($i = 0; $i < $res; $i++) {
+                    foreach ($image as $item) {
+                        $image->push($item); // Duplicate the item and add it to the collection
+                        if ($image->count() >= 4) {
+                            break 2; // Exit both loops if we reach 4 items
+                        }
+                    }
+                }
+            }
+            $recipe->create_date = $this->formatDate($recipe->create_date);
+            return view('web.recipe-detail', [
+                'recipe' => $recipe,
+                'recipeList' => $recipeList,
+                'code' => $code,
+                'image' => $image,
+            ]);
+        }
+
+        $productList = RecipeTranslation::where('language_code', $code)
+            ->distinct()->pluck('product_id')->toArray();
+        $categoryList = ProductTranslation::where('language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->whereIn('p.product_id', $productList)
+            ->distinct()->pluck('category_id')->toArray();
+        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
+            ->whereIn('category_id', $categoryList)
+            ->get(['category_title', 'category_id']);
+        // dd($categoryShow);
+        $query = RecipeTranslation::query();
+        $query->where('recipe_translation.language_code', $code)
+            ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+            ->join('products_translation as p', 'p.product_id', '=', 'recipe_translation.product_id')
+            ->where('p.language_code', $code)
+            ->where('r.recipe_status', 1)
+            ->select(['recipe_translation.*', 'r.*', 'p.product_title']);
+        if ($request->category) {
+            if (!empty($request->category)) {
+                $fetchProductList = Product::where('category_id', $request->category)
+                    ->distinct()->pluck('product_id')->toArray();
+                $query->whereIn('recipe_translation.product_id', $fetchProductList);
+            }
+        }
+        $recipes = $query->paginate($paginated, ['*'], 'page', $currentPage);
+        $recipes->getCollection()->transform(function ($value) {
+            $text = $value->recipe_description;
+            $cleanText = strip_tags($text);
+            $value->recipe_description = html_entity_decode($cleanText);
+            $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+            $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                ->value('image_filename');
+            return $value;
+        });
+        return view('web.recipe', [
+            'recipes' => $recipes,
+            'currentSum' => $recipes->count(),
+            'category' => $categoryShow,
+            'category_id' => $request->category,
+            'code' => $code,
+            'page' => $page,
+            'section' => $section,
+        ]);
+    }
+
+    public function katalog(Request $request, String $id, String $cat_title = null, String $productDetail = null)
+    {
+        $code = 'id';
+        $fakeId = $id;
         $id = match ($id) {
             'dewasa' => 1,
             'remaja' => 2,
@@ -182,46 +365,199 @@ class HomeController extends Controller
             ->where('p.product_status', 1)
             ->where('segment_id', $id)
             ->where('pc.language_code', $code)
-            ->select(['product_title', 'p.product_id']);
+            ->orderBy('p.create_date', 'desc')
+            ->select(['product_title', 'p.product_id', 'product_slug']);
 
         $cat_id = null;
         if ($cat_title) {
             $cat_id = ProductCategoryTranslation::where('category_slug', $cat_title)
                 ->value('category_id');
+            $cat_title_for_view = ProductCategoryTranslation::where('category_slug', $cat_title)
+                ->value('category_title');
         }
         if ($cat_id) $query->where('p.category_id', $cat_id);
+
         //get all first
         $products = $query->get();
+        $productListForDetail = $query->take(4)->get();
         foreach ($products as $key => $value) {
             # code...
             $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
             $value->product_image = ProductImage::where('product_image_id', $image_id)
                 ->value('image_filename');
         }
-        // dd($products);
-        //undefined
+
         $recipes = null;
+
         if (!$products->isEmpty()) {
             $recipes = RecipeTranslation::where('recipe_translation.language_code', $code)
                 ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
+                ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
                 ->where('r.recipe_status', 1)
-                ->where('product_id', $products[0]->product_id)
-                ->select(['recipe_title', 'recipe_image'])->get();
+                ->where('pct.language_code', $code)
+                ->where('pct.category_slug', $cat_title)
+                ->select(['recipe_title', 'r.recipe_id', 'recipe_image', 'recipe_slug'])->get();
+            foreach ($recipes as $value) {
+                $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+                $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                    ->value('image_filename');
+            }
+        }
+        if ($productDetail) {
+            $detail = ProductTranslation::where('product_slug', $productDetail)
+                ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+                ->where('language_code', $code)
+                ->first();
+            $image_id = ProductImage::where('product_id', $detail->product_id)->value('image_cover');
+            $detail->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+            foreach ($productListForDetail as $key => $value) {
+                # code...
+                $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+                $value->product_image = ProductImage::where('product_image_id', $image_id)
+                    ->value('image_filename');
+            }
+            return view('web.catalog-detail', [
+                'detail' => $detail,
+                'products' => $productListForDetail,
+                'code' => $code,
+                'fakeId' => $fakeId,
+                'cat_title' => ($cat_title) ?  $cat_title_for_view : null,
+                'cat_title_for_detail' => $cat_title,
+            ]);
         }
         return view('web.catalog', [
             'products' => $products,
             'recipes' => ($recipes) ? $recipes : [],
             'segment' => $id,
             'code' => $code,
+            'fakeId' => $fakeId,
+            'cat_title_for_detail' => $cat_title,
+            'cat_title' => ($cat_title) ?  $cat_title_for_view : null,
         ]);
     }
-    public function news(Request $request, String $code = null, String $id)
+    public function catalog(Request $request, String $code = null, String $id, String $cat_title = null, String $productDetail = null)
     {
+        $code ??= 'id';
+        if ($code == 'id') {
+            if ($productDetail)
+                return redirect()->route('web.id.katalog', [
+                    'id' => $id,
+                    'category_title' => $cat_title,
+                    'product' => $productDetail
+                ]);
+            return redirect()->route('web.id.katalog', ['id' => $id, 'category_title' => $cat_title]);
+        }
+        $fakeId = $id;
+        $id = match ($id) {
+            'adult' => 1,
+            'teenager' => 2,
+            'children' => 3,
+        };
+
+        $query = ProductTranslation::query();
+        $query->where('products_translation.language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
+            ->where('p.product_status', 1)
+            ->where('segment_id', $id)
+            ->where('pc.language_code', $code)
+            ->orderBy('p.create_date', 'desc')
+            ->select(['product_title', 'p.product_id', 'product_slug']);
+
+        $cat_id = null;
+        if ($cat_title) {
+            $cat_id = ProductCategoryTranslation::where('category_slug', $cat_title)
+                ->value('category_id');
+            $cat_title_for_view = ProductCategoryTranslation::where('category_slug', $cat_title)
+                ->value('category_title');
+        }
+        if ($cat_id) $query->where('p.category_id', $cat_id);
+
+        //get all first
+        $products = $query->get();
+        $productListForDetail = $query->take(4)->get();
+        foreach ($products as $key => $value) {
+            # code...
+            $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+            $value->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+        }
+        $recipes = null;
+
+        if (!$products->isEmpty()) {
+            $recipes = RecipeTranslation::where('recipe_translation.language_code', $code)
+                ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
+                ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
+                ->where('r.recipe_status', 1)
+                ->where('pct.language_code', $code)
+                ->where('pct.category_slug', $cat_title)
+                ->select(['recipe_title', 'r.recipe_id', 'recipe_image', 'recipe_slug'])->get();
+            foreach ($recipes as $value) {
+                $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+                $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                    ->value('image_filename');
+            }
+        }
+        if ($productDetail) {
+            $detail = ProductTranslation::where('product_slug', $productDetail)
+                ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+                ->where('language_code', $code)
+                ->first();
+            $image_id = ProductImage::where('product_id', $detail->product_id)->value('image_cover');
+            $detail->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+            foreach ($productListForDetail as $key => $value) {
+                # code...
+                $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+                $value->product_image = ProductImage::where('product_image_id', $image_id)
+                    ->value('image_filename');
+            }
+            return view('web.catalog-detail', [
+                'detail' => $detail,
+                'products' => $productListForDetail,
+                'code' => $code,
+                'fakeId' => $fakeId,
+                'cat_title' => ($cat_title) ?  $cat_title_for_view : null,
+                'cat_title_for_detail' => $cat_title,
+            ]);
+        }
+        return view('web.catalog', [
+            'products' => $products,
+            'recipes' => ($recipes) ? $recipes : [],
+            'segment' => $id,
+            'code' => $code,
+            'fakeId' => $fakeId,
+            'cat_title_for_detail' => $cat_title,
+            'cat_title' => ($cat_title) ?  $cat_title_for_view : null,
+        ]);
+    }
+    public function news(Request $request, String $code = null, String $id, String $title = null)
+    {
+        $code ??= 'id';
+        if ($code == 'id') {
+            ($id == 'articles') ? $id = 'artikel' : $id;
+            return redirect()->route('web.id.berita', ['id' => $id, 'title' => $title]);
+        }
         $paginated = $request->paginated ?? 4;
         $currentPage = $request->currentPage ?? 1;
-        $code ??= 'id';
         $news_category = $id === 'articles' ? 1 : ($id === 'press-release' ? 2 : null);
         if (!$news_category) abort(404);
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'berita')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', ($news_category == 1) ? 'berita-bagian-%' : 'press-bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
 
         $query = NewsTranslation::query()
             ->where('language_code', $code)
@@ -233,11 +569,12 @@ class HomeController extends Controller
                 'news_translation.news_description',
                 'n.create_date',
                 'n.news_image',
-                'news_slug'
+                'news_slug',
+                'count_views'
             ]);
 
-        if ($request->title) {
-            $news = $this->getNewsDetail($request->title);
+        if ($title) {
+            $news = $this->getNewsDetail($title);
             $newsList = $this->paginateAndFormatNews($query, 2);
 
             return view('web.news-detail', [
@@ -249,14 +586,188 @@ class HomeController extends Controller
         }
 
         $news = $this->paginateAndFormatNews($query, $paginated, $currentPage);
-
+        $popular = $query->orderBy('count_views', 'desc');
+        $popularNews = $this->paginateAndFormatNews($popular, $paginated, $currentPage);
         return view('web.news', [
             'news' => $news,
             'id' => $id,
             'code' => $code,
+            'popularNews' => $popularNews,
+            'page' => $page,
+            'section' => $section
+        ]);
+    }
+    public function berita(Request $request, String $id, String $title = null)
+    {
+        $code = 'id';
+        $paginated = $request->paginated ?? 4;
+        $currentPage = $request->currentPage ?? 1;
+        $news_category = $id === 'artikel' ? 1 : ($id === 'press-release' ? 2 : null);
+        if (!$news_category) abort(404);
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'berita')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', ($news_category == 1) ? 'berita-bagian-%' : 'press-bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
+        // dd($section);
+        $query = NewsTranslation::query()
+            ->where('language_code', $code)
+            ->join('news as n', 'n.news_id', '=', 'news_translation.news_id')
+            ->where('n.news_status', 1)
+            ->where('n.news_category', $news_category)
+            ->select([
+                'news_translation.news_title',
+                'news_translation.news_description',
+                'n.create_date',
+                'n.news_image',
+                'count_views',
+                'news_slug'
+            ]);
+
+        if ($title) {
+            $news = $this->getNewsDetail($title);
+            $newsList = $this->paginateAndFormatNews($query, 2);
+
+            return view('web.news-detail', [
+                'news' => $news,
+                'id' => $id == 'artikel' ? 'articles' : $id,
+                'newsList' => $newsList,
+                'code' => $code,
+            ]);
+        }
+
+        $news = $this->paginateAndFormatNews($query, $paginated, $currentPage);
+        $popular = $query->orderBy('count_views', 'desc');
+        $popularNews = $this->paginateAndFormatNews($popular, $paginated, $currentPage);
+
+        return view('web.news', [
+            'news' => $news,
+            'id' => $id == 'artikel' ? 'articles' : $id,
+            'code' => $code,
+            'popularNews' => $popularNews,
+            'page' => $page,
+            'section' => $section
         ]);
     }
 
+    public function products(Request $request, String $code = null)
+    {
+        $code ??= 'id';
+        if ($code == 'id') {
+            if ($request->currentPage) {
+                $link = route('web.id.produk') . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
+                return redirect($link);
+            } else return redirect()->route('web.id.produk');
+        }
+        $paginated = $request->paginated ?? 12;
+        $currentPage = $request->currentPage ?? 1;
+        $code = 'id';
+        $query = ProductTranslation::query();
+        $query->where('products_translation.language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
+            ->where('p.product_status', 1)
+            ->where('pc.language_code', $code)
+            ->orderBy('p.category_id', 'asc')
+            ->orderBy('p.create_date', 'desc')
+            ->select(['product_title', 'p.product_id', 'product_slug', 'p.category_id', 'category_title', 'segment_id']);
+
+        //get all first
+        if ($request->category) {
+            if (!empty($request->category)) {
+                $query->where('pc.category_id', $request->category);
+            }
+        }
+        $catArray = $query->distinct()->pluck('category_id')->toArray();
+        $catArray = array_values(array_unique($catArray));
+        // dd($catArray);
+        $products = $query->paginate($paginated, ['*'], 'page', $currentPage);
+        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
+            // ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->whereIn('category_id', $catArray)
+            ->get(['category_title', 'category_id']);
+        foreach ($products as $key => $value) {
+            # code...
+            $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+            $value->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+            // dd($value->segment_id);
+            $id = match ($value->segment_id) {
+                1 => 'dewasa',
+                2 => 'remaja',
+                3 => 'anak',
+            };
+            $value->segment_id = $id;
+        }
+
+        return view('web.product', [
+            'products' => $products,
+            'category' => $categoryShow,
+            'category_id' => $request->category,
+            'code' => $code
+        ]);
+    }
+    public function produk(Request $request)
+    {
+        $paginated = $request->paginated ?? 12;
+        $currentPage = $request->currentPage ?? 1;
+        $code = 'id';
+        $query = ProductTranslation::query();
+        $query->where('products_translation.language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
+            ->where('p.product_status', 1)
+            ->where('pc.language_code', $code)
+            ->orderBy('p.category_id', 'asc')
+            ->orderBy('p.create_date', 'desc')
+            ->select(['product_title', 'p.product_id', 'product_slug', 'p.category_id', 'category_title', 'segment_id']);
+
+        //get all first
+        if ($request->category) {
+            if (!empty($request->category)) {
+                // $fetchProductList = Product::where('category_id', $request->category)
+                //     ->distinct()->pluck('product_id')->toArray();
+                // dd($request->category);
+                $query->where('pc.category_id', $request->category);
+            }
+        }
+        $catArray = $query->distinct()->pluck('category_id')->toArray();
+        $catArray = array_values(array_unique($catArray));
+        // dd($catArray);
+        $products = $query->paginate($paginated, ['*'], 'page', $currentPage);
+        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
+            // ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->whereIn('category_id', $catArray)
+            ->get(['category_title', 'category_id']);
+        foreach ($products as $key => $value) {
+            # code...
+            $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+            $value->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+            // dd($value->segment_id);
+            $id = match ($value->segment_id) {
+                1 => 'dewasa',
+                2 => 'remaja',
+                3 => 'anak',
+            };
+            $value->segment_id = $id;
+        }
+
+        return view('web.product', [
+            'products' => $products,
+            'category' => $categoryShow,
+            'category_id' => $request->category,
+            'code' => $code
+        ]);
+    }
     public function subPages(Request $request, String $code = null)
     {
         $route = Route::currentRouteName();
@@ -274,11 +785,178 @@ class HomeController extends Controller
     public function pages(Request $request, String $code = null)
     {
         $route = Route::currentRouteName();
-        if ($route == 'web.careers') return view('web.careers');
+        if ($route == 'web.id.tentang') {
+            $code = 'id';
+            // Fetch page details
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'tentang')
+                ->where('pages_status', 1)
+                ->first();
+
+            // Fetch tentang description
+            $tentang_description = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.sub_pages_status', 1)
+                ->first();
+            // Fetch list of other years (excluding 'tentang-inaco')
+            $tentang_list_tahun = collect();  // Initialize empty collection
+            if ($page) {
+                $tentang_list_tahun = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->where('sub_pages_slug', 'not like', 'bagian-%')
+                    ->get();
+            }
+            // Sanitize the page description, if it exists
+            if ($page) {
+                $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
+            }
+            return view('web.about', [
+                'page' => $page,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+                'list_year' => $tentang_list_tahun ??= null,
+            ]);
+        } else if ($route == 'web.id.penghargaan') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'penghargaan')
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+                $award_list = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->where('sub_pages_slug', 'not like', 'bagian-%')->get();
+                $award_list = $award_list->map(function ($item) {
+                    // Convert sub_pages_description to an integer
+                    $item->sub_pages_description = (int) strip_tags(html_entity_decode($item->sub_pages_description));
+                    return $item;
+                })->sortBy('sub_pages_description');
+            }
+
+            return view('web.awards', [
+                'page' => $page,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+                'award_list' => $award_list ??= null,
+            ]);
+        } else if ($route == 'web.id.karir') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'karir')
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $section = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->get();
+                $rekrutmen_step = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sub_pages_slug', 'like', 'rekrutmen-%')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->get();
+            }
+            return view('web.careers', [
+                'section' => $section ??= null,
+                'page' => $page,
+                'rekrutmen_step' => $rekrutmen_step ??= null,
+            ]);
+        } else if ($route == 'web.id.temukan-kami') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'temukan-kami')
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $section = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->get();
+                $kontak = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sub_pages_slug', 'like', 'detail-kontak')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+                $daftar_kontak = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sub_pages_slug', 'like', 'kontak-%')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_status', 1)
+                    ->get();
+            }
+            $socialmedia = OfficialSocmedMarketplace::where('id', 1)
+                ->first();
+            return view('web.find-us', [
+                'section' => $section ??= null,
+                'page' => $page,
+                'kontak' => $kontak ??= null,
+                'socialmedia' => $socialmedia,
+                'daftar_kontak' => $daftar_kontak ??= null,
+            ]);
+        } else if ($route == 'web.id.tur-pabrik') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'tur-pabrik')
+                ->where('pages_status', 1)
+                ->first();
+            return view('web.factory-tour', [
+                'page' => $page ??= null,
+            ]);
+        } else if ($route == 'web.id.profil-perusahaan') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'tur-pabrik')
+                ->where('pages_status', 1)
+                ->first();
+            return view('web.company-profile', [
+                'page' => $page ??= null,
+            ]);
+        }
     }
 
     public function distributor(Request $request, String $code = null)
     {
+        $code ??= 'id';
+        if ($code == 'id') {
+            return redirect()->route('web.id.distributor');
+        }
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'distributor')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
         $distributor = Distributor::join('ref_province as rp', 'rp.id', '=', 'distributor.province')
             ->join('ref_city as rc', 'rc.id', '=', 'distributor.city')
             ->select([
@@ -298,22 +976,167 @@ class HomeController extends Controller
         }
         $distributorList = $distributor->get();
         $getBigCity = $distributor->where('distributor_type', 1)->pluck('city');
-        // dd($bigCity);
         $bigCity = DB::table('ref_city')
             ->whereIn('id', $getBigCity)
             ->get();
-        return view('web.distributor', ['distributor' => $distributorList, 'bigCity' => $bigCity]);
+        return view('web.distributor', [
+            'distributor' => $distributorList,
+            'bigCity' => $bigCity,
+            'page' => $page,
+            'section' => $section
+        ]);
+    }
+
+    public function distributorIndonesia()
+    {
+        $code = 'id';
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'distributor')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
+        $distributor = Distributor::join('ref_province as rp', 'rp.id', '=', 'distributor.province')
+            ->join('ref_city as rc', 'rc.id', '=', 'distributor.city')
+            ->select([
+                'distributor.*',
+                'rp.id as province_id',
+                'rp.name as province_name',
+                'rc.id as city_id',
+                'rc.name as city_name',
+                'distributor_type'
+            ]);
+        foreach ($distributor as $key => $value) {
+            # code...
+            $exploded_city = explode(' ', $value->city_name, 2);
+            $city_name = $exploded_city[1];
+            $value->city_name = $city_name;
+            //explode first word, how to?
+        }
+        $distributorList = $distributor->get();
+        $getBigCity = $distributor->where('distributor_type', 1)->pluck('city');
+        $bigCity = DB::table('ref_city')
+            ->whereIn('id', $getBigCity)
+            ->get();
+        return view('web.distributor', [
+            'distributor' => $distributorList,
+            'bigCity' => $bigCity,
+            'page' => $page,
+            'section' => $section,
+        ]);
     }
 
     public function Intermarket(Request $request, String $code = null)
     {
-        $market = InternationalMarket::join('ref_country as rc', 'rc.id', '=', 'international_market.country');
-        $countryISO = $market->pluck('iso');
+        $code ??= 'id';
+        if ($code == 'id') {
+            return redirect()->route('web.id.intermarket');
+        }
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'pasar-internasional')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
+        $market = InternationalMarket::join('ref_country as rc', 'rc.id', '=', 'international_market.country')
+            ->get();
+
+        $countryISO = $market->pluck('iso')->unique();
+        $northAmerica = $market->filter(fn($item) => $item->continent === 'North America');
+        $southAmerica = $market->filter(fn($item) => $item->continent === 'South America');
+        $europe = $market->filter(fn($item) => $item->continent === 'Europe');
+        $africa = $market->filter(fn($item) => $item->continent === 'Africa');
+        $asia = $market->filter(fn($item) => $item->continent === 'Asia');
+        $oceania = $market->filter(fn($item) => $item->continent === 'Oceania');
 
         return view('web.intermarket', [
-            'market' => $market->get(),
-            'countryISO' => $countryISO
+            'market' => $market,
+            'northAmerica' => $northAmerica,
+            'southAmerica' => $southAmerica,
+            'europe' => $europe,
+            'africa' => $africa,
+            'asia' => $asia,
+            'oceania' => $oceania,
+            'countryISO' => $countryISO,
+            'page' => $page,
+            'section' => $section,
         ]);
+    }
+
+    public function intermarketInd()
+    {
+        $code = 'id';
+        $page = PageTranslation::where('language_code', $code)
+            ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+            ->where('pages_slug', 'pasar-internasional')
+            ->where('pages_status', 1)
+            ->first();
+        if ($page) {
+            $section = SubpageTranslation::where('language_code', $code)
+                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                ->where('sub_pages_slug', 'like', 'bagian-%')
+                ->where('sb.pages_id', $page->pages_id)
+                ->where('sb.sub_pages_status', 1)
+                ->get();
+        }
+        $market = InternationalMarket::join('ref_country as rc', 'rc.id', '=', 'international_market.country')
+            ->get();
+
+        $countryISO = $market->pluck('iso')->unique();
+        $northAmerica = $market->filter(fn($item) => $item->continent === 'North America');
+        $southAmerica = $market->filter(fn($item) => $item->continent === 'South America');
+        $europe = $market->filter(fn($item) => $item->continent === 'Europe');
+        $africa = $market->filter(fn($item) => $item->continent === 'Africa');
+        $asia = $market->filter(fn($item) => $item->continent === 'Asia');
+        $oceania = $market->filter(fn($item) => $item->continent === 'Oceania');
+
+        return view('web.intermarket', [
+            'market' => $market,
+            'northAmerica' => $northAmerica,
+            'southAmerica' => $southAmerica,
+            'europe' => $europe,
+            'africa' => $africa,
+            'asia' => $asia,
+            'oceania' => $oceania,
+            'countryISO' => $countryISO,
+            'page' => $page,
+            'section' => $section,
+        ]);
+    }
+
+    public function question(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:25'],
+            'email' => ['required', 'string', 'max:20', 'email'],
+            'phone' => ['required', 'string', 'max:15'],
+            'message' => ['required', 'string']
+        ]);
+        try {
+            DB::beginTransaction();
+            DB::table('web_questions')->insert($data);
+            DB::commit();
+            return response()->json(['message' => 'Sukses']);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json(['error' => 'Gagal']);
+        }
     }
     private function getNewsDetail($slug)
     {
@@ -324,8 +1147,17 @@ class HomeController extends Controller
                 'news_translation.news_description',
                 'n.create_date',
                 'n.news_image',
+                'count_views',
                 'news_slug'
             ]);
+
+        $sessionKey = 'news_viewed_' . $news->news_slug;
+        // dd(session()->all());
+        if (!session($sessionKey)) {
+            $news->count_views = $news->count_views + 1;
+            NewsTranslation::where('news_slug', $slug)->update(['count_views' => $news->count_views]);
+            session()->put($sessionKey, true);
+        }
 
         $news->create_date = $this->formatDate($news->create_date);
 

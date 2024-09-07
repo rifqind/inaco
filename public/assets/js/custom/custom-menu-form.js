@@ -141,13 +141,6 @@ jQuery(".form-validate").validate({
 });
 if (window.location.pathname == "/webappcms/menu") {
     jQuery(document).ready(() => {
-        // jQuery("#datatable-menu").on("click", ".delete-row", function (e) {
-        // e.preventDefault();
-        // var row = jQuery(this).closest("tr");
-        // var id = jQuery(this).data("id");
-        // $('.delete-row').on('click', function (e) {
-            
-        // })
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");

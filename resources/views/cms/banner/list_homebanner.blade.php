@@ -24,6 +24,7 @@
                                 <th>Banner Name</th>
                                 <th>Banner Caption</th>
                                 <th>Lang</th>
+                                <th>Display Sequence</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -34,6 +35,7 @@
                                 <td>{{ $value->banner_name }}</td>
                                 <td>{{ $value->banner_caption }}</td>
                                 <td>{{ $value->language_name }}</td>
+                                <td>{{ $value->display_sequence }}</td>
                                 <td>
                                     <a href="{{ route('banner.update', ['id' => $value->banner_translation_id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <a href="{{ route('banner.create') }}?banner_id={{ $value->banner_id }}&language_code={{ $value->languageList }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>

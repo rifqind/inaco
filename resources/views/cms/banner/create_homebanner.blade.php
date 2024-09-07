@@ -69,7 +69,8 @@
                         <div class="col-lg-6">
                             <input type="hidden" value="{{ $data->banner_image }}" class="form-control-file"
                                 id="banner_image" name="banner_image">
-                            <div class="invalid-feedback">Please select an image</div>
+                            <div>Minimum Dimension : 545 x 307</div>
+                            <div>Max Size : 400kb (.png)</div>
                         </div>
                     </div>
                     @else
@@ -79,7 +80,8 @@
                         <div class="col-lg-6">
                             <input type="file" style="width:200px;" class="form-control-file" id="banner_image"
                                 name="banner_image">
-                            <div class="invalid-feedback">Please select an image</div>
+                            <div>Minimum Dimension : 545 x 307</div>
+                            <div>Max Size : 400kb (.png)</div>
                         </div>
                     </div>
                     @endif
@@ -97,6 +99,21 @@
                                     value="0" {{ $data->banner_status == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="banner_status2">Inactive</label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row {{ $data->display_sequence ? 'd-none' : '' }}">
+                        <label class="col-lg-3 col-form-label" for="display_sequence">Display Sequence<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <select class="form-control" id="display_sequence" name="display_sequence"
+                                style="width:200px;">
+                                <option value="">Please select</option>
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}"
+                                    {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}
+                                    </option>
+                                    @endfor
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">

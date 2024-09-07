@@ -7,31 +7,23 @@
                 <div class="row justify-content-center">
 
                     <div class="col-12 mt-5 mb-4">
-                        <a href="#" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
+                        <a href="{{ route('web.recipe', ['code' => $code]) }}" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
                     </div>
                     <div class="col-md-8">
                         <div id="sync1" class="owl-carousel owl-theme">
+                            @foreach ($image as $value)
                             <div class="item">
-                                <a class="image-event" href="#"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
+                                <a class="image-event" href="#"><img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
                             </div>
-                            <div class="item">
-                                <a class="image-event" href="#"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
-                            </div>
-                            <div class="item">
-                                <a class="image-event" href="#"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
-                            </div>
+                            @endforeach
                         </div>
-
+                        
                         <div id="sync2" class="owl-carousel owl-theme">
+                            @foreach ($image as $value)
                             <div class="item">
-                                <a class="image-event"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
+                                <a class="image-event" href="#"><img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
                             </div>
-                            <div class="item">
-                                <a class="image-event"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
-                            </div>
-                            <div class="item">
-                                <a class="image-event"><img src="{{ asset('data/recipe') . '/' . $recipe->recipe_image }}"></a>
-                            </div>
+                            @endforeach
                         </div>
 
                         <h1 class="title-detail-recipe">{{$recipe->recipe_title}}</h1>
@@ -60,14 +52,14 @@
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2 class="recipe-title mb-0"><span>Resep Lainnya</span></h2>
-                            <a href="{{route('web.recipe', ['code' => $code])}}" class="btn btn-primary more d-none d-md-block">Lihat Lainnya</a>
+                            <a href="{{ route('web.recipe', ['code' => $code]) }}" class="btn btn-primary more d-none d-md-block">Lihat Lainnya</a>
                         </div>
                         <div class="recipe-list row">
                             @foreach ($recipeList as $value)
                             <div class="col-12 col-md-3">
                                 <div class="recipe-thumbnail">
                                     <div class="recipe-image">
-                                        <img src="{{ asset('data/recipe') . '/' . $value->recipe_image }}">
+                                        <img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->recipe_image}}">
                                     </div>
                                     <div class="recipe-content">
                                         <div class="recipe-title">
@@ -76,7 +68,7 @@
                                         <div class="recipe-summamry">
                                             <p>{{$value->recipe_description}}</p>
                                         </div>
-                                        <a href="{{route('web.recipe', ['code' => $code]) . '?title=' . $value->recipe_slug}}" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
+                                        <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                  </div>
                                 </div>
                             </div>

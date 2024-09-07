@@ -37,14 +37,28 @@ class SubpageController extends Controller
         // dd($data);
         foreach ($data as $key => $value) {
             # code...
-            
+
+            # code...
+            $text = $value->sub_pages_description;
+            $cleanText = strip_tags($text);
+            $cleanText = html_entity_decode($cleanText);
+            $words = explode(' ', $cleanText);
+
+            // Check if the word count is greater than 10
+            if (count($words) > 10) {
+                $firstTenWords = implode(' ', array_slice($words, 0, 10));
+                $value->sub_pages_description = $firstTenWords . '...';
+            } else {
+                $value->sub_pages_description = $cleanText;
+            }
+
             //search available languague, english is priority
             $getData = PageTranslation::where('pages_id', $value->pages_id)->get();
-            
+
             //check if language with code en exists if isnt exist get first row
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation) $translation = $getData->first();
-            
+
             $pages_title = $translation->pages_title . ' (' . $translation->language_code . ')';
             $value->pages_title = $pages_title;
             $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');

@@ -1,20 +1,6 @@
 var path = window.location.pathname;
 if (path == "/webappcms/distributor") {
     document.addEventListener("DOMContentLoaded", () => {
-        jQuery("#datatable-distributor")
-            .DataTable({
-                responsive: false,
-                columns: [
-                    { width: "15%" },
-                    { width: "15%" },
-                    { width: "10%" },
-                    { width: "20%" },
-                    { width: "5%" },
-                ],
-            })
-            .buttons()
-            .container()
-            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -70,6 +56,20 @@ if (path == "/webappcms/distributor") {
                 });
             });
         });
+        jQuery("#datatable-distributor")
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "15%" },
+                    { width: "15%" },
+                    { width: "10%" },
+                    { width: "20%" },
+                    { width: "5%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.addEventListener("DOMContentLoaded", () => {

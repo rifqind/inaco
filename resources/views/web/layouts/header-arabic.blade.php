@@ -63,13 +63,9 @@
                  </div> <!-- dropdown-mega-menu.// -->
              </li>
              <li class="nav-item"><a class="nav-link" href="{{ route('web.recipe', ['code' => $code]) }}">الإسقاط</a></li>
-
              <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">موزعات التوزيع</a></li>
-
              <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}"></a></li>
-
              <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">السوق الدولية</a></li>
-
              <li class="nav-item dropdown has-megamenu">
                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> أخبار </a>
                  <div class="dropdown-menu megamenu" role="menu">

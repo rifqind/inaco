@@ -23,10 +23,11 @@ class HeaderComposer
         foreach ($categories as $key => $value) {
             # code...
             $categoryToShow = match ($value->segment_id) {
-                1 => 'dewasa',
-                2 => 'remaja',
-                3 => 'anak'
+                1 => ($lang == 'id') ? 'dewasa' : 'adult',
+                2 => ($lang == 'id') ? 'remaja' : 'teenager',
+                3 => ($lang == 'id') ? 'anak' : 'children'
             };
+
             $value->segment = $categoryToShow;
         }
         $languageList = AppLanguage::get();

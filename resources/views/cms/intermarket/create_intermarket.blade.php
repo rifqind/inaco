@@ -30,6 +30,7 @@
                             <select class="form-control select2-single" id="product_export" name="product_export"
                                 style="width:200px;">
                                 <option value="" disabled selected>Please Select</option>
+                                <option value="0">Semua Produk</option>
                                 @foreach ($product as $value)
                                 <option value="{{ $value->value }}">{{ $value->label }}</option>
                                 @endforeach

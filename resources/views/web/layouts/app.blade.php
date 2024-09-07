@@ -4,11 +4,7 @@
 {{ $head }}
 
 <body>
-    @if ($code == 'ar')
-    @include('web.layouts.header-arabic')
-    @else
     @include('web.layouts.header')
-    @endif
 
     {{ $slot }}
 

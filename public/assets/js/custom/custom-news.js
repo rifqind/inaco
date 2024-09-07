@@ -141,21 +141,6 @@ jQuery("#create-news").validate({
 });
 if (path == "/webappcms/news") {
     document.addEventListener("DOMContentLoaded", () => {
-        jQuery("#datatable-news")
-            .DataTable({
-                responsive: false,
-                columns: [
-                    { width: "5%" },
-                    { width: "7%" },
-                    { width: "5%" },
-                    { width: "25%" },
-                    { width: "5%" },
-                    { width: "5%" },
-                ],
-            })
-            .buttons()
-            .container()
-            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -211,6 +196,21 @@ if (path == "/webappcms/news") {
                 });
             });
         });
+        jQuery("#datatable-news")
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "5%" },
+                    { width: "7%" },
+                    { width: "5%" },
+                    { width: "25%" },
+                    { width: "5%" },
+                    { width: "5%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {

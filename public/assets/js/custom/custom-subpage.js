@@ -148,16 +148,6 @@ $("#create-subpage").validate({
 
 if (path == "/webappcms/subpages") {
     jQuery(document).ready(() => {
-        jQuery("#datatable-subpages").DataTable({
-            responsive: false,
-            columns: [
-                { width: "5%" },
-                { width: "5%" },
-                { width: "25%" },
-                { width: "5%" },
-                { width: "5%" },
-            ],
-        });
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -212,6 +202,16 @@ if (path == "/webappcms/subpages") {
                     }
                 });
             });
+        });
+        jQuery("#datatable-subpages").DataTable({
+            responsive: false,
+            columns: [
+                { width: "5%" },
+                { width: "5%" },
+                { width: "25%" },
+                { width: "5%" },
+                { width: "5%" },
+            ],
         });
     });
 } else {

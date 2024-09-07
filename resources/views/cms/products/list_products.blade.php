@@ -33,6 +33,8 @@
                                 <th>Product</th>
                                 <th>Category</th>
                                 <th>Segment</th>
+                                <th>Show On Home</th>
+                                <th>Display Sequence</th>
                                 <th>Lang</th>
                                 <th>Action</th>
                             </tr>
@@ -44,6 +46,10 @@
                                 <td>{{ $value->product_title }}</td>
                                 <td>{{ $value->category_title }}</td>
                                 <td>{{ $value->segment_name }}</td>
+                                <td>
+                                    {{ $value->show_on_home == 1 ? 'Ya' : 'Tidak' }}
+                                </td>
+                                <td>{{ $value->display }}</td>
                                 <td>{{ $value->language_name }}</td>
                                 <td>
                                     <a href="{{ route('products.update', ['id' => $value->product_translation_id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>

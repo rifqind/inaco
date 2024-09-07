@@ -48,10 +48,10 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                    <option value="{{ $value->value }}"
-                                        {{ $data->language_code == $value->value ? 'selected' : '' }}>
-                                        {{ $value->label }}
-                                    </option>
+                                <option value="{{ $value->value }}"
+                                    {{ $data->language_code == $value->value ? 'selected' : '' }}>
+                                    {{ $value->label }}
+                                </option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
@@ -65,9 +65,10 @@
                                 style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($product as $value)
-                                    <option value="{{ $value->product_id }}"
-                                        {{ $data->product_id == $value->product_id ? 'selected' : '' }}>
-                                        {{ $value->product_title }}</option>
+                                <option value="{{ $value->product_id }}"
+                                    {{ $data->product_id == $value->product_id ? 'selected' : '' }}>
+                                    {{ $value->product_title }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -77,9 +78,16 @@
                         <div class="col-lg-6">
                             <div class="input-group align-items-center">
                                 <input type="file" class="form-control-file w-auto" id="recipe_image_update"
-                                    name="recipe_image_update">
+                                    name="recipe_image_update[]">
+                                <div class="">
+                                    <button class="btn btn-success btn-round h2" id="addImage-update"
+                                        type="button">+</button>
+                                </div>
                             </div>
-                            <div>Select updated image if exists</div>
+                            <div id="imageContainer"></div>
+                            <div>Minimum Dimension : 658 x 307</div>
+                            <div>Max Size : 150kb (.png)</div>
+                            <div>Select updated image if exists, existing image will be deleted</div>
                         </div>
                     </div>
                     <div class="form-group row">

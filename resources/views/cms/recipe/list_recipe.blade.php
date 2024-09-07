@@ -39,7 +39,7 @@
                         <tbody>
                             @foreach ($data as $value)
                             <tr data-id="{{ $value->id }}">
-                                <td><img src="{{ asset('data/recipe/') }}/{{ $value->recipe_image }}" class="rounded mx-auto d-block image-list"></td>
+                                <td><img src="{{ asset('data/recipe/') }}/{{ $value->recipe_id }}/{{ $value->image }}" class="rounded mx-auto d-block image-list"></td>
                                 <td>{{ $value->recipe_title }}</td>
                                 <td>{{ $value->product_title }}</td>
                                 <td>{{ $value->language_name }}</td>

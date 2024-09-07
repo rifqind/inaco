@@ -14,7 +14,12 @@ class NewsTranslation extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     protected $fillable = [
-        'news_id', 'language_code', 'news_title', 'news_description', 'news_slug'
+        'news_id',
+        'language_code',
+        'news_title',
+        'news_description',
+        'news_slug',
+        'count_views'
     ];
     public $timestamps = false;
 }

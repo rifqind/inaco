@@ -24,16 +24,16 @@
  					<h3>Temukan Kami</h3>
  					@endif
  					<div class="d-flex flex-wrap position-relative">
- 						<a href="" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
+ 						<a href="{{ $socialmedia->youtube }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/yt.png') }}"> @inacoindonesiaofficial
  						</a>
- 						<a href="" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
+ 						<a href="{{ $socialmedia->facebook }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/fb.png') }}"> INACOFOOD
  						</a>
- 						<a href="" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
+ 						<a href="{{ $socialmedia->twitter }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/tw.png') }}"> sahabatinaco
  						</a>
- 						<a href="" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
+ 						<a href="{{ $socialmedia->instagram  }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/ig.png') }}"> sahabatinaco
  						</a>
  					</div>

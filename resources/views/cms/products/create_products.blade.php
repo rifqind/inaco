@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
         @if ($data->language_code)
-            Add Another Language
-            [@foreach ($titles as $t)
-                {{ $t }}
-            @endforeach]
-            :
+        Add Another Language
+        [@foreach ($titles as $t)
+        {{ $t }}
+        @endforeach]
+        :
         @else
-            Create Products
+        Create Products
         @endif
     </x-slot>
     <x-slot name="head">
@@ -23,7 +23,7 @@
                     @csrf
                     <!-- {{ $data }} -->
                     @if ($data->product_id)
-                        <input type="hidden" value="{{ $data->product_id }}" name="product_id">
+                    <input type="hidden" value="{{ $data->product_id }}" name="product_id">
                     @endif
                     <div class="form-group row {{ $data->category_id ? 'd-none' : '' }}">
                         <label class="col-lg-3 col-form-label" for="category_id">Product Category<span
@@ -32,9 +32,10 @@
                             <select class="form-control" id="category_id" name="category_id" style="width:200px;">
                                 <option value="" disabled selected>Please select</option>
                                 @foreach ($categories as $value)
-                                    <option value="{{ $value->category_id }}"
-                                        {{ $data->category_id == $value->category_id ? 'selected' : '' }}>
-                                        {{ $value->category_title }}</option>
+                                <option value="{{ $value->category_id }}"
+                                    {{ $data->category_id == $value->category_id ? 'selected' : '' }}>
+                                    {{ $value->category_title }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -61,16 +62,16 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                    @if ($data->language_code)
-                                        <option value="{{ $value->value }}"
-                                            {{ in_array($value->value, $data->language_code->toArray()) ? 'hidden' : '' }}>
-                                            {{ $value->label }}
-                                        </option>
-                                    @else
-                                        <option value="{{ $value->value }}">
-                                            {{ $value->label }}
-                                        </option>
-                                    @endif
+                                @if ($data->language_code)
+                                <option value="{{ $value->value }}"
+                                    {{ in_array($value->value, $data->language_code->toArray()) ? 'hidden' : '' }}>
+                                    {{ $value->label }}
+                                </option>
+                                @else
+                                <option value="{{ $value->value }}">
+                                    {{ $value->label }}
+                                </option>
+                                @endif
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
@@ -135,44 +136,48 @@
                                 <option value="">Please select</option>
                                 @for ($i = 1; $i <= 10; $i++)
                                     <option value="{{ $i }}"
-                                        {{ $data->display_sequence_onhome == $i ? 'selected' : '' }}>
-                                        {{ $i }}</option>
-                                @endfor
+                                    {{ $data->display_sequence_onhome == $i ? 'selected' : '' }}>
+                                    {{ $i }}</option>
+                                    @endfor
                             </select>
                         </div>
                     </div>
                     @if ($data->product_image)
-                        <div class="form-group row d-none">
-                            <label class="col-lg-3 col-form-label" for="">Product Images<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <div class="input-group mb-3 align-items-center">
-                                    <input type="hidden" value="{{ $data->product_image }}"
-                                        class="form-control-file" id="product_image" name="product_image">
-                                    <div class="">
-                                        <button class="btn btn-success btn-round h2" id="addImage"
-                                            type="button">+</button>
-                                    </div>
+                    <div class="form-group row d-none">
+                        <label class="col-lg-3 col-form-label" for="">Product Images<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3 align-items-center">
+                                <input type="hidden" value="{{ $data->product_image }}"
+                                    class="form-control-file" id="product_image" name="product_image">
+                                <div class="">
+                                    <button class="btn btn-success btn-round h2" id="addImage"
+                                        type="button">+</button>
                                 </div>
-                                <div id="imageContainer"></div>
                             </div>
+                            <div id="imageContainer"></div>
+                            <div>Minimum Dimension : 296 x 296</div>
+                            <div>Max Size : 150kb (.png)</div>
                         </div>
+                    </div>
                     @else
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label" for="">Product Images<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <div class="input-group mb-3 align-items-center">
-                                    <input type="file" class="form-control-file w-auto" id="product_image"
-                                        name="product_image[]">
-                                    <div class="">
-                                        <button class="btn btn-success btn-round h2" id="addImage"
-                                            type="button">+</button>
-                                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Product Images<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="input-group mb-3 align-items-center">
+                                <input type="file" class="form-control-file w-auto" id="product_image"
+                                name="product_image[]">
+                                <div class="">
+                                    <button class="btn btn-success btn-round h2" id="addImage"
+                                    type="button">+</button>
                                 </div>
-                                <div id="imageContainer"></div>
                             </div>
+                            <div id="imageContainer"></div>
+                            <div>Minimum Dimension : 296 x 296</div>
+                            <div>Max Size : 150kb (.png)</div>
                         </div>
+                    </div>
                     @endif
                     <div class="form-group row {{ $data->product_id ? 'd-none' : '' }}">
                         <label class="col-lg-3 col-form-label" for="product_status">Product Status<span

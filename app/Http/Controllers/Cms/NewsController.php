@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
 
 class NewsController extends Controller
 {
@@ -109,13 +110,25 @@ class NewsController extends Controller
                 $news_id_used = $data['news_id'];
             } else {
                 $data['news_image'] = $request->validate([
-                    'news_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048'
+                    'news_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:200'
                 ]);
                 if ($request->hasFile('news_image')) {
                     $file = $request->file('news_image');
+                    $imageDimensions = getimagesize($file);
+                    // Check if the image dimensions are at least 545x307
+                    if ($imageDimensions[0] < 526 || $imageDimensions[1] < 307) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                        return response()->json([
+                            'error' => 'The image must be at least 526x307 pixels.'
+                        ]);
+                    }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/news/' . $fileName;
-
+                    $image = Image::read($file->path());
+                    $resizedImage = $image->resize(526, 307, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
                     $insertNews = News::create([
                         'create_date' => Carbon::createFromFormat('d/m/Y', $data['create_date'])->format('Y-m-d H:i:s'),
                         'news_image' => $fileName,
@@ -129,7 +142,8 @@ class NewsController extends Controller
                         'news_description' => $data['news_description'],
                         'news_slug' => $news_slug,
                     ]);
-                    $file->move(public_path('data/news'), $fileName);
+                    // $file->move(public_path('data/news'), $fileName);
+                    $resizedImage->save(public_path('data/news') . '/' . $fileName);
                     $news_id_used = $insertNews->news_id;
                 }
             }
@@ -198,7 +212,7 @@ class NewsController extends Controller
                     'news_status' => ['required', 'integer'],
                     'news_category' => ['required', 'integer'],
                     'create_date_update' => ['sometimes'],
-                    'news_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'news_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:200',
                 ]);
 
                 $updateNewsTranslation = NewsTranslation::where('news_translation_id', $data['news_translation_id']);
@@ -221,6 +235,14 @@ class NewsController extends Controller
                 }
                 if ($request->hasFile('news_image_update')) {
                     $file = $request->file('news_image_update');
+                    $imageDimensions = getimagesize($file);
+                    // Check if the image dimensions are at least 545x307
+                    if ($imageDimensions[0] < 526 || $imageDimensions[1] < 307) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                        return response()->json([
+                            'error' => 'The image must be at least 526x307 pixels.'
+                        ]);
+                    }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/news/' . $fileName;
 
@@ -229,8 +251,14 @@ class NewsController extends Controller
                         'news_image' => $fileName
                     ]);
 
+                    $image = Image::read($file->path());
+                    $resizedImage = $image->resize(526, 307, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $resizedImage->save(public_path('data/news') . '/' . $fileName);
                     //update file 
-                    $file->move(public_path('data/news'), $fileName);
+                    // $file->move(public_path('data/news'), $fileName);
                     //previous path & delete it
                     $getFilePath = 'data/news/' . $getFileName;
 
@@ -256,7 +284,8 @@ class NewsController extends Controller
         }
     }
 
-    public function destroy(String $id) {
+    public function destroy(String $id)
+    {
         try {
             //code...
             DB::beginTransaction();

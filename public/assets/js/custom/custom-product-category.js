@@ -3,19 +3,6 @@ var path = window.location.pathname;
 
 if (path == "/webappcms/products-category") {
     document.addEventListener("DOMContentLoaded", () => {
-        jQuery("#datatable-products-category")
-            .DataTable({
-                responsive: true,
-                columns: [
-                    { width: "10%" },
-                    { width: "10%" },
-                    { width: "10%" },
-                    { width: "5%" },
-                ],
-            })
-            .buttons()
-            .container()
-            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -71,6 +58,19 @@ if (path == "/webappcms/products-category") {
                 });
             });
         });
+        jQuery("#datatable-products-category")
+            .DataTable({
+                responsive: true,
+                columns: [
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "5%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {

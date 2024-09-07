@@ -6,13 +6,18 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-5 pe-md-5 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-                    <h1 class="">Temukan kami</h1>
-                    <p class="">Produk INACO semakin dekat dan mudah ditemukan oleh pelanggannya.</p>
+                    @if ($section->isNotEmpty())
+                    {!! $section->where('sub_pages_slug', 'bagian-satu')->value('sub_pages_description') !!}
+                    @else
+                    <div class="text-center">Konten belum tersedia</div>
+                    @endif
                 </div>
             </div>
         </div>
         <div class="hero-img">
-            <img src="{{ asset('assets/web/images/distributor/distributor-hero.jpg') . '?v=1' }}" class="img-fluid" alt="Award Inaco">
+            @if ($page)
+            <img src="{{ asset('data/pages') . '/' . $page->pages_image }}" class="img-fluid" alt="Artikel Inaco">
+            @endif
         </div>
 
     </section><!-- End Hero -->
@@ -28,9 +33,11 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-7 text-center">
-                        <h2 data-aos="fade-up" class="fw-bold">City List</h2>
-                        <p data-aos="fade-up">For more detailed information, we also provide a list of cities where our distributors are located. This list helps you find the closest distributor to your location and get in touch with them directly.
-                        </p>
+                        @if ($section->isNotEmpty())
+                        {!! $section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description') !!}
+                        @else
+                        <div class="text-center">Konten belum tersedia</div>
+                        @endif
                     </div>
                 </div>
                 <div class="row text-center mt-4">
@@ -145,7 +152,7 @@
         @include('web.layouts.cta-footer')
         <x-slot name="script">
             <script>
-                var cities = {{ Js::from($bigCity) }}
+                var cities = {{Js::from($bigCity)}}
                 am5.ready(function() {
 
                     // Create root element

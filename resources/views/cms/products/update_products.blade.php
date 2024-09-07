@@ -139,6 +139,8 @@
                                 </div>
                             </div>
                             <div id="imageContainer"></div>
+                            <div>Minimum Dimension : 296 x 296</div>
+                            <div>Max Size : 150kb (.png)</div>
                             <div>Select updated image if exists, existing image will be deleted</div>
                         </div>
                     </div>

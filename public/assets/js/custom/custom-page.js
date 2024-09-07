@@ -140,19 +140,6 @@ $("#val-page").on("change", function () {
 
 if (path == "/webappcms/pages") {
     jQuery(document).ready(() => {
-        jQuery("#datatable-pages")
-            .DataTable({
-                responsive: true,
-                columns: [
-                    { width: "5%" },
-                    { width: "30%" },
-                    { width: "5%" },
-                    { width: "5%" },
-                ],
-            })
-            .buttons()
-            .container()
-            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -208,6 +195,19 @@ if (path == "/webappcms/pages") {
                 });
             });
         });
+        jQuery("#datatable-pages")
+        .DataTable({
+            responsive: true,
+            columns: [
+                { width: "5%" },
+                { width: "30%" },
+                { width: "5%" },
+                { width: "5%" },
+            ],
+        })
+        .buttons()
+        .container()
+        .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {

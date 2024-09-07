@@ -52,6 +52,8 @@
                             <input type="file" style="width:200px;" class="form-control-file" id="banner_image_update"
                                 name="banner_image_update">
                             <div>Please select an updated image if exists</div>
+                            <div>Minimum Dimension : 545 x 307</div>
+                            <div>Max Size : 400kb</div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -68,6 +70,17 @@
                                     value="0" {{ $data->banner_status == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="banner_status2">Inactive</label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="display_sequence">Display Sequence<span class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <select class="form-control" id="display_sequence" name="display_sequence" style="width:200px;">
+                                <option value="">Please select</option>
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">

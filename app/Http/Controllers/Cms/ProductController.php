@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -25,10 +26,15 @@ class ProductController extends Controller
         $query->join('app_language as al', 'al.code', '=', 'products_translation.language_code');
         $query->join('products_category as pc', 'pc.category_id', '=', 'p.category_id');
         $query->select([
-            'products_translation.*', 'p.category_id', 'al.name as language_name'
+            'products_translation.*',
+            'p.category_id',
+            'al.name as language_name',
+            'p.show_on_home',
+            'p.display_sequence_onhome as display'
         ]);
 
         //sementara
+        $categoryList = $query->distinct()->pluck('category_id')->toArray();
         $data = $query->get();
         foreach ($data as $key => $value) {
             # code...
@@ -47,7 +53,7 @@ class ProductController extends Controller
             $value->image = ProductImage::where('product_image_id', $getImage->image_cover)
                 ->value('image_filename');
         }
-        $category = ProductCategory::get();
+        $category = ProductCategory::whereIn('category_id', $categoryList)->get();
         foreach ($category as $key => $value) {
             # code...
             $getData = ProductCategoryTranslation::where('category_id', $value->category_id)->get();
@@ -149,7 +155,7 @@ class ProductController extends Controller
                 $product_id_used = $data['product_id'];
             } else {
                 $request->validate([
-                    'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:150',
                 ]);
                 if ($request->hasFile('product_image')) {
                     $insertProduct = Product::create([
@@ -166,13 +172,27 @@ class ProductController extends Controller
 
                     foreach ($request->file('product_image') as $key => $file) {
                         # code...
+                        $imageDimensions = getimagesize($file);
+                        // Check if the image dimensions are at least 545x307
+                        if ($imageDimensions[0] < 296 || $imageDimensions[1] < 296) {
+                            // return back()->withErrors(['banner_image' => 'The image must be at least 296x296 pixels.']);
+                            return response()->json([
+                                'error' => 'The image must be at least 296x296 pixels.'
+                            ]);
+                        }
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = 'data/product/' . $insertProduct->product_id;
                         //chec if folder exists
                         if (!File::exists(public_path($filePath))) {
                             File::makeDirectory(public_path($filePath), 0755, true);
                         }
-                        $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->move(public_path($filePath), $fileName);
+                        $image = Image::read($file->path());
+                        $resizedImage = $image->resize(296, 296, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        // $file->move(public_path($filePath), $fileName);
                         $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                         if ($key == 0) {
                             $insertImage = ProductImage::create([
@@ -279,7 +299,7 @@ class ProductController extends Controller
                     'show_on_home' => ['required', 'integer'],
                     'display_sequence_onhome' => ['required', 'integer'],
                     'product_status' => ['required', 'integer'],
-                    'product_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'product_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:150',
                 ]);
                 $updateProductTranslation = ProductTranslation::where('product_translation_id', $data['product_translation_id']);
                 $product_slug = Str::slug($data['product_title'], '-');
@@ -317,9 +337,23 @@ class ProductController extends Controller
                     }
                     foreach ($request->file('product_image_update') as $key => $file) {
                         # code...
+                        $imageDimensions = getimagesize($file);
+                        // Check if the image dimensions are at least 545x307
+                        if ($imageDimensions[0] < 296 || $imageDimensions[1] < 296) {
+                            // return back()->withErrors(['banner_image' => 'The image must be at least 296x296 pixels.']);
+                            return response()->json([
+                                'error' => 'The image must be at least 296x296 pixels.'
+                            ]);
+                        }
                         $filePath = 'data/product/' . $data['product_id'];
                         $fileName = time() . '_' . $file->getClientOriginalName();
-                        $file->move(public_path($filePath), $fileName);
+                        $image = Image::read($file->path());
+                        $resizedImage = $image->resize(296, 296, function ($constraint) {
+                            $constraint->aspectRatio();
+                            $constraint->upsize();
+                        });
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        // $file->move(public_path($filePath), $fileName);
                         $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                         if ($key == 0) {
                             $insertImage = ProductImage::create([

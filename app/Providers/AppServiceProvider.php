@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\View\Composers\CtaComposer;
+use App\Http\View\Composers\FooterComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\LayoutComposer;
 use App\Http\View\Composers\SidebarComposer;
@@ -30,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer('web.layouts.header', HeaderComposer::class);
         View::composer('web.layouts.app', LayoutComposer::class);
         View::composer('web.layouts.header-arabic', HeaderComposer::class);
+        View::composer('web.layouts.footer', FooterComposer::class);
     }
 }

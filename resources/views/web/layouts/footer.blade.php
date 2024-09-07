@@ -12,25 +12,57 @@
                         </div>
                     </div>
                 </div>
-
+                @if($code == 'id')
                 <div class="col-md-2 col-6">
                     <ul>
-                        <li><a href="#">Company</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Recipe</a></li>
-                        <li><a href="#">Distributors</a></li>
+                        <li><a href="#" id="companyFooter">Perusahaan</a></li>
+                        <li><a href="#" id="produkFooter">Produk</a></li>
+                        <li><a href="{{ route('web.recipe', ['code' => $code]) }}">Resep</a></li>
+                        <li><a href="{{ route('web.distributor', ['code' => $code]) }}">Distributor</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-6 ps-0">
+                    <ul>
+                        <li><a href="{{ route('web.intermarket', ['code' => $code]) }}">Pasar Internasional</a></li>
+                        <li><a href="#" id="newsFooter" >Berita</a></li>
+                        <li><a href="{{ route('web.careers', ['code' => $code]) }}">Karir</a></li>
+                    </ul>
+                </div>
+                @elseif ($code == 'en')
+                <div class="col-md-2 col-6">
+                    <ul>
+                        <li><a href="#" id="companyFooter">Company</a></li>
+                        <li><a href="#" id="produkFooter">Products</a></li>
+                        <li><a href="{{ route('web.recipe', ['code' => $code]) }}">Recipe</a></li>
+                        <li><a href="{{ route('web.distributor', ['code' => $code]) }}">Distributors</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-6 ps-0">
+                    <ul>
+                        <li><a href="{{ route('web.intermarket', ['code' => $code]) }}">International Market</a></li>
+                        <li><a href="#" id="newsFooter" >News</a></li>
+                        <li><a href="{{ route('web.careers', ['code' => $code]) }}">Careers</a></li>
+                    </ul>
+                </div>
+                @elseif ($code == 'ar')
+                <div class="col-md-2 col-6">
+                    <ul>
+                        <li><a href="#" id="companyFooter">شركة</a></li>
+                        <li><a href="#" id="produkFooter">المنتجات</a></li>
+                        <li><a href="{{ route('web.recipe', ['code' => $code]) }}">الإسقاط</a></li>
+                        <li><a href="{{ route('web.distributor', ['code' => $code]) }}">موزعات التوزيع</a></li>
                     </ul>
 
                 </div>
 
                 <div class="col-md-3 col-6 ps-0">
                     <ul>
-                        <li><a href="#">International Market</a></li>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="{{ route('web.intermarket', ['code' => $code]) }}">السوق الدولية</a></li>
+                        <li><a href="#" id="newsFooter" >أخبار</a></li>
+                        <li><a href="{{ route('web.careers', ['code' => $code]) }}">المهنية</a></li>
                     </ul>
                 </div>
-
+                @endif
 
             </div>
         </div>

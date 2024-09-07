@@ -6,6 +6,38 @@
 "use strict";
 var path = window.location.pathname;
 $(document).ready(function () {
+    let imageCounter = 1;
+    $("#addImage").click(function () {
+        if (imageCounter < 4) {
+            imageCounter++;
+            const newImageInput = `
+            <div class="input-group mb-3 align-items-center" id="imageInput${imageCounter}">
+                <input type="file" class="form-control-file w-auto" name="product_image[]">
+                <div class="">
+                    <button class="btn btn-danger removeImage btn-round h2" type="button">-</button>
+                </div>
+            </div>`;
+            $("#imageContainer").append(newImageInput);
+        }
+    });
+    $("#addImage-update").click(function () {
+        if (imageCounter < 4) {
+            imageCounter++;
+            const newImageInput = `
+            <div class="input-group mb-3 align-items-center" id="imageInput${imageCounter}">
+                <input type="file" class="form-control-file w-auto" name="product_image_update[]">
+                <div class="">
+                    <button class="btn btn-danger removeImage btn-round h2" type="button">-</button>
+                </div>
+            </div>`;
+            $("#imageContainer").append(newImageInput);
+        }
+    });
+
+    $("#imageContainer").on("click", ".removeImage", function () {
+        $(this).closest(".input-group").remove();
+        imageCounter--;
+    });
     /* -- Form Editors - Tinymce -- */
     if ($("#tinymce-example").length > 0) {
         tinymce.init({

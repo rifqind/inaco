@@ -16,7 +16,8 @@ class Homebanner extends Model
     protected $fillable = [
         'banner_name',
         'banner_image',
-        'banner_status'
+        'banner_status',
+        'display_sequence'
     ];
     public $timestamps = false;
 }

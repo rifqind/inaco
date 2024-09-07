@@ -6,13 +6,18 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-5 pe-md-5 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-                    <h1 class="">International Market</h1>
-                    <p class="">Expanding Global Horizons by Navigating the Complexities of Global Trade</p>
+                    @if ($section->isNotEmpty())
+                    {!! $section->where('sub_pages_slug', 'bagian-satu')->value('sub_pages_description') !!}
+                    @else
+                    <div class="text-center">Konten belum tersedia</div>
+                    @endif
                 </div>
             </div>
         </div>
         <div class="hero-img">
-            <img src="{{ asset('assets/web/images/market/market-hero.jpg') }}" class="img-fluid" alt="Award Inaco">
+            @if ($page)
+            <img src="{{ asset('data/pages') . '/' . $page->pages_image }}" class="img-fluid" alt="Artikel Inaco">
+            @endif
         </div>
 
     </section><!-- End Hero -->
@@ -27,59 +32,62 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-7 text-center">
-                        <h2 data-aos="fade-up">Geographical Coverage</h2>
-                        <p data-aos="fade-up">Our international market presence spans multiple regions, each with its own unique opportunities and challenges. Our extensive reach allows us to operate in the following areas:</p>
+                        @if ($section->isNotEmpty())
+                        {!! $section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description') !!}
+                        @else
+                        <div class="text-center">Konten belum tersedia</div>
+                        @endif
                     </div>
                 </div>
                 <div class="row text-center mt-4">
+                    @if($northAmerica->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>NORTH AMERICA</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'North America')
+                        @foreach ($northAmerica as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
                         @endforeach
                     </div>
+                    @endif
+                    @if($southAmerica->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>SOUTH AMERICA</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'South America')
+                        @foreach ($southAmerica as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
                         @endforeach
                     </div>
+                    @endif
+                    @if($europe->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>EUROPE</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'Europe')
+                        @foreach ($europe as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
-                        @endforeach    
+                        @endforeach
                     </div>
+                    @endif
+                    @if($africa->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>AFRICA</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'Africa')
+                        @foreach ($africa as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
                         @endforeach
                     </div>
+                    @endif
+                    @if($asia->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>ASIA</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'Asia')
+                        @foreach ($asia as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
                         @endforeach
                     </div>
+                    @endif
+                    @if($oceania->isNotEmpty())
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
                         <h3>OCEANIA</h3>
-                        @foreach ($market as $value)
-                        @if ($value->continent == 'Oceania')
+                        @foreach ($oceania as $value)
                         <div class="list-market"> {{ $value->name }} </div>
-                        @endif
                         @endforeach
                     </div>
+                    @endif
                 </div>
             </div>
         </section>
@@ -88,7 +96,7 @@
 
     <x-slot name="script">
         <script>
-            var activeCountries = {{ Js::from($countryISO) }}
+            var activeCountries = {{Js::from($countryISO)}}
             am5.ready(function() {
 
                 // Create root element

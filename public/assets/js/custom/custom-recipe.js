@@ -6,6 +6,62 @@
 "use strict";
 $(document).ready(function () {
     /* -- Form Editors - Tinymce -- */
+
+    document.querySelectorAll(".table .delete-row").forEach((button) => {
+        button.addEventListener("click", (e) => {
+            const button = e.target.closest(".delete-row");
+            const row = e.target.closest("tr");
+            const id = button.dataset.id;
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                showConfirmButton: true,
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger m-l-10",
+                },
+                confirmButtonText: "Yes, delete it!",
+            }).then((value) => {
+                if (value.isConfirmed) {
+                    jQuery.ajax({
+                        url: "/webappcms/recipes/destroy/" + id,
+                        type: "DELETE",
+                        data: {
+                            _token: jQuery('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        success: function (data) {
+                            if (data.message) {
+                                row.remove();
+                                Swal.fire(
+                                    "Deleted!",
+                                    "Your data has been deleted.",
+                                    "success"
+                                );
+                            } else if (data.error) {
+                                Swal.fire(
+                                    "Error!",
+                                    "There was a problem deleting your data.",
+                                    "error"
+                                );
+                            }
+                        },
+                        error: function () {
+                            Swal.fire(
+                                "Error!",
+                                "There was a problem with the server.",
+                                "error"
+                            );
+                        },
+                    });
+                }
+            });
+        });
+    });
     if ($("#tinymce-example").length > 0) {
         tinymce.init({
             selector: "textarea#tinymce-example",
@@ -72,60 +128,4 @@ $(document).ready(function () {
     });
 
     table.draw();
-
-    document.querySelectorAll(".table .delete-row").forEach((button) => {
-        button.addEventListener("click", (e) => {
-            const button = e.target.closest(".delete-row");
-            const row = e.target.closest("tr");
-            const id = button.dataset.id;
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                showConfirmButton: true,
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger m-l-10",
-                },
-                confirmButtonText: "Yes, delete it!",
-            }).then((value) => {
-                if (value.isConfirmed) {
-                    jQuery.ajax({
-                        url: "/webappcms/recipes/destroy/" + id,
-                        type: "DELETE",
-                        data: {
-                            _token: jQuery('meta[name="csrf-token"]').attr(
-                                "content"
-                            ),
-                        },
-                        success: function (data) {
-                            if (data.message) {
-                                row.remove();
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Your data has been deleted.",
-                                    "success"
-                                );
-                            } else if (data.error) {
-                                Swal.fire(
-                                    "Error!",
-                                    "There was a problem deleting your data.",
-                                    "error"
-                                );
-                            }
-                        },
-                        error: function () {
-                            Swal.fire(
-                                "Error!",
-                                "There was a problem with the server.",
-                                "error"
-                            );
-                        },
-                    });
-                }
-            });
-        });
-    });
 });

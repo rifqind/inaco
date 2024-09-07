@@ -23,7 +23,7 @@
                             </ol>
                         </div><!-- End Breadcrumbs -->
                         <h1 class="title-detail-article">{{$news->news_title}}</h1>
-                        <div class="info-article">{{ $news->create_date }} · (????) · by <a href="#">????</a></div>
+                        <div class="info-article">{{ $news->create_date }}</div>
                         <div class="detail-image-article">
                             <img src="{{asset('data/news') . '/' .$news->news_image }}">
                         </div>

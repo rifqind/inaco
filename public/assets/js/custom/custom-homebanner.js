@@ -1,20 +1,6 @@
 var path = window.location.pathname;
 if (path == "/webappcms/banner") {
     document.addEventListener("DOMContentLoaded", () => {
-        jQuery("#datatable-banner")
-            .DataTable({
-                responsive: false,
-                columns: [
-                    { width: "10%" },
-                    { width: "10%" },
-                    { width: "20%" },
-                    { width: "7%" },
-                    { width: "5%" },
-                ],
-            })
-            .buttons()
-            .container()
-            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
         document.querySelectorAll(".table .delete-row").forEach((button) => {
             button.addEventListener("click", (e) => {
                 const button = e.target.closest(".delete-row");
@@ -70,6 +56,21 @@ if (path == "/webappcms/banner") {
                 });
             });
         });
+        jQuery("#datatable-banner")
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "10%" },
+                    { width: "10%" },
+                    { width: "20%" },
+                    { width: "7%" },
+                    { width: "7%" },
+                    { width: "5%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.addEventListener("DOMContentLoaded", () => {
@@ -119,6 +120,9 @@ if (path == "/webappcms/banner") {
             banner_image: {
                 required: true,
             },
+            display_sequence: {
+                required: true,
+            },
             banner_status: {
                 required: true,
             },
@@ -135,6 +139,9 @@ if (path == "/webappcms/banner") {
             },
             banner_image: {
                 required: "Please select an image",
+            },
+            display_sequence: {
+                required: "Please add display sequence",
             },
             banner_status: {
                 required: "Please select banner status",

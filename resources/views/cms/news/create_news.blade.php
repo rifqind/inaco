@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="breadcrumb">
         @if ($data->language_code)
-            Add Another Language
-            [@foreach ($titles as $t)
-                {{ $t }}
-            @endforeach]
-            :
+        Add Another Language
+        [@foreach ($titles as $t)
+        {{ $t }}
+        @endforeach]
+        :
         @else
-            Create News
+        Create News
         @endif
     </x-slot>
     <x-slot name="head">
@@ -26,7 +26,7 @@
                     @csrf
                     <!-- {{ $data }} -->
                     @if ($data->news_id)
-                        <input type="hidden" value="{{ $data->news_id }}" name="news_id">
+                    <input type="hidden" value="{{ $data->news_id }}" name="news_id">
                     @endif
                     <div class="form-group row {{ $data->news_category ? 'd-none' : '' }}">
                         <label class="col-lg-3 col-form-label" for="news_category">Category<span
@@ -65,74 +65,78 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                    @if ($data->language_code)
-                                        <option value="{{ $value->value }}"
-                                            {{ in_array($value->value, $data->language_code->toArray()) ? 'hidden' : '' }}>
-                                            {{ $value->label }}
-                                        </option>
-                                    @else
-                                        <option value="{{ $value->value }}">
-                                            {{ $value->label }}
-                                        </option>
-                                    @endif
+                                @if ($data->language_code)
+                                <option value="{{ $value->value }}"
+                                    {{ in_array($value->value, $data->language_code->toArray()) ? 'hidden' : '' }}>
+                                    {{ $value->label }}
+                                </option>
+                                @else
+                                <option value="{{ $value->value }}">
+                                    {{ $value->label }}
+                                </option>
+                                @endif
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
                         </div>
                     </div>
                     @if ($data->create_date)
-                        <div class="form-group row d-none">
-                            <label class="col-lg-3 col-form-label" for="val_image">Create Date<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <div class="input-group" style="width:200px;">
-                                    <input type="text" name="create_date"
-                                        value="{{ $data->create_date ? $data->create_date : '' }}" id="data-hidden"
-                                        class="form-control" placeholder="dd/mm/yyyy" />
-                                    <div class="input-group-append">
-                                        <label for="autoclose-date" class="input-group-text" id="basic-addon3"><i
-                                                class="feather icon-calendar"></i></label>
-                                    </div>
+                    <div class="form-group row d-none">
+                        <label class="col-lg-3 col-form-label" for="val_image">Create Date<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="input-group" style="width:200px;">
+                                <input type="text" name="create_date"
+                                    value="{{ $data->create_date ? $data->create_date : '' }}" id="data-hidden"
+                                    class="form-control" placeholder="dd/mm/yyyy" />
+                                <div class="input-group-append">
+                                    <label for="autoclose-date" class="input-group-text" id="basic-addon3"><i
+                                            class="feather icon-calendar"></i></label>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @else
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label" for="val_image">Create Date<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <div class="input-group" style="width:200px;">
-                                    <input type="text" name="create_date" id="autoclose-date"
-                                        class="datepicker-here form-control" placeholder="dd/mm/yyyy"
-                                        aria-describedby="basic-addon3" />
-                                    <div class="input-group-append">
-                                        <label for="autoclose-date" class="input-group-text" id="basic-addon3"><i
-                                                class="feather icon-calendar"></i></label>
-                                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="val_image">Create Date<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="input-group" style="width:200px;">
+                                <input type="text" name="create_date" id="autoclose-date"
+                                    class="datepicker-here form-control" placeholder="dd/mm/yyyy"
+                                    aria-describedby="basic-addon3" />
+                                <div class="input-group-append">
+                                    <label for="autoclose-date" class="input-group-text" id="basic-addon3"><i
+                                            class="feather icon-calendar"></i></label>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @endif
                     @if ($data->news_image)
-                        <div class="form-group row d-none">
-                            <label class="col-lg-3 col-form-label" for="">News Image<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <input type="hidden" value="{{ $data->news_image }}" class="form-control-file"
-                                    id="news_image" name="news_image">
-                                <div class="invalid-feedback">Please select an image</div>
-                            </div>
+                    <div class="form-group row d-none">
+                        <label class="col-lg-3 col-form-label" for="">News Image<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <input type="hidden" value="{{ $data->news_image }}" class="form-control-file"
+                                id="news_image" name="news_image">
+                            <div class="invalid-feedback">Please select an image</div>
+                            <div>Minimum Dimension : 526 x 307</div>
+                            <div>Max Size : 200kb (.png)</div>
                         </div>
+                    </div>
                     @else
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label" for="">News Image<span
-                                    class="text-danger">*</span></label>
-                            <div class="col-lg-6">
-                                <input type="file" style="width:200px;" class="form-control-file" id="news_image"
-                                    name="news_image">
-                                <div class="invalid-feedback">Please select an image</div>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">News Image<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <input type="file" style="width:200px;" class="form-control-file" id="news_image"
+                                name="news_image">
+                            <div class="invalid-feedback">Please select an image</div>
+                            <div>Minimum Dimension : 526 x 307</div>
+                            <div>Max Size : 200kb (.png)</div>
                         </div>
+                    </div>
                     @endif
                     <div class="form-group row {{ $data->news_status ? 'd-none' : '' }}">
                         <label class="col-lg-3 col-form-label" for="val-phoneus">News Status<span

@@ -87,6 +87,8 @@
                             <input type="file" class="form-control-file" id="news_image_update"
                                 name="news_image_update">
                             <div class="">Please select an updated image if exists</div>
+                            <div>Minimum Dimension : 526 x 307</div>
+                            <div>Max Size : 200kb (.png)</div>
                         </div>
                     </div>
                     <div class="form-group row">

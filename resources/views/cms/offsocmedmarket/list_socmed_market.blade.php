@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
                 <div class="">
-                    @if ($routeName == 'social-media.list')
+                    @if ($routeName == 'socmed-marketplace.social-media.list')
                     <table id="datatable-socmed" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -48,7 +48,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @elseif ($routeName == 'marketplace.list')
+                    @elseif ($routeName == 'socmed-marketplace.marketplace.list')
                     <table id="datatable-marketplace" class="table table-striped table-bordered">
                         <thead>
                             <tr>

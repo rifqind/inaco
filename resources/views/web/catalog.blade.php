@@ -27,6 +27,9 @@
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="catalog-list row">
+                            @if($products->isEmpty())
+                            <div class="text-center">Produk belum tersedia</div>
+                            @else
                             @foreach ($products as $value)
                             <div class="col-12 col-md-3">
                                 <div class="catalog-thumbnail">
@@ -38,39 +41,81 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="catalog-detail.php" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
+                                    <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
                                 </div>
                             </div>
                             @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        @if ($cat_title)
         <section id="resep" class="resep pt-0">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         @if(!$products->isEmpty())
-                        <h2>Resep dengan produk Nata De Coco ??? {{$products[0]->product_title}}</h2>
+                        <h2>Resep dengan produk {{ $cat_title }}</h2>
                         @else
-                        <h2>Resep dengan produk Nata De Coco ???</h2>
+                        <h2>Belum ada resep dengan produk ini</h2>
                         @endif
                     </div>
-                    @foreach ($recipes as $value)
                     <div class="col-sm-4 col-md-3">
                         <div class="recipe-catalog">
-                            <a href="recipe-detail.php">
-                                <div class="image-resicipe-catalog"><img src="{{ asset('data/recipe/') }}/{{$value->recipe_image}}"></div>
-                                <div class="title-recipe-catalog">{{$value->recipe_title}}</div>
+                            @if(isset($recipes[0]))
+                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[0]->recipe_slug])}}">
+                                <div class="image-recipe-catalog">
+                                    <img src="{{ asset('data/recipe') . '/' . $recipes[0]->recipe_image }}">
+                                </div>
+                                <div class="title-recipe-catalog">{{ $recipes[0]->recipe_title }}</div>
                             </a>
+                            @endif
                         </div>
                     </div>
-                    <!-- set sm-8 md-9 dst, susah -->
-                    @endforeach
+                    <div class="col-sm-8 col-md-9">
+                        <div class="recipe-catalog">
+                            @if(isset($recipes[1]))
+                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[1]->recipe_slug])}}">
+                                <div class="image-recipe-catalog">
+                                    <img src="{{ asset('data/recipe') . '/' . $recipes[1]->recipe_image }}">
+                                </div>
+                                <div class="title-recipe-catalog">{{ $recipes[1]->recipe_title }}</div>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="recipe-catalog">
+                            @if(isset($recipes[2]))
+                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[2]->recipe_slug])}}">
+                                <div class="image-recipe-catalog">
+                                    <img src="{{ asset('data/recipe') . '/' . $recipes[2]->recipe_image }}">
+                                </div>
+                                <div class="title-recipe-catalog">{{ $recipes[2]->recipe_title }}</div>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="recipe-catalog">
+                            @if(isset($recipes[3]))
+                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[3]->recipe_slug])}}">
+                                <div class="image-recipe-catalog">
+                                    <img src="{{ asset('data/recipe') . '/' . $recipes[3]->recipe_image }}">
+                                </div>
+                                <div class="title-recipe-catalog">{{ $recipes[3]->recipe_title }}</div>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
+        @endif
+
         @include('web.layouts.cta-footer')
     </main>
     <x-slot name="script"></x-slot>

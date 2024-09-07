@@ -16,11 +16,12 @@ class SocmedmarketController extends Controller
         $routeName = Route::currentRouteName();
         $query = OfficialSocmedMarketplace::query();
 
-        if ($routeName == 'social-media.list') {
+        if ($routeName == 'socmed-marketplace.social-media.list') {
             $query->select([
                 'id', 'instagram', 'facebook', 'tiktok', 'youtube', 'twitter'
             ]);
-        } else if ($routeName == 'marketplace.list') {
+        } else if ($routeName == 'socmed-marketplace.marketplace.list') {
+            // dd($query);
             $query->select([
                 'id', 'shopee', 'tokopedia', 'lazada', 'tiktokshop'
             ]);
@@ -28,6 +29,7 @@ class SocmedmarketController extends Controller
 
         //sementara
         $data = $query->get();
+        // dd($data);
         return view('cms.offsocmedmarket.list_socmed_market', [
             'data' => $data,
             'routeName' => $routeName
