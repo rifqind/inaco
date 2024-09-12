@@ -524,15 +524,25 @@ class HomeController extends Controller
                 'code' => $show['code'],
             ]);
         }
-
-        return view('web.news', [
-            'news' => $data['news'],
-            'id' => $data['id'],
-            'code' => $data['code'],
-            'popularNews' => $data['popularNews'],
-            'page' => $data['page'],
-            'section' => $data['section']
-        ]);
+        if ($data['news_category'] == 1) {
+            return view('web.news', [
+                'news' => $data['news'],
+                'id' => $data['id'],
+                'code' => $data['code'],
+                'popularNews' => $data['popularNews'],
+                'page' => $data['page'],
+                'section' => $data['section']
+            ]);
+        } else {
+            return view('web.press-release', [
+                'news' => $data['news'],
+                'id' => $data['id'],
+                'code' => $data['code'],
+                'popularNews' => $data['popularNews'],
+                'page' => $data['page'],
+                'section' => $data['section']
+            ]);
+        }
     }
 
     public function berita(Request $request, String $id, String $title = null)
@@ -549,14 +559,25 @@ class HomeController extends Controller
             ]);
         }
 
-        return view('web.news', [
-            'news' => $data['news'],
-            'id' => $data['id'],
-            'code' => $data['code'],
-            'popularNews' => $data['popularNews'],
-            'page' => $data['page'],
-            'section' => $data['section']
-        ]);
+        if ($data['news_category'] == 1) {
+            return view('web.news', [
+                'news' => $data['news'],
+                'id' => $data['id'],
+                'code' => $data['code'],
+                'popularNews' => $data['popularNews'],
+                'page' => $data['page'],
+                'section' => $data['section']
+            ]);
+        } else {
+            return view('web.press-release', [
+                'news' => $data['news'],
+                'id' => $data['id'],
+                'code' => $data['code'],
+                'popularNews' => $data['popularNews'],
+                'page' => $data['page'],
+                'section' => $data['section']
+            ]);
+        }
     }
 
     private function newsGenerate(Request $request, String $code = null, String $id, String $title = null)
@@ -618,6 +639,7 @@ class HomeController extends Controller
         $data['popularNews'] = $popularNews;
         $data['page'] = $page;
         $data['section'] = $section;
+        $data['news_category'] = $news_category;
         return $data;
     }
 
