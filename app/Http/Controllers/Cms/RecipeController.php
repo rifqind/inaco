@@ -38,7 +38,8 @@ class RecipeController extends Controller
             //search available languague, english is priority
             $getData = ProductTranslation::where('product_id', $value->product_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
 
             $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
             $value->product_title = $product_title;
@@ -56,7 +57,8 @@ class RecipeController extends Controller
             # code...
             $getData = ProductTranslation::where('product_id', $value->product_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
             $value->product_title = $product_title;
         }
@@ -75,7 +77,8 @@ class RecipeController extends Controller
             # code...
             $getData = ProductTranslation::where('product_id', $value->product_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
             $value->product_title = $product_title;
         }
@@ -146,7 +149,7 @@ class RecipeController extends Controller
                 $recipe_id_used = $data['recipe_id'];
             } else {
                 $request->validate([
-                    'recipe_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:150',
+                    'recipe_image.*' => 'required|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 $insertRecipe = Recipe::create([
                     'create_date' => date('Y-m-d H:i:s'),
@@ -175,7 +178,15 @@ class RecipeController extends Controller
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
-                    $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                    // $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                    while (filesize(public_path($filePath) . '/' . $fileName) > 150 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                     if ($key == 0) {
                         $insertImage = RecipeImage::create([
@@ -227,7 +238,7 @@ class RecipeController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $query = RecipeTranslation::query();
@@ -252,7 +263,8 @@ class RecipeController extends Controller
                 # code...
                 $getData = ProductTranslation::where('product_id', $value->product_id)->get();
                 $translation = $getData->firstWhere('language_code', 'en');
-                if (!$translation) $translation = $getData->first();
+                if (!$translation)
+                    $translation = $getData->first();
                 $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
                 $value->product_title = $product_title;
             }
@@ -275,7 +287,7 @@ class RecipeController extends Controller
                     'language_code' => ['required', 'string'],
                     'ingredient' => ['required', 'string'],
                     'recipe_status' => ['required', 'integer'],
-                    'recipe_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:150',
+                    'recipe_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 $updateRecipeTranslation = RecipeTranslation::where('recipe_translation_id', $data['recipe_translation_id']);
                 $recipe_slug = Str::slug($data['recipe_title'], '-');
@@ -324,7 +336,15 @@ class RecipeController extends Controller
                             $constraint->aspectRatio();
                             $constraint->upsize();
                         });
-                        $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        // $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        $quality = 100;
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                        while (filesize(public_path($filePath) . '/' . $fileName) > 150 * 1024) {
+                            $quality -= 5;
+                            $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                            if ($quality <= 10)
+                                break;
+                        }
                         // $file->move(public_path($filePath), $fileName);
                         $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                         if ($key == 0) {
@@ -348,7 +368,8 @@ class RecipeController extends Controller
                 DB::commit();
                 return response()->json([
                     'message' => 'Success',
-                ]);;
+                ]);
+                ;
             } catch (\Throwable $th) {
                 //throw $th;
                 DB::rollBack();
@@ -364,7 +385,7 @@ class RecipeController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

@@ -145,7 +145,6 @@ class SubpageController extends Controller
                 'sub_pages_description' => ['required', 'string'],
                 'language_code' => ['required', 'string'],
                 'sub_pages_status' => ['required', 'integer'],
-                // 'sub_pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
             $sub_pages_id_used = null;
             $sub_pages_slug = Str::slug($data['sub_pages_title'], '-');
@@ -163,7 +162,7 @@ class SubpageController extends Controller
                 $sub_pages_id_used = $data['sub_pages_id'];
             } else {
                 $data['sub_pages_image'] = $request->validate([
-                    'sub_pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048'
+                    'sub_pages_image' => 'required|image|mimes:jpeg,png,jpg,gif'
                 ]);
                 if ($request->hasFile('sub_pages_image')) {
                     $file = $request->file('sub_pages_image');
@@ -241,7 +240,7 @@ class SubpageController extends Controller
                     'sub_pages_description' => ['required', 'string'],
                     'language_code' => ['required', 'string'],
                     'sub_pages_status' => ['required', 'integer'],
-                    'sub_pages_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'sub_pages_image_update' => 'sometimes|image|mimes:jpeg,png,jpg',
                 ]);
 
                 $updateSubpageTranslation = SubpageTranslation::where('sub_pages_translation_id', $data['sub_pages_translation_id']);

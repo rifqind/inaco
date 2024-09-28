@@ -32,7 +32,7 @@ class LanguageController extends Controller
             $data = $request->validate([
                 'code' => ['required', 'string', 'max:2'],
                 'name' => ['required', 'string', 'max:100'],
-                'icon_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
+                'icon_image' => 'required|image|mimes:jpeg,png,jpg,gif',
             ]);
             if ($request->hasFile('icon_image')) {
                 $file = $request->file('icon_image');
@@ -75,7 +75,7 @@ class LanguageController extends Controller
                     'old_code' => ['required', 'string', 'max:2'],
                     'code' => ['required', 'string', 'max:2'],
                     'name' => ['required', 'string', 'max:100'],
-                    'icon_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'icon_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 $updateLanguage = AppLanguage::where('code', $data['old_code']);
                 if ($updateLanguage) {

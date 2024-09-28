@@ -41,7 +41,8 @@ class ProductController extends Controller
             //search available languague, english is priority
             $getData = ProductCategoryTranslation::where('category_id', $value->category_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
 
             $value->segment_name = ProductSegment::where('segment_id', $translation->segment_id)->value('segment_name');
             $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
@@ -58,7 +59,8 @@ class ProductController extends Controller
             # code...
             $getData = ProductCategoryTranslation::where('category_id', $value->category_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
             $value->category_title = $category_title;
         }
@@ -77,7 +79,8 @@ class ProductController extends Controller
             # code...
             $getData = ProductCategoryTranslation::where('category_id', $value->category_id)->get();
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
             $value->category_title = $category_title;
         }
@@ -135,7 +138,6 @@ class ProductController extends Controller
                 'show_on_home' => ['required', 'integer'],
                 'display_sequence_onhome' => ['required', 'integer'],
                 'product_status' => ['required', 'integer'],
-                // 'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
             $product_id_used = null;
             $product_slug = Str::slug($data['product_title'], '-');
@@ -155,7 +157,7 @@ class ProductController extends Controller
                 $product_id_used = $data['product_id'];
             } else {
                 $request->validate([
-                    'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:150',
+                    'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 if ($request->hasFile('product_image')) {
                     $insertProduct = Product::create([
@@ -191,7 +193,15 @@ class ProductController extends Controller
                             $constraint->aspectRatio();
                             $constraint->upsize();
                         });
-                        $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        // $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        $quality = 100;
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                        while (filesize(public_path($filePath) . '/' . $fileName) > 150 * 1024) {
+                            $quality -= 5;
+                            $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                            if ($quality <= 10)
+                                break;
+                        }
                         // $file->move(public_path($filePath), $fileName);
                         $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                         if ($key == 0) {
@@ -245,7 +255,7 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $query = ProductTranslation::query();
@@ -261,7 +271,8 @@ class ProductController extends Controller
                 # code...
                 $getData = ProductCategoryTranslation::where('category_id', $value->category_id)->get();
                 $translation = $getData->firstWhere('language_code', 'en');
-                if (!$translation) $translation = $getData->first();
+                if (!$translation)
+                    $translation = $getData->first();
                 $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
                 $value->category_title = $category_title;
             }
@@ -299,7 +310,7 @@ class ProductController extends Controller
                     'show_on_home' => ['required', 'integer'],
                     'display_sequence_onhome' => ['required', 'integer'],
                     'product_status' => ['required', 'integer'],
-                    'product_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:150',
+                    'product_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 $updateProductTranslation = ProductTranslation::where('product_translation_id', $data['product_translation_id']);
                 $product_slug = Str::slug($data['product_title'], '-');
@@ -352,7 +363,15 @@ class ProductController extends Controller
                             $constraint->aspectRatio();
                             $constraint->upsize();
                         });
-                        $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        // $resizedImage->save(public_path($filePath) . '/' . $fileName);
+                        $quality = 100;
+                        $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                        while (filesize(public_path($filePath) . '/' . $fileName) > 150 * 1024) {
+                            $quality -= 5;
+                            $resizedImage->save(public_path($filePath) . '/' . $fileName, $quality);
+                            if ($quality <= 10)
+                                break;
+                        }
                         // $file->move(public_path($filePath), $fileName);
                         $uploadedFiles[] = public_path($filePath . '/' . $fileName);
                         if ($key == 0) {
@@ -393,7 +412,7 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

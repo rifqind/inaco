@@ -97,7 +97,6 @@ class PageController extends Controller
                 'pages_description' => ['required', 'string'],
                 'language_code' => ['required', 'string'],
                 'pages_status' => ['required', 'integer'],
-                // 'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
             $pages_id_used = null;
             $pages_slug = Str::slug($data['pages_title'], '-');
@@ -115,7 +114,7 @@ class PageController extends Controller
                 $pages_id_used = $data['pages_id'];
             } else {
                 $data['pages_image'] = $request->validate([
-                    'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 if ($request->hasFile('pages_image')) {
                     $file = $request->file('pages_image');
@@ -198,7 +197,7 @@ class PageController extends Controller
                     'pages_description' => ['required', 'string'],
                     'language_code' => ['required', 'string'],
                     'pages_status' => ['required', 'integer'],
-                    'pages_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048',
+                    'pages_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
 
                 $updatePageTranslation = PageTranslation::where('pages_translation_id', $data['pages_translation_id']);

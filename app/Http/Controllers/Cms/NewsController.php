@@ -110,7 +110,7 @@ class NewsController extends Controller
                 $news_id_used = $data['news_id'];
             } else {
                 $data['news_image'] = $request->validate([
-                    'news_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:200'
+                    'news_image' => 'required|image|mimes:jpeg,png,jpg,gif'
                 ]);
                 if ($request->hasFile('news_image')) {
                     $file = $request->file('news_image');
@@ -143,7 +143,15 @@ class NewsController extends Controller
                         'news_slug' => $news_slug,
                     ]);
                     // $file->move(public_path('data/news'), $fileName);
-                    $resizedImage->save(public_path('data/news') . '/' . $fileName);
+                    // $resizedImage->save(public_path('data/news') . '/' . $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/news') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/news') . '/' . $fileName) > 200 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/news') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     $news_id_used = $insertNews->news_id;
                 }
             }
@@ -168,7 +176,7 @@ class NewsController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $query = NewsTranslation::query();
@@ -212,7 +220,7 @@ class NewsController extends Controller
                     'news_status' => ['required', 'integer'],
                     'news_category' => ['required', 'integer'],
                     'create_date_update' => ['sometimes'],
-                    'news_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:200',
+                    'news_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
 
                 $updateNewsTranslation = NewsTranslation::where('news_translation_id', $data['news_translation_id']);
@@ -256,7 +264,15 @@ class NewsController extends Controller
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
-                    $resizedImage->save(public_path('data/news') . '/' . $fileName);
+                    // $resizedImage->save(public_path('data/news') . '/' . $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/news') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/news') . '/' . $fileName) > 200 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/news') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     //update file 
                     // $file->move(public_path('data/news'), $fileName);
                     //previous path & delete it
@@ -284,7 +300,7 @@ class NewsController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

@@ -22,6 +22,7 @@ class SidebarComposer
         $data = MenuNavigation::where('parent_menu', 0)
             ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
             ->where('mn.menu_title', '!=', 'Settings')
+            ->where('on_website', 1)
             ->whereIn('mn.menu_title', $role)
             ->orderBy('display_sequence')
             ->get();
@@ -31,18 +32,21 @@ class SidebarComposer
             # code...
             if (in_array($value->menu_id, $children_check->toArray())) {
                 $value->hasChildren = true;
-            } else $value->hasChildren = false;
+            } else
+                $value->hasChildren = false;
             //search available languague, english is priority
             $getData = MenuNavigationTranslation::where('menu_id', $value->menu_id)->get();
             //check if language with code en exists if isnt exist get first row
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $value->menu_title = $translation->menu_title;
             $value->menu_web_url = $translation->menu_web_url;
             $value->menu_cms_url = $translation->menu_cms_url;
         }
         $sidebarItems = $data;
         $childrenItems = MenuNavigation::where('parent_menu', '!=', 0)
+            ->where('on_website', 1)
             // ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
             ->whereIn('parent_menu', $data->pluck('menu_id')->toArray())
             ->orderBy('display_sequence')
@@ -53,7 +57,8 @@ class SidebarComposer
             $getData = MenuNavigationTranslation::where('menu_id', $value->menu_id)->get();
             //check if language with code en exists if isnt exist get first row
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
             $value->menu_title = $translation->menu_title;
             $value->menu_web_url = $translation->menu_web_url;
             $value->menu_cms_url = $translation->menu_cms_url;

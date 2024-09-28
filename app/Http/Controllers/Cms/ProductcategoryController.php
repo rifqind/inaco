@@ -108,7 +108,7 @@ class ProductcategoryController extends Controller
                 $category_id_used = $data['category_id'];
             } else {
                 $data['category_image'] = $request->validate([
-                    'category_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048'
+                    'category_image' => 'required|image|mimes:jpeg,png,jpg,gif'
                 ]);
                 if ($request->hasFile('category_image')) {
                     $file = $request->file('category_image');
@@ -190,7 +190,7 @@ class ProductcategoryController extends Controller
                     'category_description' => ['required', 'string'],
                     'language_code' => ['required', 'string'],
                     'category_status' => ['required', 'integer'],
-                    'category_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:5048'
+                    'category_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif'
                 ]);
 
                 $updateProductCategoryTrans = ProductCategoryTranslation::where('category_translation_id', $data['category_translation_id']);

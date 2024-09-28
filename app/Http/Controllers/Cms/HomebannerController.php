@@ -99,7 +99,6 @@ class HomebannerController extends Controller
                 'banner_status' => ['required', 'integer'],
                 'banner_url' => ['sometimes', 'nullable', 'string'],
                 'display_sequence' => ['required', 'integer'],
-                // 'pages_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
             $banner_id_used = null;
             if ($request->banner_id) {
@@ -115,7 +114,7 @@ class HomebannerController extends Controller
                 $banner_id_used = $data['banner_id'];
             } else {
                 $data['banner_image'] = $request->validate([
-                    'banner_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:400',
+                    'banner_image' => 'required|image|mimes:jpeg,png,jpg,gif',
                 ]);
                 if ($request->hasFile('banner_image')) {
                     $file = $request->file('banner_image');
@@ -148,7 +147,14 @@ class HomebannerController extends Controller
                     ]);
                     // $file->move(public_path('data/banner'), $fileName);
                     // dd(public_path('data/banner'));
-                    $resizedImage->save(public_path('data/banner') . '/' . $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/banner') . '/' . $fileName) > 400 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     $banner_id_used = $insertBanner->banner_id;
                 }
             }
@@ -172,7 +178,7 @@ class HomebannerController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $query = HomebannerTranslation::query();
@@ -212,7 +218,7 @@ class HomebannerController extends Controller
                     'banner_status' => ['required', 'integer'],
                     'banner_url' => ['sometimes', 'nullable', 'string'],
                     'display_sequence' => ['required', 'integer'],
-                    'banner_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:400',
+                    'banner_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
 
                 $updateBannerTranslation = HomebannerTranslation::where('banner_translation_id', $data['banner_translation_id']);
@@ -256,7 +262,15 @@ class HomebannerController extends Controller
 
                     //update file 
                     // $file->move(public_path('data/banner'), $fileName);
-                    $resizedImage->save(public_path('data/banner') . '/' . $fileName);
+                    // $resizedImage->save(public_path('data/banner') . '/' . $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/banner') . '/' . $fileName) > 400 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     //previous path & delete it
                     $getFilePath = 'data/banner/' . $getFileName;
 
@@ -281,7 +295,7 @@ class HomebannerController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

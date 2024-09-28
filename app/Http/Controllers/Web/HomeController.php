@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Session;
 class HomeController extends Controller
 {
     //
-    public function index(String $code = null)
+    public function index(string $code = null)
     {
         $code ??= 'id';
         $banner = HomebannerTranslation::where('language_code', $code)
@@ -92,8 +92,10 @@ class HomeController extends Controller
                 $value->news_description = $cleanText;
             }
             $value->create_date = date('d M Y', strtotime($value->create_date));
-            if ($value->news_category == 1) $value->news_category = 'articles';
-            else $value->news_category = 'press-release';
+            if ($value->news_category == 1)
+                $value->news_category = 'articles';
+            else
+                $value->news_category = 'press-release';
         }
 
         $texts = [
@@ -125,14 +127,15 @@ class HomeController extends Controller
         ]);
     }
 
-    public function recipe(Request $request, String $code = null, $title = null)
+    public function recipe(Request $request, string $code = null, $title = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
             if ($request->currentPage) {
                 $link = route('web.id.resep', ['title' => $title]) . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
                 return redirect($link);
-            } else return redirect()->route('web.id.resep', ['title' => $title]);
+            } else
+                return redirect()->route('web.id.resep', ['title' => $title]);
         }
         $data = $this->recipeGenerate($request, $code, $title);
         if ($title) {
@@ -180,7 +183,7 @@ class HomeController extends Controller
         ]);
     }
 
-    private function recipeGenerate(Request $request, String $code, String $title = null)
+    private function recipeGenerate(Request $request, string $code, string $title = null)
     {
         $paginated = $request->paginated ?? 12;
         $currentPage = $request->currentPage ?? 1;
@@ -296,7 +299,7 @@ class HomeController extends Controller
         return $data;
     }
 
-    private function recipeDetailGenerate(String $code, String $title)
+    private function recipeDetailGenerate(string $code, string $title)
     {
         $query = RecipeTranslation::query();
         $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
@@ -352,7 +355,7 @@ class HomeController extends Controller
         return $data;
     }
 
-    public function katalog(Request $request, String $id, String $cat_title = null, String $productDetail = null)
+    public function katalog(Request $request, string $id, string $cat_title = null, string $productDetail = null)
     {
         $code = 'id';
         $data = $this->catalogGenerate($request, $code, $id, $cat_title, $productDetail);
@@ -377,7 +380,7 @@ class HomeController extends Controller
             'cat_title' => $data['cat_title'],
         ]);
     }
-    public function catalog(Request $request, String $code = null, String $id, String $cat_title = null, String $productDetail = null)
+    public function catalog(Request $request, string $code = null, string $id, string $cat_title = null, string $productDetail = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
@@ -412,7 +415,7 @@ class HomeController extends Controller
         ]);
     }
 
-    private function catalogGenerate(Request $request, String $code = null, String $id, String $cat_title = null, String $productDetail = null)
+    private function catalogGenerate(Request $request, string $code = null, string $id, string $cat_title = null, string $productDetail = null)
     {
         $fakeId = $id;
         if ($code == 'id') {
@@ -445,7 +448,8 @@ class HomeController extends Controller
             $cat_title_for_view = ProductCategoryTranslation::where('category_slug', $cat_title)
                 ->value('category_title');
         }
-        if ($cat_id) $query->where('p.category_id', $cat_id);
+        if ($cat_id)
+            $query->where('p.category_id', $cat_id);
 
         //get all first
         $products = $query->get();
@@ -478,21 +482,25 @@ class HomeController extends Controller
                 ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
                 ->where('language_code', $code)
                 ->first();
-            $image_id = ProductImage::where('product_id', $detail->product_id)->value('image_cover');
-            $detail->product_image = ProductImage::where('product_image_id', $image_id)
-                ->value('image_filename');
-            foreach ($productListForDetail as $key => $value) {
-                # code...
-                $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
-                $value->product_image = ProductImage::where('product_image_id', $image_id)
+            // if (!$detail)
+            //     abort(404);
+            if ($detail) {
+                $image_id = ProductImage::where('product_id', $detail->product_id)->value('image_cover');
+                $detail->product_image = ProductImage::where('product_image_id', $image_id)
                     ->value('image_filename');
+                foreach ($productListForDetail as $key => $value) {
+                    # code...
+                    $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+                    $value->product_image = ProductImage::where('product_image_id', $image_id)
+                        ->value('image_filename');
+                }
             }
             $show = [];
             $show['detail'] = $detail;
             $show['products'] = $productListForDetail;
             $show['code'] = $code;
             $show['fakeId'] = $fakeId;
-            $show['cat_title'] = ($cat_title) ?  $cat_title_for_view : null;
+            $show['cat_title'] = ($cat_title) ? $cat_title_for_view : null;
             $show['cat_title_for_detail'] = $cat_title;
             return $show;
         }
@@ -503,11 +511,11 @@ class HomeController extends Controller
         $data['code'] = $code;
         $data['fakeId'] = $fakeId;
         $data['cat_title_for_detail'] = $cat_title;
-        $data['cat_title'] = ($cat_title) ?  $cat_title_for_view : null;
+        $data['cat_title'] = ($cat_title) ? $cat_title_for_view : null;
         return $data;
     }
 
-    public function news(Request $request, String $code = null, String $id, String $title = null)
+    public function news(Request $request, string $code = null, string $id, string $title = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
@@ -545,7 +553,7 @@ class HomeController extends Controller
         }
     }
 
-    public function berita(Request $request, String $id, String $title = null)
+    public function berita(Request $request, string $id, string $title = null)
     {
         $code = 'id';
         $data = $this->newsGenerate($request, $code, $id, $title);
@@ -580,7 +588,7 @@ class HomeController extends Controller
         }
     }
 
-    private function newsGenerate(Request $request, String $code = null, String $id, String $title = null)
+    private function newsGenerate(Request $request, string $code = null, string $id, string $title = null)
     {
         $paginated = $request->paginated ?? 4;
         $currentPage = $request->currentPage ?? 1;
@@ -589,7 +597,8 @@ class HomeController extends Controller
             $news_category = $id === 'artikel' ? 1 : ($id === 'press-release' ? 2 : null);
         else
             $news_category = $id === 'articles' ? 1 : ($id === 'press-release' ? 2 : null);
-        if (!$news_category) abort(404);
+        if (!$news_category)
+            abort(404);
 
         $page = PageTranslation::where('language_code', $code)
             ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
@@ -643,14 +652,15 @@ class HomeController extends Controller
         return $data;
     }
 
-    public function products(Request $request, String $code = null)
+    public function products(Request $request, string $code = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
             if ($request->currentPage) {
                 $link = route('web.id.produk') . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
                 return redirect($link);
-            } else return redirect()->route('web.id.produk');
+            } else
+                return redirect()->route('web.id.produk');
         }
         $data = $this->productGenerate($request, $code);
         return view('web.product', [
@@ -672,7 +682,7 @@ class HomeController extends Controller
         ]);
     }
 
-    private function productGenerate(Request $request, String $code = null)
+    private function productGenerate(Request $request, string $code = null)
     {
         $paginated = $request->paginated ?? 12;
         $currentPage = $request->currentPage ?? 1;
@@ -724,7 +734,7 @@ class HomeController extends Controller
         $data['code'] = $code;
         return $data;
     }
-    public function subPages(Request $request, String $code = null)
+    public function subPages(Request $request, string $code = null)
     {
         $route = Route::currentRouteName();
         $code ??= 'id';
@@ -734,11 +744,13 @@ class HomeController extends Controller
                 ->first();
             $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
             return view('web.about', ['page' => $page, 'code' => $code]);
-        } else if ($route == 'web.awards') return view('web.awards');
-        else if ($route == 'web.find-us') return view('web.find-us');
+        } else if ($route == 'web.awards')
+            return view('web.awards');
+        else if ($route == 'web.find-us')
+            return view('web.find-us');
     }
 
-    public function pages(Request $request, String $code = null)
+    public function pages(Request $request, string $code = null)
     {
         $route = Route::currentRouteName();
         if ($route == 'web.id.tentang') {
@@ -746,17 +758,19 @@ class HomeController extends Controller
             // Fetch page details
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'tentang')
+                ->where('pages_slug', 'tentang-kami')
                 ->where('pages_status', 1)
                 ->first();
 
             // Fetch tentang description
-            $tentang_description = SubpageTranslation::where('language_code', $code)
-                ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                ->where('sb.pages_id', $page->pages_id)
-                ->where('sub_pages_slug', 'like', 'bagian-%')
-                ->where('sb.sub_pages_status', 1)
-                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
             // Fetch list of other years (excluding 'tentang-inaco')
             $tentang_list_tahun = collect();  // Initialize empty collection
             if ($page) {
@@ -878,23 +892,43 @@ class HomeController extends Controller
                 ->where('pages_slug', 'tur-pabrik')
                 ->where('pages_status', 1)
                 ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
             return view('web.factory-tour', [
                 'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
             ]);
         } else if ($route == 'web.id.profil-perusahaan') {
             $code = 'id';
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'tur-pabrik')
+                ->where('pages_slug', 'profil-perusahaan')
                 ->where('pages_status', 1)
                 ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
             return view('web.company-profile', [
                 'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
             ]);
         }
     }
 
-    public function distributor(Request $request, String $code = null)
+    public function distributor(Request $request, string $code = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
@@ -921,7 +955,7 @@ class HomeController extends Controller
         ]);
     }
 
-    private function distributorGenerate(String $code = null)
+    private function distributorGenerate(string $code = null)
     {
         $page = PageTranslation::where('language_code', $code)
             ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
@@ -966,7 +1000,7 @@ class HomeController extends Controller
         return $data;
     }
 
-    public function Intermarket(Request $request, String $code = null)
+    public function Intermarket(Request $request, string $code = null)
     {
         $code ??= 'id';
         if ($code == 'id') {
@@ -1005,7 +1039,7 @@ class HomeController extends Controller
         ]);
     }
 
-    private function marketGenerate(String $code)
+    private function marketGenerate(string $code)
     {
         $page = PageTranslation::where('language_code', $code)
             ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
