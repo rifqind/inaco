@@ -268,7 +268,7 @@
                         @if ($page)
                         {!! $page->pages_description !!}
                         @else
-                        <div class="text-center">Konten belum tersedia</div>s
+                        <div class="text-center">Konten belum tersedia</div>
                         @endif
                     </div>
                 </div>

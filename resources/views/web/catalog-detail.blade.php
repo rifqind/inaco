@@ -41,7 +41,7 @@
                         <div class="d-flex align-items-center justify-content-between mb-4 pb-4">
                             <h2>Produk {{ $cat_title }} Lainnya</h2>
                             <!-- <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}" -->
-                            <a href="{{ route('web.products', ['code' => $code]) }}?category={{$cat_title_for_detail}}"
+                            <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
                                 class="btn btn-primary more d-none d-sm-block">Lihat Lainnya</a>
                         </div>
                         <div class="catalog-list row">

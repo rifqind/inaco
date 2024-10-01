@@ -670,8 +670,8 @@ class HomeController extends Controller
                     'category_title' => $cat_title,
                     'product' => $productDetail
                 ]);
-            if ($request->currentPage || $request->category) {
-                $link = route('web.id.produk') . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
+            if ($cat_title) {
+                $link = route('web.id.produk', ['category_title' => $cat_title]);
                 return redirect($link);
             } else
                 return redirect()->route('web.id.produk');
@@ -688,12 +688,21 @@ class HomeController extends Controller
                 'cat_title_for_detail' => $show['cat_title_for_detail'],
             ]);
         }
-        return view('web.product', [
+        return view('web.catalog', [
             'products' => $data['products'],
-            'category' => $data['category'],
-            'category_id' => $data['category_id'],
-            'code' => $data['code']
+            'recipes' => $data['recipes'],
+            'segment' => $data['segment'],
+            'code' => $data['code'],
+            // 'fakeId' => $data['fakeId'],
+            'cat_title_for_detail' => $data['cat_title_for_detail'],
+            'cat_title' => $data['cat_title'],
         ]);
+        // return view('web.product', [
+        //     'products' => $data['products'],
+        //     'category' => $data['category'],
+        //     'category_id' => $data['category_id'],
+        //     'code' => $data['code']
+        // ]);
     }
     public function produk(Request $request, string $cat_title = null, string $productDetail = null)
     {
@@ -710,15 +719,114 @@ class HomeController extends Controller
                 'cat_title_for_detail' => $show['cat_title_for_detail'],
             ]);
         }
-        return view('web.product', [
+
+        return view('web.catalog', [
             'products' => $data['products'],
-            'category' => $data['category'],
-            'category_id' => $data['category_id'],
-            'code' => $data['code']
+            'recipes' => $data['recipes'],
+            'segment' => $data['segment'],
+            'code' => $data['code'],
+            // 'fakeId' => $data['fakeId'],
+            'cat_title_for_detail' => $data['cat_title_for_detail'],
+            'cat_title' => $data['cat_title'],
         ]);
+        // return view('web.product', [
+        //     'products' => $data['products'],
+        //     'category' => $data['category'],
+        //     'category_id' => $data['category_id'],
+        //     'code' => $data['code']
+        // ]);
     }
 
     private function productGenerate(Request $request, string $code = null, string $cat_title = null, string $productDetail = null)
+    {
+        $query = ProductTranslation::query();
+        $query->where('products_translation.language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
+            ->where('p.product_status', 1)
+            ->where('pc.category_slug', $cat_title)
+            // ->where('segment_id', $id)
+            ->where('pc.language_code', $code)
+            ->orderBy('p.create_date', 'desc')
+            ->select(['product_title', 'pc.category_slug', 'p.product_id', 'product_slug']);
+
+        $segment = ProductCategoryTranslation::where('category_slug', $cat_title)->value('segment_id');
+        $cat_id = null;
+        if ($cat_title) {
+            $cat_id = ProductCategoryTranslation::where('category_slug', $cat_title)
+                ->value('category_id');
+            $cat_title_for_view = ProductCategoryTranslation::where('category_slug', $cat_title)
+                ->value('category_title');
+        }
+        if ($cat_id)
+            $query->where('p.category_id', $cat_id);
+
+        //get all first
+        $products = $query->get();
+        $queryProductDetail = clone $query;
+        $productListForDetail = $queryProductDetail->take(4)->get();
+        foreach ($products as $key => $value) {
+            # code...
+            $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+            $value->product_image = ProductImage::where('product_image_id', $image_id)
+                ->value('image_filename');
+        }
+        $recipes = null;
+
+        if (!$products->isEmpty()) {
+            $recipes = RecipeTranslation::where('recipe_translation.language_code', $code)
+                ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
+                ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
+                ->where('r.recipe_status', 1)
+                ->where('pct.language_code', $code)
+                ->where('pct.category_slug', $cat_title)
+                ->select(['recipe_title', 'r.recipe_id', 'recipe_image', 'recipe_slug'])->get();
+            foreach ($recipes as $value) {
+                $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+                $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                    ->value('image_filename');
+            }
+        }
+        if ($productDetail) {
+            $detail = ProductTranslation::where('product_slug', $productDetail)
+                ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+                ->where('language_code', $code)
+                ->first();
+            // if (!$detail)
+            //     abort(404);
+            if ($detail) {
+                $image_id = ProductImage::where('product_id', $detail->product_id)->value('image_cover');
+                $detail->product_image = ProductImage::where('product_image_id', $image_id)
+                    ->value('image_filename');
+                foreach ($productListForDetail as $key => $value) {
+                    # code...
+                    $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
+                    $value->product_image = ProductImage::where('product_image_id', $image_id)
+                        ->value('image_filename');
+                }
+            }
+            $show = [];
+            $show['detail'] = $detail;
+            $show['products'] = $productListForDetail;
+            $show['code'] = $code;
+            // $show['fakeId'] = $fakeId;
+            $show['cat_title'] = ($cat_title) ? $cat_title_for_view : null;
+            $show['cat_title_for_detail'] = $cat_title;
+            return $show;
+        }
+        $data = [];
+        $data['products'] = $products;
+        $data['recipes'] = ($recipes) ? $recipes : collect([]);
+        $data['segment'] = $segment;
+        $data['code'] = $code;
+        // $data['fakeId'] = $fakeId;
+        $data['cat_title_for_detail'] = $cat_title;
+        $data['cat_title'] = ($cat_title) ? $cat_title_for_view : null;
+        return $data;
+    }
+
+    private function rawProductGenerate(Request $request, string $code = null, string $cat_title = null, string $productDetail = null)
     {
         $paginated = $request->paginated ?? 12;
         $currentPage = $request->currentPage ?? 1;
@@ -737,6 +845,7 @@ class HomeController extends Controller
             ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
             ->where('p.product_status', 1)
             ->where('pc.language_code', $code)->distinct()->pluck('p.category_id')->toArray();
+
         //get all first
         if ($request->category) {
             if (!empty($request->category)) {
@@ -815,6 +924,7 @@ class HomeController extends Controller
         $data['code'] = $code;
         return $data;
     }
+
     public function subPages(Request $request, string $code = null)
     {
         $route = Route::currentRouteName();

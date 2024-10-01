@@ -41,7 +41,6 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <!-- <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a> -->
                                     <a href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
                                 </div>
                             </div>

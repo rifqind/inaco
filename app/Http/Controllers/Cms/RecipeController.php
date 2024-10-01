@@ -171,7 +171,7 @@ class RecipeController extends Controller
                     $filePath = 'data/recipe/' . $insertRecipe->recipe_id;
                     //chec if folder exists
                     if (!File::exists(public_path($filePath))) {
-                        File::makeDirectory(public_path($filePath), 0755, true);
+                        File::makeDirectory(public_path($filePath), 0777, true);
                     }
                     $image = Image::read($file->path());
                     $resizedImage = $image->resize(658, 307, function ($constraint) {

@@ -119,7 +119,7 @@
                                         <div class="col-sm-4">
                                             <!-- <div class="megamenu-item"><a href="{{ route('web.catalog', ['id' => $value->segment, 'code' => $value->language_code, 'category_title' => $value->category_slug]) }}">{{$value->category_title}}</a></div> -->
                                             <div class="megamenu-item"><a
-                                                    href="{{ route('web.products', ['code' => $value->language_code]) }}?category={{$value->category_slug}}">{{$value->category_title}}</a>
+                                                    href="{{ route('web.products', ['code' => $value->language_code, 'category_title' => $value->category_slug]) }}">{{$value->category_title}}</a>
                                             </div>
                                         </div>
                                     @endforeach
@@ -250,7 +250,28 @@
             element.addEventListener('click', (event) => {
                 event.preventDefault(); // Prevent the default action of the anchor tag
                 const langCode = event.target.closest('a').id.split('-')[2];
-                const newPath = `/${langCode}/${window.location.pathname.split('/').pop()}`;
+                const checkCurrentPath = window.location.pathname.split('/').pop();
+                let goalPath
+                console.log(checkCurrentPath)
+                switch (checkCurrentPath) {
+                    case 'tentang-kami':
+                        goalPath = 'about'
+                        break;
+                    case 'penghargaan': goalPath = 'awards'
+                        break;
+                    case 'temukan-kami': goalPath = 'find-us'
+                        break;
+                    case 'karir': goalPath = 'careers'
+                        break;
+                    case 'tur-pabrik': goalPath = 'factory-tour'
+                        break;
+                    case 'profil-perusahaan': goalPath = 'company-profile'
+                        break;
+                    default:
+                        goalPath = checkCurrentPath
+                        break;
+                }
+                const newPath = `/${langCode}/${goalPath}`;
                 window.location.href = newPath;
             });
         });
