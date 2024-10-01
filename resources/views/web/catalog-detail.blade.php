@@ -6,8 +6,7 @@
                 <div class="row">
                     @if ($detail)
                         <div class="col-12 mb-4">
-                            <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail]) }}"
-                                class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
+                            <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
                         </div>
                         <div class="col-md-7">
                             <div id="image-detail" class="image-catalog-detail mb-4 mb-sm-0">
@@ -27,9 +26,9 @@
                             </button>
                         </div>
                     @else
-                    <div class="text-center">
-                        Produk Tidak Ada
-                    </div>
+                        <div class="text-center">
+                            Produk Tidak Ada
+                        </div>
                     @endif
 
                 </div>
@@ -41,7 +40,8 @@
                     <div class="col-12">
                         <div class="d-flex align-items-center justify-content-between mb-4 pb-4">
                             <h2>Produk {{ $cat_title }} Lainnya</h2>
-                            <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail]) }}"
+                            <!-- <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}" -->
+                            <a href="{{ route('web.products', ['code' => $code]) }}?category={{$cat_title_for_detail}}"
                                 class="btn btn-primary more d-none d-sm-block">Lihat Lainnya</a>
                         </div>
                         <div class="catalog-list row">
@@ -60,7 +60,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail, 'product' => $value->product_slug]) }}"
+                                            <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail, 'product' => $value->product_slug]) }}"
                                                 class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
                                         </div>
                                     </div>
@@ -68,7 +68,7 @@
                             @endif
                         </div>
                         <div class="text-center">
-                            <a href="{{ route('web.catalog', ['code' => $code, 'id' => $fakeId, 'category_title' => $cat_title_for_detail]) }}"
+                            <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
                                 class="btn btn-primary more d-sm-none">Lihat Lainnya</a>
                         </div>
                     </div>
@@ -123,5 +123,13 @@
             </div>
         </div>
     </div>
-    <x-slot name="script"></x-slot>
+    <x-slot name="script">
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('goback').addEventListener('click', () => {
+                    window.history.back();
+                })
+            })
+        </script>
+    </x-slot>
 </x-web-layout>

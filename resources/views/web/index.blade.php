@@ -80,7 +80,7 @@
                             @foreach ($products as $value)
                             <div class="item" data-aos="fade-up">
                                 <div class="catalog-thumbnail">
-                                    <a href="#">
+                                    <a href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}">
                                         <div class="image-catalog"><img src="{{ asset('data/product'). '/' . $value->product_id .  '/' . $value->product_image }}?v=1"></div>
                                         <div class="content-catalog">
                                             <div class="title-catalog">

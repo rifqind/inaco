@@ -14,7 +14,7 @@ Route::name('web.id.')->group(function () {
     Route::get('/karir', [HomeController::class, 'pages'])->name('karir');
     Route::get('/tur-pabrik', [HomeController::class, 'pages'])->name('tur-pabrik');
     Route::get('/profil-perusahaan', [HomeController::class, 'pages'])->name('profil-perusahaan');
-    Route::get('/produk', [HomeController::class, 'produk'])->name('produk');
+    Route::get('/produk/{category_title?}/{product?}', [HomeController::class, 'produk'])->name('produk');
     Route::get('/distributor', [HomeController::class, 'distributorIndonesia'])->name('distributor');
     Route::get('/pasar-internasional', [HomeController::class, 'intermarketInd'])->name('intermarket');
     Route::get('/resep/{title?}', [HomeController::class, 'resep'])->name('resep');
@@ -25,7 +25,7 @@ Route::prefix('{code?}')
     ->name('web.')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/recipe/{title?}', [HomeController::class, 'recipe'])->name('recipe');
-        Route::get('/catalog/{id}/{category_title?}/{product?}', [HomeController::class, 'catalog'])->name('catalog');
+        Route::get('/catalog/{id}', [HomeController::class, 'catalog'])->name('catalog');
         Route::get('/news/{id}/{title?}', [HomeController::class, 'news'])->name('news');
         Route::get('/about', function (String $code = null) {
             $code ??= 'id';
@@ -52,7 +52,7 @@ Route::prefix('{code?}')
             if ($code == 'id') return redirect()->route('web.id.profil-perusahaan');
         })->name('company-profile');
         Route::get('/distributor', [HomeController::class, 'distributor'])->name('distributor');
-        Route::get('/products', [HomeController::class, 'products'])->name('products');
+        Route::get('/products/{category_title?}/{product?}', [HomeController::class, 'products'])->name('products');
         Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');
     });
 Route::post('/web-question', [HomeController::class, 'question'])->name('question');

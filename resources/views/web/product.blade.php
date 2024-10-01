@@ -30,7 +30,7 @@
                             @if ($category->isNotEmpty())
                             <a href="{{ route('web.products', ['code' => $code]) }}" class="filter-button {{ $category_id ? '' : 'active' }}">Semua</a>
                             @foreach ($category as $value)
-                            <a href="{{ route('web.products', ['code' => $code]) }}?currentPage={{ $products->currentPage() }}&category={{ $value->category_id }}" class="filter-button {{ $value->category_id == $category_id ? 'active' : '' }}">
+                            <a href="{{ route('web.products', ['code' => $code]) }}?currentPage={{ $products->currentPage() }}&category={{ $value->category_slug }}" class="filter-button {{ $value->category_slug == $category_id ? 'active' : '' }}">
                                 {{ $value->category_title }}
                             </a>
                             @endforeach
@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{{ route('web.catalog', ['code' => $code, 'id' => $value->segment_id, 'category_title' => $value->category_title, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
+                                    <a href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
                                 </div>
                             </div>
                             @endforeach
