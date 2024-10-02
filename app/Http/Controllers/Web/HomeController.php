@@ -1290,6 +1290,98 @@ class HomeController extends Controller
             return response()->json(['error' => 'Gagal']);
         }
     }
+
+    public function changeLang(Request $request) {
+        $language = $request->language;
+        $url = $request->url;
+        $remainingPath = $request->remainingPath;
+        switch ($url) {
+            case 'tentang-kami':
+                $goalPath = 'about';
+                break;
+            case 'penghargaan':
+                $goalPath = 'awards';
+                break;
+            case 'temukan-kami':
+                $goalPath = 'find-us';
+                break;
+            case 'karir':
+                $goalPath = 'careers';
+                break;
+            case 'tur-pabrik':
+                $goalPath = 'factory-tour';
+                break;
+            case 'profil-perusahaan':
+                $goalPath = 'company-profile';
+                break;
+            case 'resep':
+                $goalPath = 'recipe';
+                if ($remainingPath != '') {
+                    $recipe_id = RecipeTranslation::where('recipe_slug', $remainingPath)->value('recipe_id');
+                    $recipe_slug = RecipeTranslation::where('language_code', $language)
+                        ->where('recipe_id', operator: $recipe_id)
+                        ->value('recipe_slug');
+                    $goalPath = 'recipe/' . $recipe_slug;
+                }
+                break;
+            case 'katalog':
+                $goalPath = 'catalog';
+                if ($remainingPath != '') {
+                    $remainingPath = match ($remainingPath) {
+                        'dewasa' => 'adult',
+                        'remaja' => 'teenager',
+                        'anak' => 'children'
+                    };
+                    $goalPath = 'catalog/' . $remainingPath;
+                }
+                break;
+            case 'produk':
+                $goalPath = 'products';
+                if ($remainingPath != '') {
+                    $explode_remaining = explode('/', $remainingPath);
+                    $category_id = ProductCategoryTranslation::where('category_slug', $explode_remaining[0])->value('category_id');
+                    $category_slug = ProductCategoryTranslation::where('language_code', $language)
+                        ->where('category_id', $category_id)
+                        ->value('category_slug');
+                    if (sizeof($explode_remaining) > 1) {
+                        $product_id = ProductTranslation::where('product_slug', $explode_remaining[1])->value('product_id');
+                        $product_slug = ProductTranslation::where('language_code', $language)
+                            ->where('product_id', $product_id)
+                            ->value('product_slug');
+                        $goalPath = 'products/' . $category_slug . '/' . $product_slug;
+                    } else {
+                        $goalPath = 'products/' . $category_slug;
+                    }
+                }
+                break;
+            case 'pasar-internasional':
+                $goalPath = 'international-market';
+                break;
+            case 'berita':
+                $goalPath = 'news';
+                if ($remainingPath != '') {
+                    $explode_remaining = explode('/', $remainingPath);
+                    $explode_remaining[0] = match ($explode_remaining[0]) {
+                        'artikel' => 'articles',
+                        'press-release' => 'press-release',
+                    };
+                    if ($explode_remaining[1]) {
+                        $news_id = NewsTranslation::where('news_slug', $explode_remaining[1])->value('news_id');
+                        $news_slug = NewsTranslation::where('language_code', $language)
+                            ->where('news_id', $news_id)
+                            ->value('news_slug');
+                        $goalPath = 'news/' . $explode_remaining[0] . '/' . $news_slug;
+                    } else
+                        $goalPath = 'news/' . $explode_remaining[0];
+                }
+                break;
+            default:
+                $goalPath = $url;
+                break;
+        }
+        $result = '/' . $language . '/' . $goalPath;
+        return response()->json($result);
+    }
     private function getNewsDetail($slug)
     {
         $news = NewsTranslation::where('news_slug', $slug)

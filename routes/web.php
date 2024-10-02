@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\Web\HomeController;
+use App\Models\NewsTranslation;
 use App\Models\OfficialSocmedMarketplace;
 use App\Models\PageTranslation;
+use App\Models\ProductCategoryTranslation;
+use App\Models\ProductTranslation;
+use App\Models\RecipeTranslation;
 use App\Models\SubpageTranslation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -224,6 +229,7 @@ Route::prefix('{code?}')
         Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');
     });
 Route::post('/web-question', [HomeController::class, 'question'])->name('question');
+Route::get('/change-language', [HomeController::class, 'changeLang']);
 Route::get('/fetch/province/{id}', function (string $id) {
     $target = DB::table('ref_province')->where('country_id', $id)
         ->get([

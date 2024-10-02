@@ -19,7 +19,8 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                         @foreach ($languages as $value)
                             <li class="changeLang">
-                                <a class="dropdown-item" href="#" id="change-to-{{ strtolower($value->code) }}">
+                                <a class="dropdown-item language-list" href="#"
+                                    id="change-to-{{ strtolower($value->code) }}">
                                     <img title="{{ $value->name }}"
                                         src="{{ asset('data/language') . '/' . $value->icon_image }}">
                                 </a>
@@ -229,7 +230,8 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                         @foreach ($languages as $value)
                             <li class="changeLang">
-                                <a class="dropdown-item" href="#" id="change-to-{{ strtolower($value->code) }}">
+                                <a class="dropdown-item language-list" href="#"
+                                    id="change-to-{{ strtolower($value->code) }}">
                                     <img title="{{ $value->name }}"
                                         src="{{ asset('data/language') . '/' . $value->icon_image }}">
                                 </a>
@@ -243,36 +245,86 @@
         </nav><!-- .navbar -->
     </div>
 </header><!-- End Header -->
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
+        let nodeElementLang = document.querySelectorAll('.language-list');
+        var languageList = [];
+        nodeElementLang.forEach((element) => {
+            let lang = element.id.split('-')[2];
+            languageList.push(lang);
+        });
+        languageList = [...new Set(languageList)];
         document.querySelectorAll('.changeLang').forEach((element) => {
-            element.addEventListener('click', (event) => {
+            element.addEventListener('click', async (event) => {
                 event.preventDefault(); // Prevent the default action of the anchor tag
                 const langCode = event.target.closest('a').id.split('-')[2];
-                const checkCurrentPath = window.location.pathname.split('/').pop();
-                let goalPath
-                console.log(checkCurrentPath)
-                switch (checkCurrentPath) {
-                    case 'tentang-kami':
-                        goalPath = 'about'
-                        break;
-                    case 'penghargaan': goalPath = 'awards'
-                        break;
-                    case 'temukan-kami': goalPath = 'find-us'
-                        break;
-                    case 'karir': goalPath = 'careers'
-                        break;
-                    case 'tur-pabrik': goalPath = 'factory-tour'
-                        break;
-                    case 'profil-perusahaan': goalPath = 'company-profile'
-                        break;
-                    default:
-                        goalPath = checkCurrentPath
-                        break;
+                const splitPath = window.location.pathname.split('/');
+                let goalPath, remainingPath, newPath
+                remainingPath = splitPath.slice(2).join('/')
+                if (!languageList.includes(splitPath[1])) {
+                    // switch (splitPath[1]) {
+                    //     case 'tentang-kami':
+                    //         goalPath = 'about'
+                    //         break;
+                    //     case 'penghargaan': goalPath = 'awards'
+                    //         break;
+                    //     case 'temukan-kami': goalPath = 'find-us'
+                    //         break;
+                    //     case 'karir': goalPath = 'careers'
+                    //         break;
+                    //     case 'tur-pabrik': goalPath = 'factory-tour'
+                    //         break;
+                    //     case 'profil-perusahaan': goalPath = 'company-profile'
+                    //         break;
+                    //     case 'resep':
+                    //         goalPath = 'recipe';
+                    //         // if (remainingPath != '') goalPath = `recipe/${remainingPath}`
+                    //         break;
+                    //     case 'katalog':
+                    //         goalPath = 'catalog'
+                    //         // if (remainingPath != '') goalPath = `catalog/${remainingPath}`
+                    //         break;
+                    //     case 'produk':
+                    //         goalPath = 'products'
+                    //         // if (remainingPath != '') goalPath = `products/${remainingPath}`
+                    //         break;
+                    //     case 'pasar-internasional':
+                    //         goalPath = 'international-market'
+                    //         // if (remainingPath != '') goalPath = `international-market/${remainingPath}`
+                    //         break;
+                    //     case 'berita':
+                    //         goalPath = 'news'
+                    //         // if (remainingPath != '') goalPath = `news/${remainingPath}`
+                    //         break;
+                    //     default:
+                    //         goalPath = splitPath[1]
+                    //         break;
+                    // }
+                    // newPath = `/${langCode}/${goalPath}`;
+                    const response = await axios.get('/change-language', {
+                        params: {
+                            language: langCode,
+                            url: splitPath[1],
+                            remainingPath: remainingPath,
+                        }
+                    });
+                    console.log(response);
+                } else {
+                    // newPath = `/${langCode}/${remainingPath}`;
+                    const newSplitPath = remainingPath.split('/');
+                    const newRemainingPath = newSplitPath.slice(1).join('/');
+                    // console.log(newRemainingPath)
+                    const response = await axios.get('/change-language', {
+                        params: {
+                            language: langCode,
+                            url: newSplitPath[0],
+                            remainingPath: newRemainingPath,
+                        }
+                    });
+                    console.log(remainingPath)
                 }
-                const newPath = `/${langCode}/${goalPath}`;
-                window.location.href = newPath;
+                // window.location.href = newPath;
             });
         });
     });
