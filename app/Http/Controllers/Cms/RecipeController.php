@@ -41,7 +41,7 @@ class RecipeController extends Controller
             if (!$translation)
                 $translation = $getData->first();
 
-            $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
+            $product_title = $translation->product_title;
             $value->product_title = $product_title;
             $languageList = RecipeTranslation::where('recipe_id', $value->recipe_id)
                 ->pluck('language_code');
@@ -59,7 +59,7 @@ class RecipeController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation)
                 $translation = $getData->first();
-            $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
+            $product_title = $translation->product_title;
             $value->product_title = $product_title;
         }
 
@@ -79,7 +79,7 @@ class RecipeController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation)
                 $translation = $getData->first();
-            $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
+            $product_title = $translation->product_title;
             $value->product_title = $product_title;
         }
         if ($request->recipe_id) {
@@ -265,7 +265,7 @@ class RecipeController extends Controller
                 $translation = $getData->firstWhere('language_code', 'en');
                 if (!$translation)
                     $translation = $getData->first();
-                $product_title = $translation->product_title . ' (' . $translation->language_code . ')';
+                $product_title = $translation->product_title;
                 $value->product_title = $product_title;
             }
 

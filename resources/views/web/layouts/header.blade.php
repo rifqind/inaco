@@ -35,6 +35,8 @@
                         <a class="nav-link dropdown-toggle" href="#">Perusahaan</a>
                     @elseif ($code == 'ar')
                         <a class="nav-link dropdown-toggle" href="#">شركة</a>
+                    @elseif ($code == 'vi')
+                    <a class="nav-link dropdown-toggle" href="#">Công ty</a>
                     @else
                         <a class="nav-link dropdown-toggle" href="#">Company</a>
                     @endif
@@ -77,6 +79,22 @@
                                                     href="{{ route('web.awards', ['code' => $code]) }}">الجوائز</a></div>
                                             <div class="megamenu-item"><a
                                                     href="{{ route('web.find-us', ['code' => $code]) }}">ابحث عنا</a></div>
+                                        @elseif($code == 'vi')
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.about', ['code' => $code]) }}">Về Chúng Tôi</a>
+                                            </div>
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.company-profile', ['code' => $code]) }}">Hồ Sơ Công
+                                                    Ty</a></div>
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.factory-tour', ['code' => $code]) }}">Tham Quan Nhà
+                                                    Máy</a></div>
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.awards', ['code' => $code]) }}">Giải Thưởng</a>
+                                            </div>
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.find-us', ['code' => $code]) }}">Tìm Chúng Tôi</a>
+                                            </div>
                                         @else
                                             <div class="megamenu-item"><a
                                                     href="{{ route('web.about', ['code' => $code]) }}">About Us</a></div>
@@ -104,9 +122,12 @@
                         <a class="nav-link dropdown-toggle" href="#">Produk</a>
                     @elseif ($code == 'ar')
                         <a class="nav-link dropdown-toggle" href="#">المنتجات</a>
+                    @elseif ($code == 'vi')
+                        <a class="nav-link dropdown-toggle" href="#">Sản phẩm</a>
                     @else
                         <a class="nav-link dropdown-toggle" href="#">Products</a>
                     @endif
+
                     <div class="dropdown-menu megamenu" role="menu">
                         <div class="row">
                             <div class="col-sm-3 d-none d-sm-block">
@@ -149,6 +170,15 @@
                                 src="{{ asset('assets/web/images/logo.png') }}"></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">Pasar
                             Internasional</a></li>
+                @elseif ($code == 'vi')
+                    <li class="nav-item"><a class="nav-link" href="{{ route('web.recipe', ['code' => $code]) }}">Công
+                            Thức</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">Nhà
+                            Phân Phối</a></li>
+                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco"
+                                src="{{ asset('assets/web/images/logo.png') }}"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">Thị
+                            Trường Quốc Tế</a></li>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ route('web.recipe', ['code' => $code]) }}">Recipe</a>
                     </li>
@@ -166,9 +196,12 @@
                         <a class="nav-link dropdown-toggle" href="#">أخبار</a>
                     @elseif ($code == 'id')
                         <a class="nav-link dropdown-toggle" href="#">Berita</a>
+                    @elseif ($code == 'vi')
+                        <a class="nav-link dropdown-toggle" href="#">Tin tức</a>
                     @else
                         <a class="nav-link dropdown-toggle" href="#">News</a>
                     @endif
+
                     <div class="dropdown-menu megamenu" role="menu">
                         <div class="row">
                             <div class="col-sm-3 d-none d-sm-block">
@@ -193,7 +226,16 @@
                                             <div class="megamenu-item"><a
                                                     href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}">Press
                                                     Release</a></div>
+                                        @elseif ($code == 'vi')
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}">Bài
+                                                    Viết</a>
+                                            </div>
+                                            <div class="megamenu-item"><a
+                                                    href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}">Thông
+                                                    Cáo Báo Chí</a></div>
                                         @else
+
                                             <div class="megamenu-item"><a
                                                     href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}">Article</a>
                                             </div>
@@ -215,7 +257,11 @@
                 @elseif ($code == 'id')
                     <li class="nav-item"><a class="nav-link" href="{{ route('web.careers', ['code' => $code]) }}">Karir</a>
                     </li>
+                @elseif ($code == 'vi')
+                    <li class="nav-item"><a class="nav-link" href="{{ route('web.careers', ['code' => $code]) }}">Nghề
+                            Nghiệp</a></li>
                 @else
+
                     <li class="nav-item"><a class="nav-link"
                             href="{{ route('web.careers', ['code' => $code]) }}">Careers</a></li>
                 @endif

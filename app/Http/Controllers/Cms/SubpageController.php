@@ -59,7 +59,7 @@ class SubpageController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation) $translation = $getData->first();
 
-            $pages_title = $translation->pages_title . ' (' . $translation->language_code . ')';
+            $pages_title = $translation->pages_title;
             $value->pages_title = $pages_title;
             $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
             $value->languageList = $languageList;

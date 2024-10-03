@@ -45,7 +45,7 @@ class ProductController extends Controller
                 $translation = $getData->first();
 
             $value->segment_name = ProductSegment::where('segment_id', $translation->segment_id)->value('segment_name');
-            $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
+            $category_title = $translation->category_title;
             $value->category_title = $category_title;
             $languageList = ProductCategoryTranslation::where('category_id', $value->category_id)
                 ->pluck('language_code');
@@ -61,7 +61,7 @@ class ProductController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation)
                 $translation = $getData->first();
-            $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
+            $category_title = $translation->category_title;
             $value->category_title = $category_title;
         }
 
@@ -81,7 +81,7 @@ class ProductController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation)
                 $translation = $getData->first();
-            $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
+            $category_title = $translation->category_title;
             $value->category_title = $category_title;
         }
         if ($request->product_id) {
@@ -273,7 +273,7 @@ class ProductController extends Controller
                 $translation = $getData->firstWhere('language_code', 'en');
                 if (!$translation)
                     $translation = $getData->first();
-                $category_title = $translation->category_title . ' (' . $translation->language_code . ')';
+                $category_title = $translation->category_title;
                 $value->category_title = $category_title;
             }
 

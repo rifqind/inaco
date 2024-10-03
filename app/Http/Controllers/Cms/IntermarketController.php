@@ -34,7 +34,7 @@ class IntermarketController extends Controller
             $translation = $getData->firstWhere('language_code', 'en');
             if (!$translation) $translation = $getData->first();
 
-            $product_export = $translation->product_title . ' (' . $translation->language_code . ')';
+            $product_export = $translation->product_title;
             $value->product_export = $product_export;
         }
         return view('cms.intermarket.list_intermarket', [
