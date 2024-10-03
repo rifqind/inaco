@@ -14,8 +14,9 @@
             @case(3)
             <img src="{{ asset('assets/web/images/catalog/hero-anak.jpg') }}?v=1" class="img-fluid" alt="Hero Desawa">
             @break
-
+            
             @default
+            <img src="{{ asset('assets/web/images/catalog/hero-dewasa.jpg') }}" class="img-fluid" alt="Hero Desawa">
 
             @endswitch
         </div>

@@ -260,71 +260,16 @@
                 event.preventDefault(); // Prevent the default action of the anchor tag
                 const langCode = event.target.closest('a').id.split('-')[2];
                 const splitPath = window.location.pathname.split('/');
-                let goalPath, remainingPath, newPath
+                let goalPath, remainingPath, newPath, response
                 remainingPath = splitPath.slice(2).join('/')
                 if (!languageList.includes(splitPath[1])) {
-                    // switch (splitPath[1]) {
-                    //     case 'tentang-kami':
-                    //         goalPath = 'about'
-                    //         break;
-                    //     case 'penghargaan': goalPath = 'awards'
-                    //         break;
-                    //     case 'temukan-kami': goalPath = 'find-us'
-                    //         break;
-                    //     case 'karir': goalPath = 'careers'
-                    //         break;
-                    //     case 'tur-pabrik': goalPath = 'factory-tour'
-                    //         break;
-                    //     case 'profil-perusahaan': goalPath = 'company-profile'
-                    //         break;
-                    //     case 'resep':
-                    //         goalPath = 'recipe';
-                    //         // if (remainingPath != '') goalPath = `recipe/${remainingPath}`
-                    //         break;
-                    //     case 'katalog':
-                    //         goalPath = 'catalog'
-                    //         // if (remainingPath != '') goalPath = `catalog/${remainingPath}`
-                    //         break;
-                    //     case 'produk':
-                    //         goalPath = 'products'
-                    //         // if (remainingPath != '') goalPath = `products/${remainingPath}`
-                    //         break;
-                    //     case 'pasar-internasional':
-                    //         goalPath = 'international-market'
-                    //         // if (remainingPath != '') goalPath = `international-market/${remainingPath}`
-                    //         break;
-                    //     case 'berita':
-                    //         goalPath = 'news'
-                    //         // if (remainingPath != '') goalPath = `news/${remainingPath}`
-                    //         break;
-                    //     default:
-                    //         goalPath = splitPath[1]
-                    //         break;
-                    // }
-                    // newPath = `/${langCode}/${goalPath}`;
-                    const response = await axios.get('/change-language', {
-                        params: {
-                            language: langCode,
-                            url: splitPath[1],
-                            remainingPath: remainingPath,
-                        }
-                    });
-                    console.log(response);
+                    response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`);
                 } else {
-                    // newPath = `/${langCode}/${remainingPath}`;
                     const newSplitPath = remainingPath.split('/');
                     const newRemainingPath = newSplitPath.slice(1).join('/');
-                    // console.log(newRemainingPath)
-                    const response = await axios.get('/change-language', {
-                        params: {
-                            language: langCode,
-                            url: newSplitPath[0],
-                            remainingPath: newRemainingPath,
-                        }
-                    });
-                    console.log(remainingPath)
+                    response = await axios.get(`/change-language/${langCode}/${newSplitPath[0]}/${newRemainingPath}`);
                 }
-                // window.location.href = newPath;
+                window.location.href = response.data;
             });
         });
     });

@@ -229,7 +229,7 @@ Route::prefix('{code?}')
         Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');
     });
 Route::post('/web-question', [HomeController::class, 'question'])->name('question');
-Route::get('/change-language', [HomeController::class, 'changeLang']);
+Route::get('/change-language/{lang}/{url}/{remaining?}', [HomeController::class, 'changeLang']);
 Route::get('/fetch/province/{id}', function (string $id) {
     $target = DB::table('ref_province')->where('country_id', $id)
         ->get([
