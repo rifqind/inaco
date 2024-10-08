@@ -22,7 +22,7 @@ class SidebarComposer
         $data = MenuNavigation::where('parent_menu', 0)
             ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
             ->where('mn.menu_title', '!=', 'Settings')
-            ->where('on_website', 1)
+            ->where('on_cms', 1)
             ->whereIn('mn.menu_title', $role)
             ->orderBy('display_sequence')
             ->get();
@@ -46,7 +46,7 @@ class SidebarComposer
         }
         $sidebarItems = $data;
         $childrenItems = MenuNavigation::where('parent_menu', '!=', 0)
-            ->where('on_website', 1)
+            ->where('on_cms', 1)
             // ->join('menu_navigation_translation as mn', 'mn.menu_id', '=', 'menu_navigation.menu_id')
             ->whereIn('parent_menu', $data->pluck('menu_id')->toArray())
             ->orderBy('display_sequence')

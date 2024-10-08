@@ -24,6 +24,7 @@
                                 <th>Menu</th>
                                 <th>Category</th>
                                 <th>On Website</th>
+                                <th>On Cms</th>
                                 <th>Lang</th>
                                 <th>Action</th>
                             </tr>
@@ -46,6 +47,13 @@
                                 </td>
                                 <td>
                                     @if ($value->on_website == 1)
+                                    Yes
+                                    @else
+                                    No
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($value->on_cms == 1)
                                     Yes
                                     @else
                                     No

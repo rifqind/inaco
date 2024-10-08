@@ -23,6 +23,7 @@ class MenuController extends Controller
             'menu_title',
             'menu_category',
             'on_website',
+            'on_cms',
             'al.name as language_name',
             'al.code as language_code'
         ]);
@@ -36,8 +37,7 @@ class MenuController extends Controller
                 $value->parent_title = 'As Parent';
             } else {
                 $label = MenuNavigationTranslation::where('menu_id', $value->parent_menu)->value('menu_title');
-                $language = MenuNavigationTranslation::where('menu_id', $value->parent_menu)->value('language_code');
-                $value->parent_title = $label . ' (' . $language . ')';
+                $value->parent_title = $label;
             }
             $languageList = MenuNavigationTranslation::where('menu_id', $value->menu_id)->pluck('language_code');
             $value->languageList = $languageList;
@@ -61,7 +61,7 @@ class MenuController extends Controller
                     ->get(['menu_title', 'language_code']);
                 foreach ($menuTitleList as $key => $value) {
                     # code...
-                    $value->titles = $value->menu_title . ' (' . $value->language_code . ')';
+                    $value->titles = $value->menu_title;
                 }
                 $titles = $menuTitleList->pluck('titles');
                 $data->parent_check = 1;
@@ -100,6 +100,7 @@ class MenuController extends Controller
                 'menu_title' => ['required', 'string'],
                 'menu_category' => ['required', 'integer'],
                 'on_website' => ['required', 'integer'],
+                'on_cms' => ['required', 'integer'],
                 'menu_web_url' => ['sometimes', 'string', 'nullable'],
                 'menu_cms_url' => ['sometimes', 'string', 'nullable'],
                 'icon_on_cms' => ['sometimes', 'string', 'nullable'],
@@ -120,6 +121,7 @@ class MenuController extends Controller
                 $insertMenuNavigation = MenuNavigation::create([
                     'parent_menu' => $data['parent_menu'],
                     'on_website' => $data['on_website'],
+                    'on_cms' => $data['on_cms'],
                     'menu_category' => $data['menu_category'],
                     'icon_on_cms' => $data['icon_on_cms'],
                     'display_sequence' => $data['display_sequence']
@@ -150,12 +152,34 @@ class MenuController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
-            $query = MenuNavigationTranslation::query();
-            $query->join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id');
-            $parent = $query->where('mn.parent_menu', 0)->select('menu_title as label', 'mn.menu_id as value')->get();
+            $parent = MenuNavigation::get();
+            $list = [];
+            foreach ($parent as $key => $value) {
+                $check = MenuNavigationTranslation::where('menu_id', $value->menu_id)->count();
+                if ($check > 1) {
+                    $checklvl2 = MenuNavigationTranslation::where('menu_id', $value->menu_id)
+                        ->where('language_code', 'en')->first();
+                    if ($checklvl2)
+                        array_push($list, $checklvl2->menu_translation_id);
+                    else {
+                        $checklvl2 = MenuNavigationTranslation::where('menu_id', $value->menu_id)->first();
+                        array_push($list, $checklvl2->menu_translation_id);
+                    }
+                } else {
+                    $check = MenuNavigationTranslation::where('menu_id', $value->menu_id)->first();
+                    array_push($list, $check->menu_translation_id);
+                }
+            }
+            $parent = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
+                ->select('menu_navigation_translation.menu_id as value', 'menu_title as label')
+                ->where('mn.parent_menu', 0)
+                ->whereIn('menu_translation_id', $list)
+                ->get();
+            // $query->join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id');
+            // $parent = $query->where('mn.parent_menu', 0)->select('menu_title as label', 'mn.menu_id as value')->get();
             $data = MenuNavigationTranslation::where('menu_translation_id', $id)
                 ->join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
                 ->first();
@@ -188,6 +212,7 @@ class MenuController extends Controller
                     'menu_title' => ['required', 'string'],
                     'menu_category' => ['required', 'integer'],
                     'on_website' => ['required', 'integer'],
+                    'on_cms' => ['required', 'integer'],
                     'menu_web_url' => ['sometimes', 'string', 'nullable'],
                     'menu_cms_url' => ['sometimes', 'string', 'nullable'],
                     'icon_on_cms' => ['sometimes', 'string', 'nullable'],
@@ -200,6 +225,7 @@ class MenuController extends Controller
                 $updateMenuNavigation->update([
                     'parent_menu' => $data['parent_menu'],
                     'on_website' => $data['on_website'],
+                    'on_cms' => $data['on_cms'],
                     'menu_category' => $data['menu_category'],
                     'icon_on_cms' => $data['icon_on_cms'],
                     'display_sequence' => $data['display_sequence']
@@ -226,7 +252,7 @@ class MenuController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...
@@ -236,8 +262,8 @@ class MenuController extends Controller
             $sumOfMenuNavTrans = MenuNavigationTranslation::where('menu_id', $getMenuNav->menu_id)->count();
             if (
                 $deleteMenuNavigationTranslation
-                ->first()
-                ->menu_title == 'Settings'
+                    ->first()
+                    ->menu_title == 'Settings'
             )
                 return response()->json(['error' => 'You cant delete it']);
             $parent_menu_check = MenuNavigation::where('menu_id', $deleteMenuNavigationTranslation->first()->menu_id)
@@ -254,10 +280,11 @@ class MenuController extends Controller
                         return response()->json(['error' => 'You cant delete it, this menu used on permissions']);
                 }
             }
-            if (DB::table('permissions')->where('permission_name', $deleteMenuNavigationTranslation
-                ->first()
-                ->menu_title)
-                ->exists()
+            if (
+                DB::table('permissions')->where('permission_name', $deleteMenuNavigationTranslation
+                    ->first()
+                    ->menu_title)
+                    ->exists()
             )
                 return response()->json(['error' => 'You cant delete it, this menu used on permissions']);
             $deleteMenuNavigationTranslation->delete();

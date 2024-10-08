@@ -55,6 +55,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="val-phoneus">Display on Cms<span class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="on_cms" id="on_cms1" value="1" {{ $data->on_cms == 1 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="on_cms1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="on_cms" id="on_cms2" value="0" {{ $data->on_cms == 0 ? 'checked' : '' }}>
+                                <label class="form-check-label" for="on_cms2">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="menu_web_url">URL Website<span class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <input value="{{ $data->menu_web_url }}" type="text" class="form-control" id="menu_web_url" name="menu_web_url" placeholder="Enter URL">

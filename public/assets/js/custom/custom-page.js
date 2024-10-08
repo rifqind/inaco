@@ -205,7 +205,7 @@ if (path == "/webappcms/pages") {
         });
         jQuery("#datatable-pages")
         .DataTable({
-            responsive: true,
+            responsive: false,
             columns: [
                 { width: "5%" },
                 { width: "30%" },

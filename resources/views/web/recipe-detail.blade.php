@@ -7,22 +7,35 @@
                 <div class="row justify-content-center">
 
                     <div class="col-12 mt-5 mb-4">
-                        <a href="{{ route('web.recipe', ['code' => $code]) }}" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
+                        <a href="{{ route('web.recipe', ['code' => $code]) }}" class="backlink"><i
+                                class="bi bi-arrow-left me-2"></i>
+                            @if ($code == 'id')
+                                Kembali
+                            @elseif($code == 'ar')
+                                العودة
+                            @elseif($code == 'vi')
+                                Quay lại
+                            @else
+                                Back
+                            @endif
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div id="sync1" class="owl-carousel owl-theme">
                             @foreach ($image as $value)
-                            <div class="item">
-                                <a class="image-event" href="#"><img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
-                            </div>
+                                <div class="item">
+                                    <a class="image-event" href="#"><img
+                                            src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                </div>
                             @endforeach
                         </div>
-                        
+
                         <div id="sync2" class="owl-carousel owl-theme">
                             @foreach ($image as $value)
-                            <div class="item">
-                                <a class="image-event" href="#"><img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
-                            </div>
+                                <div class="item">
+                                    <a class="image-event" href="#"><img
+                                            src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                </div>
                             @endforeach
                         </div>
 
@@ -30,12 +43,28 @@
                         <div class="info-recipe">{{$recipe->create_date}}</div>
                         <hr />
                         <div class="detail-content-recipe">
-                            <h4>Ingredients</h4>
+                            @if($code == 'id')
+                                <h4>Bahan-bahan</h4>
+                            @elseif($code == 'ar')
+                                <h4>المكونات</h4>
+                            @elseif($code == 'vi')
+                                <h4>Thành phần</h4>
+                            @else
+                                <h4>Ingredients</h4>
+                            @endif
                             {!! $recipe->ingredient !!}
 
                             <hr />
+                            @if($code == 'id')
+                                <h4>Cara Memasak</h4>
+                            @elseif($code == 'ar')
+                                <h4>طريقة الطهي</h4>
+                            @elseif($code == 'vi')
+                                <h4>Cách Nấu</h4>
+                            @else
+                                <h4>Cooking Instructions</h4>
+                            @endif
 
-                            <h4>Cara Memasak</h4>
                             {!! $recipe->recipe_description !!}
                             <!-- <a href="" class="btn btn-primary more btn-fill mt-4">Print Resep</a> -->
                         </div>
@@ -52,29 +81,63 @@
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h2 class="recipe-title mb-0"><span>Resep Lainnya</span></h2>
-                            <a href="{{ route('web.recipe', ['code' => $code]) }}" class="btn btn-primary more d-none d-md-block">Lihat Lainnya</a>
+                            <a href="{{ route('web.recipe', ['code' => $code]) }}"
+                                class="btn btn-primary more d-none d-md-block">
+                                @if ($code == 'id')
+                                    Lihat Resep
+                                @elseif($code == 'ar')
+                                    شاهد الوصفات
+                                @elseif($code == 'vi')
+                                    Xem Công Thức
+                                @else
+                                    View Recipes
+                                @endif
+
+                            </a>
                         </div>
                         <div class="recipe-list row">
                             @foreach ($recipeList as $value)
-                            <div class="col-12 col-md-3">
-                                <div class="recipe-thumbnail">
-                                    <div class="recipe-image">
-                                        <img src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->recipe_image}}">
+                                <div class="col-12 col-md-3">
+                                    <div class="recipe-thumbnail">
+                                        <div class="recipe-image">
+                                            <img
+                                                src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->recipe_image}}">
+                                        </div>
+                                        <div class="recipe-content">
+                                            <div class="recipe-title">
+                                                <h4>{{$value->recipe_title}}</h4>
+                                            </div>
+                                            <div class="recipe-summamry">
+                                                <p>{{$value->recipe_description}}</p>
+                                            </div>
+                                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                                class="btn btn-primary w-100 more filled-button">
+                                                @if ($code == 'id')
+                                                    Lihat Resep
+                                                @elseif($code == 'ar')
+                                                    شاهد الوصفات
+                                                @elseif($code == 'vi')
+                                                    Xem Công Thức
+                                                @else
+                                                    View Recipes
+                                                @endif
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="recipe-content">
-                                        <div class="recipe-title">
-                                            <h4>{{$value->recipe_title}}</h4>
-                                        </div>
-                                        <div class="recipe-summamry">
-                                            <p>{{$value->recipe_description}}</p>
-                                        </div>
-                                        <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}" class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
-                                 </div>
                                 </div>
-                            </div>
                             @endforeach
                             <div class="col-12 text-center d-md-none">
-                                <a href="#" class="btn btn-primary more">Lihat Lainnya</a>
+                                <a href="#" class="btn btn-primary more">
+                                    @if ($code == 'id')
+                                        Lihat Resep
+                                    @elseif($code == 'ar')
+                                        شاهد الوصفات
+                                    @elseif($code == 'vi')
+                                        Xem Công Thức
+                                    @else
+                                        View Recipes
+                                    @endif
+                                </a>
                             </div>
                         </div>
                     </div>
