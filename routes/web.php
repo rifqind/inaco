@@ -72,7 +72,7 @@ Route::prefix('{code?}')
                 'page' => $page,
                 'code' => $code,
                 'descriptions' => $tentang_description ??= null,
-                'list_year' => $tentang_list_tahun ??= null,
+                'list_year' => $tentang_list_tahun ??= collect([]),
             ]);
         })->name('about');
         Route::get('/awards', function (string $code = null) {
@@ -107,7 +107,7 @@ Route::prefix('{code?}')
                 'page' => $page,
                 'code' => $code,
                 'descriptions' => $tentang_description ??= null,
-                'award_list' => $award_list ??= null,
+                'award_list' => $award_list ??= collect([]),
             ]);
         })->name('awards');
         Route::get('/find-us', function (string $code = null) {
@@ -142,11 +142,12 @@ Route::prefix('{code?}')
             $socialmedia = OfficialSocmedMarketplace::where('id', 1)
                 ->first();
             return view('web.find-us', [
-                'section' => $section ??= null,
+                'section' => $section ??= collect([]),
                 'page' => $page,
+                'code' => $code,
                 'kontak' => $kontak ??= null,
                 'socialmedia' => $socialmedia,
-                'daftar_kontak' => $daftar_kontak ??= null,
+                'daftar_kontak' => $daftar_kontak ??= collect([]),
             ]);
         })->name('find-us');
         Route::get('/careers', function (string $code = null) {
@@ -173,9 +174,10 @@ Route::prefix('{code?}')
                     ->get();
             }
             return view('web.careers', [
-                'section' => $section ??= null,
+                'section' => $section ??= collect([]),
                 'page' => $page,
-                'rekrutmen_step' => $rekrutmen_step ??= null,
+                'code' => $code,
+                'rekrutmen_step' => $rekrutmen_step ??= collect([]),
             ]);
         })->name('careers');
         Route::get('/factory-tour', function (string $code = null) {

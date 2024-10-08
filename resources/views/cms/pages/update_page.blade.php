@@ -46,6 +46,7 @@
                         <div class="col-lg-6">
                             <input type="file" class="form-control-file" id="pages_image" name="pages_image_update">
                             <div class="">Please select an updated image if exists</div>
+                            <div>Minimum Dimension : 1440 x 392</div>
                         </div>
                     </div>
                     <div class="form-group row">

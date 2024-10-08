@@ -336,15 +336,26 @@
             element.addEventListener('click', async (event) => {
                 event.preventDefault(); // Prevent the default action of the anchor tag
                 const langCode = event.target.closest('a').id.split('-')[2];
-                const splitPath = window.location.pathname.split('/');
-                let goalPath, remainingPath, newPath, response
-                remainingPath = splitPath.slice(2).join('/')
-                if (!languageList.includes(splitPath[1])) {
-                    response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`);
+                let goalPath, splitPath, remainingPath, newPath, response
+                if (window.location.pathname == '/') {
+                    response = await axios.get(`/change-language/${langCode}/index`);
                 } else {
-                    const newSplitPath = remainingPath.split('/');
-                    const newRemainingPath = newSplitPath.slice(1).join('/');
-                    response = await axios.get(`/change-language/${langCode}/${newSplitPath[0]}/${newRemainingPath}`);
+                    splitPath = window.location.pathname.split('/');
+                    remainingPath = splitPath.slice(2).join('/')
+                    if (!languageList.includes(splitPath[1])) {
+                        response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`);
+                    } else {
+                        const newSplitPath = remainingPath.split('/');
+                        const newRemainingPath = newSplitPath.slice(1).join('/');
+                        if (newSplitPath[0] == '')
+                            if (langCode == 'id') response = { data: '/' };
+                            else
+                                response = await axios.get(`/change-language/${langCode}/index`);
+                        else
+                            response = await axios.get(`/change-language/${langCode}/${newSplitPath[0]}/${newRemainingPath}`);
+                        // if (newSplitPath[0] == '')
+                        // console.log('uhuy')
+                    }
                 }
                 window.location.href = response.data;
             });

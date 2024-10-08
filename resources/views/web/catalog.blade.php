@@ -29,7 +29,15 @@
                     <div class="col-12">
                         <div class="catalog-list row">
                             @if($products->isEmpty())
-                            <div class="text-center">Produk belum tersedia</div>
+                            @if($code == 'id')
+                                <div class="text-center">Produk belum tersedia</div>
+                            @elseif($code == 'ar')
+                                <div class="text-center">المنتجات غير متاحة بعد</div>
+                            @elseif($code == 'vi')
+                                <div class="text-center">Sản phẩm chưa có sẵn</div>
+                            @else
+                                <div class="text-center">Products are not available yet</div>
+                            @endif
                             @else
                             @foreach ($products as $value)
                             <div class="col-12 col-md-3">
@@ -42,7 +50,17 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
+                                    <a href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}" class="btn btn-primary btn-dewasa btn-more">
+                                    @if ($code == 'id')
+                                        Lihat Produk
+                                    @elseif ($code == 'ar')
+                                        انظر المنتجات
+                                    @elseif ($code == 'vi')
+                                        Xem Sản Phẩm
+                                    @else
+                                        See Product
+                                    @endif
+                                    </a>
                                 </div>
                             </div>
                             @endforeach
@@ -58,11 +76,28 @@
                 <div class="row">
                     <div class="col-12">
                         @if(!$products->isEmpty())
-                        <h2>Resep dengan produk {{ $cat_title }}</h2>
+                        @if($code == 'id')
+                            <h2>Resep dengan produk {{ $cat_title }}</h2>
+                        @elseif($code == 'ar')
+                            <h2>وصفات باستخدام منتج {{ $cat_title }}</h2>
+                        @elseif ($code == 'vi')
+                            <h2>Công thức với sản phẩm {{ $cat_title }}</h2>
                         @else
-                        <h2>Belum ada resep dengan produk ini</h2>
+                            <h2>Recipes with {{ $cat_title }}</h2>
+                        @endif
+                        @else
+                        @if ($code == 'id')
+                            <h2>Belum ada resep dengan produk ini</h2>
+                        @elseif ($code == 'ar')
+                            <h2>لا توجد وصفات لهذا المنتج حتى الآن</h2>
+                        @elseif ($code == 'vi')
+                            <h2>Chưa có công thức nào cho sản phẩm này</h2>
+                        @else
+                            <h2>No recipes available for this product yet</h2>
+                        @endif
                         @endif
                     </div>
+                    @if (isset($recipes[0]))
                     <div class="col-sm-4 col-md-3">
                         <div class="recipe-catalog">
                             @if(isset($recipes[0]))
@@ -111,6 +146,17 @@
                             @endif
                         </div>
                     </div>
+                    @else
+                    @if ($code == 'id')
+                        Belum ada resep dengan produk ini
+                    @elseif ($code == 'ar')
+                        لا توجد وصفات لهذا المنتج حتى الآن
+                    @elseif ($code == 'vi')
+                        Chưa có công thức nào cho sản phẩm này
+                    @else
+                        No recipes available for this product yet
+                    @endif
+                    @endif
 
                 </div>
             </div>

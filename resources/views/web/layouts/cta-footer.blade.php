@@ -18,11 +18,16 @@
  					<img src="{{ asset('assets/web/images/maskot.png') }}" class="maskot d-none d-sm-block">
  					@endswitch
  					<img src="{{ asset('assets/web/images/maskot-mobile.png') }}" class="maskot-mobile d-sm-none ">
- 					@if($arabic)
- 					<h3>وسائل التواصل الاجتماعي لدينا</h3>
- 					@else
- 					<h3>Temukan Kami</h3>
- 					@endif
+ 					@if($lang == 'ar')
+						<h3>وسائل التواصل الاجتماعي لدينا</h3>
+					@elseif ($lang == 'id')
+						<h3>Temukan Kami</h3>
+					@elseif ($lang == 'vi')
+						<h3>Chúng Tôi Trên Mạng Xã Hội</h3>
+					@else
+						<h3>Our Social Media</h3>
+					@endif
+
  					<div class="d-flex flex-wrap position-relative">
  						<a href="{{ $socialmedia->youtube }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/yt.png') }}"> @inacoindonesiaofficial

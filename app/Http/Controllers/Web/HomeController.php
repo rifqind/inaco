@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
-use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;
 use App\Models\InternationalMarket;
 use App\Models\NewsTranslation;
 use App\Models\OfficialSocmedMarketplace;
 use App\Models\PageTranslation;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\ProductCategoryTranslation;
 use App\Models\ProductImage;
 use App\Models\ProductTranslation;
@@ -21,7 +19,6 @@ use App\Models\SubpageTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -112,7 +109,7 @@ class HomeController extends Controller
                     ['title' => 'نموذج الشركة', 'desc' => 'معلومات عن ملف الشركة', 'image' => 'profile.jpg', 'url' => '#'],
                 ],
             ],
-            'default' => [
+            'id' => [
                 'header' => 'Tentang INACO',
                 'items' => [
                     ['title' => 'Penghargaan', 'desc' => 'Beberapa penghargaan Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
@@ -120,6 +117,23 @@ class HomeController extends Controller
                     ['title' => 'Profil Perusahaan', 'desc' => 'Informasi tentang profil perusahaan', 'image' => 'profile.jpg', 'url' => '#'],
                 ],
             ],
+            'vi' => [
+                'header' => 'Về INACO',
+                'items' => [
+                    ['title' => 'Giải thưởng', 'desc' => 'Một số giải thưởng của Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
+                    ['title' => 'Về Chúng Tôi', 'desc' => 'Về công ty Inaco', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
+                    ['title' => 'Hồ Sơ Công Ty', 'desc' => 'Thông tin về hồ sơ công ty', 'image' => 'profile.jpg', 'url' => '#'],
+                ],
+            ],
+            'default' => [
+                'header' => 'About INACO',
+                'items' => [
+                    ['title' => 'Awards', 'desc' => 'Some awards of Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
+                    ['title' => 'About Us', 'desc' => 'About Inaco company', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
+                    ['title' => 'Company Profile', 'desc' => 'Information about the company profile', 'image' => 'profile.jpg', 'url' => '#'],
+                ],
+            ],
+
         ];
         $firstText = $texts[$code] ?? $texts['default'];
         return view('web.index', [
@@ -980,7 +994,7 @@ class HomeController extends Controller
                 'page' => $page,
                 'code' => $code,
                 'descriptions' => $tentang_description ??= null,
-                'list_year' => $tentang_list_tahun ??= null,
+                'list_year' => $tentang_list_tahun ??= collect([]),
             ]);
         } else if ($route == 'web.id.penghargaan') {
             $code = 'id';
@@ -1012,7 +1026,7 @@ class HomeController extends Controller
                 'page' => $page,
                 'code' => $code,
                 'descriptions' => $tentang_description ??= null,
-                'award_list' => $award_list ??= null,
+                'award_list' => $award_list ??= collect([]),
             ]);
         } else if ($route == 'web.id.karir') {
             $code = 'id';
@@ -1036,9 +1050,10 @@ class HomeController extends Controller
                     ->get();
             }
             return view('web.careers', [
-                'section' => $section ??= null,
+                'section' => $section ??= collect([]),
                 'page' => $page,
-                'rekrutmen_step' => $rekrutmen_step ??= null,
+                'code' => $code,
+                'rekrutmen_step' => $rekrutmen_step ??= collect([]),
             ]);
         } else if ($route == 'web.id.temukan-kami') {
             $code = 'id';
@@ -1070,11 +1085,12 @@ class HomeController extends Controller
             $socialmedia = OfficialSocmedMarketplace::where('id', 1)
                 ->first();
             return view('web.find-us', [
-                'section' => $section ??= null,
-                'page' => $page,
+                'section' => $section ??= collect([]),
+                'page' => $page ??= null,
+                'code' => $code,
                 'kontak' => $kontak ??= null,
-                'socialmedia' => $socialmedia,
-                'daftar_kontak' => $daftar_kontak ??= null,
+                'socialmedia' => $socialmedia ??= null,
+                'daftar_kontak' => $daftar_kontak ??= collect([]),
             ]);
         } else if ($route == 'web.id.tur-pabrik') {
             $code = 'id';
@@ -1130,6 +1146,7 @@ class HomeController extends Controller
             'distributor' => $data['distributor'],
             'bigCity' => $data['bigCity'],
             'page' => $data['page'],
+            'code' => $code,
             'section' => $data['section'],
         ]);
     }
@@ -1142,6 +1159,7 @@ class HomeController extends Controller
             'distributor' => $data['distributor'],
             'bigCity' => $data['bigCity'],
             'page' => $data['page'],
+            'code' => $code,
             'section' => $data['section'],
         ]);
     }
@@ -1199,6 +1217,7 @@ class HomeController extends Controller
         }
         $data = $this->marketGenerate($code);
         return view('web.intermarket', [
+            'code' => $code,
             'market' => $data['market'],
             'northAmerica' => $data['northAmerica'],
             'southAmerica' => $data['southAmerica'],
@@ -1217,6 +1236,7 @@ class HomeController extends Controller
         $code = 'id';
         $data = $this->marketGenerate($code);
         return view('web.intermarket', [
+            'code' => $code,
             'market' => $data['market'],
             'northAmerica' => $data['northAmerica'],
             'southAmerica' => $data['southAmerica'],
@@ -1366,7 +1386,7 @@ class HomeController extends Controller
                         'artikel' => 'articles',
                         'press-release' => 'press-release',
                     };
-                    if ($explode_remaining[1]) {
+                    if (sizeof($explode_remaining) > 1) {
                         $news_id = NewsTranslation::where('news_slug', $explode_remaining[1])->value('news_id');
                         $news_slug = NewsTranslation::where('language_code', $language)
                             ->where('news_id', $news_id)
@@ -1376,6 +1396,8 @@ class HomeController extends Controller
                         $goalPath = 'news/' . $explode_remaining[0];
                 }
                 break;
+            case 'index':
+                $goalPath = 'index';
             default:
                 $goalPath = $url;
                 if ($remainingPath != '') {
@@ -1400,10 +1422,10 @@ class HomeController extends Controller
                             if ($remainingPath != '') {
                                 $explode_remaining = explode('/', $remainingPath);
                                 $explode_remaining[0] = match ($explode_remaining[0]) {
-                                    'artikel' => 'articles',
+                                    'articles' => 'artikel',
                                     'press-release' => 'press-release',
                                 };
-                                if ($explode_remaining[1]) {
+                                if (sizeof($explode_remaining) > 1) {
                                     $news_id = NewsTranslation::where('news_slug', $explode_remaining[1])->value('news_id');
                                     $news_slug = NewsTranslation::where('language_code', $language)
                                         ->where('news_id', $news_id)
@@ -1416,9 +1438,9 @@ class HomeController extends Controller
                         case 'catalog':
                             if ($remainingPath != '') {
                                 $remainingPath = match ($remainingPath) {
-                                    'dewasa' => 'adult',
-                                    'remaja' => 'teenager',
-                                    'anak' => 'children'
+                                    'adult' => 'dewasa',
+                                    'teenager' => 'remaja',
+                                    'children' => 'anak'
                                 };
                                 $goalPath = 'catalog/' . $remainingPath;
                             }
@@ -1439,6 +1461,8 @@ class HomeController extends Controller
                 break;
         }
         $result = '/' . $language . '/' . $goalPath;
+        if ($goalPath == 'index')
+            $result = '/' . $language;
         return response()->json($result);
     }
     private function getNewsDetail($slug)

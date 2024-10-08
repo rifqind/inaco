@@ -16,14 +16,14 @@ class CtaComposer
         } else {
             $segment = 'not catalog';
         }
-        $arabic = request()->route('code');
-        if ($arabic == 'ar') $arabic = true;
-        else $arabic = false;
+        $lang = request()->route('code');
+        if (!$lang)
+            $lang = 'id';
         $socialmedia = OfficialSocmedMarketplace::where('id', 1)
             ->first();
         $view->with([
             'segment' => $segment,
-            'arabic' => $arabic,
+            'lang' => $lang,
             'socialmedia' => $socialmedia,
         ]);
     }

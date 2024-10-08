@@ -184,11 +184,19 @@ if (path == "/webappcms/user") {
                                 }
                             });
                         } else if (data.error) {
-                            alert(data.error);
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: data.error,
+                            });
                         }
                     },
                     error: (data) => {
-                        alert(data);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: data,
+                        });
                     },
                 });
             },

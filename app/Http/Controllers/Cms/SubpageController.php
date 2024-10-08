@@ -57,7 +57,8 @@ class SubpageController extends Controller
 
             //check if language with code en exists if isnt exist get first row
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
 
             $pages_title = $translation->pages_title;
             $value->pages_title = $pages_title;
@@ -81,7 +82,8 @@ class SubpageController extends Controller
             if ($check > 1) {
                 $checkLvl2 = PageTranslation::where('pages_id', $value->pages_id)
                     ->where('language_code', 'en')->first();
-                if ($checkLvl2) array_push($list, $checkLvl2->pages_translation_id);
+                if ($checkLvl2)
+                    array_push($list, $checkLvl2->pages_translation_id);
                 else {
                     $checkLvl2 = PageTranslation::where('pages_id', $value->pages_id)->first();
                     array_push($list, $checkLvl2->pages_translation_id);
@@ -94,11 +96,6 @@ class SubpageController extends Controller
         $pages = PageTranslation::select('pages_id as value', 'pages_title as label', 'language_code')
             ->whereIn('pages_translation_id', $list)
             ->get();
-
-        foreach ($pages as $key => $value) {
-            # code...
-            $value->label = $value->label . ' (' . $value->language_code . ')';
-        }
         if ($request) {
             $data = Subpage::where('sub_pages_id', $request->sub_pages_id)->first();
             if ($data) {
@@ -106,7 +103,7 @@ class SubpageController extends Controller
                     ->get(['sub_pages_title', 'language_code']);
                 foreach ($subpageTitleList as $key => $value) {
                     # code...
-                    $value->titles = $value->sub_pages_title . ' (' . $value->language_code . ')';
+                    $value->titles = $value->sub_pages_title;
                 }
                 $titles = $subpageTitleList->pluck('titles');
                 $data->language_code = $subpageTitleList->pluck('language_code');
@@ -206,11 +203,32 @@ class SubpageController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $languages = AppLanguage::select('code as value', 'name as label')->get();
-            $pages = PageTranslation::select('pages_id as value', 'pages_title as label')->get();
+            $pages = Page::get();
+            $list = [];
+            foreach ($pages as $key => $value) {
+                # code...
+                $check = PageTranslation::where('pages_id', $value->pages_id)->count();
+                if ($check > 1) {
+                    $checkLvl2 = PageTranslation::where('pages_id', $value->pages_id)
+                        ->where('language_code', 'en')->first();
+                    if ($checkLvl2)
+                        array_push($list, $checkLvl2->pages_translation_id);
+                    else {
+                        $checkLvl2 = PageTranslation::where('pages_id', $value->pages_id)->first();
+                        array_push($list, $checkLvl2->pages_translation_id);
+                    }
+                } else {
+                    $check = PageTranslation::where('pages_id', $value->pages_id)->first();
+                    array_push($list, $check->pages_translation_id);
+                }
+            }
+            $pages = PageTranslation::select('pages_id as value', 'pages_title as label')
+                ->whereIn('pages_translation_id', $list)
+                ->get();
             $query = SubpageTranslation::query();
             $query->join('sub_pages as sp', 'sp.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id');
             $query->where('sub_pages_translation_id', $id)
@@ -294,7 +312,7 @@ class SubpageController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

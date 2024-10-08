@@ -71,6 +71,7 @@
                                 <input type="hidden" value="{{ $data->pages_image }}" class="form-control-file"
                                     id="pages_image" name="pages_image">
                                 <div class="invalid-feedback">Please select an image</div>
+                                <div>Minimum Dimension : 1440 x 392</div>
                             </div>
                         </div>
                     @else
@@ -81,6 +82,7 @@
                                 <input type="file" style="width:200px;" class="form-control-file" id="pages_image"
                                     name="pages_image">
                                 <div class="invalid-feedback">Please select an image</div>
+                                <div>Minimum Dimension : 1440 x 392</div>
                             </div>
                         </div>
                     @endif

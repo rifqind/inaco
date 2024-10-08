@@ -10,6 +10,7 @@ use App\Models\PageTranslation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class PageController extends Controller
 {
@@ -118,9 +119,20 @@ class PageController extends Controller
                 ]);
                 if ($request->hasFile('pages_image')) {
                     $file = $request->file('pages_image');
+                    $imageDimensions = getimagesize($file);
+                    if ($imageDimensions[0] < 1440 || $imageDimensions[1] < 392) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                        return response()->json([
+                            'error' => 'The image must be at least 1440x392 pixels.'
+                        ]);
+                    }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/pages/' . $fileName;
-
+                    $image = Image::read($file->path());
+                    $resizedImage = $image->resize(1440, 392, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
                     $insertPage = Page::create([
                         'create_date' => date('Y-m-d H:i:s'),
                         'pages_image' => $fileName,
@@ -133,7 +145,15 @@ class PageController extends Controller
                         'pages_description' => $data['pages_description'],
                         'pages_slug' => $pages_slug,
                     ]);
-                    $file->move(public_path('data/pages'), $fileName);
+                    // $file->move(public_path('data/pages'), $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/pages') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/pages') . '/' . $fileName) > 400 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/pages') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     $pages_id_used = $insertPage->pages_id;
                 }
             }
@@ -157,7 +177,7 @@ class PageController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $query = PageTranslation::query();
@@ -216,6 +236,18 @@ class PageController extends Controller
 
                 if ($request->hasFile('pages_image_update')) {
                     $file = $request->file('pages_image_update');
+                    $imageDimensions = getimagesize($file);
+                    if ($imageDimensions[0] < 1440 || $imageDimensions[1] < 392) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                        return response()->json([
+                            'error' => 'The image must be at least 1440x392 pixels.'
+                        ]);
+                    }
+                    $image = Image::read($file->path());
+                    $resizedImage = $image->resize(1440, 392, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/pages/' . $fileName;
 
@@ -225,7 +257,15 @@ class PageController extends Controller
                     ]);
 
                     //update file 
-                    $file->move(public_path('data/pages'), $fileName);
+                    // $file->move(public_path('data/pages'), $fileName);
+                    $quality = 100;
+                    $resizedImage->save(public_path('data/pages') . '/' . $fileName, $quality);
+                    while (filesize(public_path('data/pages') . '/' . $fileName) > 400 * 1024) {
+                        $quality -= 5;
+                        $resizedImage->save(public_path('data/pages') . '/' . $fileName, $quality);
+                        if ($quality <= 10)
+                            break;
+                    }
                     //previous path & delete it
                     $getFilePath = 'data/pages/' . $getFileName;
 
@@ -250,7 +290,7 @@ class PageController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

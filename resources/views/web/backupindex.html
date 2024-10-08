@@ -66,16 +66,9 @@
                         @if($code == 'ar')
                             <h1 class="page-header">المنتجات الرئيسية<br class="d-none d-md-block" /> من اختيارنا</h1>
                             <h3 class="sub-header">بعض منتجات Inaco</h3>
-                        @elseif ($code == 'id')
+                        @else
                             <h1 class="page-header">Produk Utama <br class="d-none d-md-block" />Pilihan Kami</h1>
                             <h3 class="sub-header">Beberapa produk Inaco</h3>
-                        @elseif ($code == 'vi')
-                            <h1 class="page-header">Sản phẩm chính <br class="d-none d-md-block" />Lựa chọn của chúng tôi
-                            </h1>
-                            <h3 class="sub-header">Một số sản phẩm của Inaco</h3>
-                        @else
-                            <h1 class="page-header">Main Products <br class="d-none d-md-block" />Our Choice</h1>
-                            <h3 class="sub-header">Some Inaco Products</h3>
                         @endif
                         <div class="button-catalog-slide mb-4 pb-2 d-none d-sm-block">
                             <button id="prev-catalog"><i class="bi bi-chevron-left"></i></button>
@@ -84,15 +77,9 @@
                         @if ($code == 'ar')
                             <a href="{{ route('web.products', ['code' => $code]) }}"
                                 class="btn btn-primary more filled-button d-none d-sm-inline">انظر جميع المنتجات</a>
-                        @elseif ($code == 'id')
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-none d-sm-inline">Lihat Semua Produk</a>
-                        @elseif ($code == 'vi')
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-none d-sm-inline">Xem Tất Cả Sản Phẩm</a>
                         @else
                             <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-none d-sm-inline">View All Products</a>
+                                class="btn btn-primary more filled-button d-none d-sm-inline">Lihat Semua Produk</a>
                         @endif
                     </div>
                 </div>
@@ -121,27 +108,9 @@
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        @if ($code == 'id')
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">
-                                Lihat Semua Produk
-                            </a>
-                        @elseif ($code == 'ar')
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">
-                                شاهد جميع المنتجات
-                            </a>
-                        @elseif ($code == 'vi')
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">
-                                Xem Tất Cả Sản Phẩm
-                            </a>
-                        @else
-                            <a href="{{ route('web.products', ['code' => $code]) }}"
-                                class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">
-                                View All Products
-                            </a>
-                        @endif
+                        <a href="{{ route('web.products', ['code' => $code]) }}"
+                            class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">Lihat Semua
+                            Produk</a>
                     </div>
                 </div>
             </div>
@@ -154,26 +123,12 @@
                     <div class="col-12">
                         @if ($code == 'ar')
                             <h1 class="page-header text-center mb-3" data-aos="fade-up">احرص على الاستمتاع بـ INACO</h1>
-                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">
-                                الملابس والملابس والمشروبات وغيرها الكثير من النصائح التي تجعل الأطعمة أكثر طعمًا مع INACO!
-                            </h3>
-                        @elseif ($code == 'id')
-                            <h1 class="page-header text-center mb-3" data-aos="fade-up">Buat Lebih Enak Dengan INACO</h1>
-                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">
-                                Salad, Kue, Minuman dan masih banyak lagi resep yang membuat hidangan lebih enak dengan
-                                INACO!
-                            </h3>
-                        @elseif ($code == 'vi')
-                            <h1 class="page-header text-center mb-3" data-aos="fade-up">Làm cho Món Ăn Ngon Hơn Với INACO
-                            </h1>
-                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">
-                                Salad, Bánh Ngọt, Đồ Uống và nhiều mẹo khác để làm cho món ăn ngon hơn với INACO!
-                            </h3>
+                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">الملابس والملابس والمشروبات
+                                وغيرها الكثير من النصائح التي تجعل الأطعمة أكثر طعمًا مع INACO!</h3>
                         @else
-                            <h1 class="page-header text-center mb-3" data-aos="fade-up">Make It Taste Better with INACO</h1>
-                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">
-                                Salads, Cakes, Drinks, and many more tips to make dishes taste better with INACO!
-                            </h3>
+                            <h1 class="page-header text-center mb-3" data-aos="fade-up">Buat Lebih Enak Dengan INACO</h1>
+                            <h3 class="sub-header text-center mb-5 mt-0" data-aos="fade-up">Salad, Kue, Minuman dan masih
+                                banyak lagi resep yang membuat hidangan lebih enak dengan INACO!</h3>
                         @endif
                         <div id="recipe-list" class="owl-carousel owl-theme">
                             @foreach ($recipes as $value)
@@ -201,27 +156,8 @@
                             @endforeach
                         </div>
                         <div class="text-center" data-aos="fade-up">
-                            @if ($code == 'id')
-                                <a href="{{ route('web.recipe', ['code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    Lihat Semua Resep
-                                </a>
-                            @elseif ($code == 'ar')
-                                <a href="{{ route('web.recipe', ['code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    شاهد جميع الوصفات
-                                </a>
-                            @elseif ($code == 'vi')
-                                <a href="{{ route('web.recipe', ['code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    Xem Tất Cả Công Thức
-                                </a>
-                            @else
-                                <a href="{{ route('web.recipe', ['code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    View All Recipes
-                                </a>
-                            @endif
+                            <a href="{{ route('web.recipe', ['code' => $code]) }}"
+                                class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Semua Resep</a>
                         </div>
                     </div>
                 </div>
@@ -236,50 +172,25 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
                                 @if ($code == 'ar')
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Press Release
+                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Prees Release
                                         من INACO</h1>
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">آخر
                                         الأخبار من INACO</h3>
-                                @elseif ($code == 'id')
+                                @else
                                     <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Info dari
                                         INACO</h1>
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">
                                         Berita terbaru dari Inaco</h3>
-                                @elseif ($code == 'vi')
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Thông cáo báo
-                                        chí từ INACO</h1>
-                                    <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">Tin
-                                        tức mới nhất từ INACO</h3>
-                                @else
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Press Release
-                                        from INACO</h1>
-                                    <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">
-                                        Latest news from INACO</h3>
                                 @endif
-
                             </div>
 
                             <div class="button-news-slide mb-4 pb-2 d-none d-md-block">
                                 @if ($code == 'ar')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        انظر جميع النصائح
-                                    </a>
-                                @elseif ($code == 'id')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        Lihat Lainnya
-                                    </a>
-                                @elseif ($code == 'vi')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        Xem Thêm
-                                    </a>
+                                    <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}"
+                                        class="btn btn-primary more border-0 text-red">انظر جميع النصائح</a>
                                 @else
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        See More
-                                    </a>
+                                    <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}"
+                                        class="btn btn-primary more border-0 text-red">Lihat Lainnya</a>
                                 @endif
                                 <div>
                                     <button id="prev-news"><i class="bi bi-chevron-left"></i></button>
@@ -311,25 +222,11 @@
 
                         <div class="text-center" data-aos="fade-up">
                             @if ($code == 'ar')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    انظر جميع النصائح
-                                </a>
-                            @elseif ($code == 'id')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    Lihat Lainnya
-                                </a>
-                            @elseif ($code == 'vi')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    Xem Thêm
-                                </a>
+                                <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}"
+                                    class="btn btn-primary more filled-button mt-4 mt-md-5">انظر جميع النصائح</a>
                             @else
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                    class="btn btn-primary more filled-button mt-4 mt-md-5">
-                                    See More
-                                </a>
+                                <a href="{{route('web.news', ['id' => 'articles', 'code' => $code])}}"
+                                    class="btn btn-primary more filled-button mt-4 mt-md-5">Lihat Lainnya</a>
                             @endif
                         </div>
                     </div>

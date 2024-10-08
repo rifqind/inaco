@@ -6,7 +6,13 @@
                 <div class="row">
                     @if ($detail)
                         <div class="col-12 mb-4">
-                            <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
+                            @if ($code == 'id')
+                                <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
+                            @elseif ($code == 'ar')
+                                <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>العودة</a>
+                            @else
+                                <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Go Back</a>
+                            @endif
                         </div>
                         <div class="col-md-7">
                             <div id="image-detail" class="image-catalog-detail mb-4 mb-sm-0">
@@ -20,14 +26,32 @@
                             <div class="detail-catalog">
                                 {!! $detail->product_description !!}
                             </div>
-                            <button type="button" class="btn btn-primary button-catalog more btn-fill"
-                                data-bs-toggle="modal" data-bs-target="#buyModal">
-                                Beli Sekarang
-                            </button>
+                            @if ($code == 'id')
+                                <button type="button" class="btn btn-primary button-catalog more btn-fill"
+                                    data-bs-toggle="modal" data-bs-target="#buyModal">
+                                    Beli Sekarang
+                                </button>
+                            @elseif($code == 'ar')
+                                <button type="button" class="btn btn-primary button-catalog more btn-fill"
+                                    data-bs-toggle="modal" data-bs-target="#buyModal">
+                                    اشترِ الآن
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-primary button-catalog more btn-fill"
+                                    data-bs-toggle="modal" data-bs-target="#buyModal">
+                                    Buy Now
+                                </button>
+                            @endif
                         </div>
                     @else
                         <div class="text-center">
-                            Produk Tidak Ada
+                            @if ($code == 'id')
+                                Produk Tidak Ada
+                            @elseif($code == 'ar')
+                                المنتج غير متوفر
+                            @else
+                                Product Not Available
+                            @endif
                         </div>
                     @endif
 
@@ -39,10 +63,19 @@
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="d-flex align-items-center justify-content-between mb-4 pb-4">
-                            <h2>Produk {{ $cat_title }} Lainnya</h2>
-                            <!-- <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}" -->
-                            <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
-                                class="btn btn-primary more d-none d-sm-block">Lihat Lainnya</a>
+                            @if ($code == 'id')
+                                <h2>Produk {{ $cat_title }} Lainnya</h2>
+                                <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
+                                    class="btn btn-primary more d-none d-sm-block">Lihat Lainnya</a>
+                            @elseif ($code == 'ar')
+                                <h2>منتجات {{ $cat_title }} أخرى</h2>
+                                <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
+                                    class="btn btn-primary more d-none d-sm-block">عرض المزيد</a>
+                            @else
+                                <h2>Other {{ $cat_title }} Products</h2>
+                                <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
+                                    class="btn btn-primary more d-none d-sm-block">View More</a>
+                            @endif
                         </div>
                         <div class="catalog-list row">
                             @if($products->isNotEmpty())
@@ -61,7 +94,15 @@
                                                 </div>
                                             </a>
                                             <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail, 'product' => $value->product_slug]) }}"
-                                                class="btn btn-primary btn-dewasa btn-more">Lihat Produk</a>
+                                                class="btn btn-primary btn-dewasa btn-more">
+                                                @if ($code == 'id')
+                                                    Lihat Produk
+                                                @elseif ($code == 'ar')
+                                                    انظر المنتجات
+                                                @else
+                                                    See Product
+                                                @endif
+                                            </a>
                                         </div>
                                     </div>
                                 @endforeach
@@ -69,7 +110,15 @@
                         </div>
                         <div class="text-center">
                             <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
-                                class="btn btn-primary more d-sm-none">Lihat Lainnya</a>
+                                class="btn btn-primary more d-sm-none">
+                                @if ($code == 'id')
+                                    Lihat Lainnya
+                                @elseif ($code == 'ar')
+                                    عرض المزيد
+                                @else
+                                    View More
+                                @endif
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -83,7 +132,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Beli Sekarang</h5>
+                    @if ($code == 'id')
+                        <h5 class="modal-title" id="exampleModalLabel">Beli Sekarang</h5>
+                    @elseif ($code == 'ar')
+                        <h5 class="modal-title" id="exampleModalLabel">اشتري الآن</h5>
+                    @else
+                        <h5 class="modal-title" id="exampleModalLabel">Buy Now</h5>
+                    @endif
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
