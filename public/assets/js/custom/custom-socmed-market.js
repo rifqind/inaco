@@ -96,9 +96,9 @@ jQuery(".form-validate").validate({
         data += "&path=" + encodeURIComponent(path);
         jQuery.ajax({
             url:
-                path == "/socmed-marketplace/create"
-                    ? "/socmed-marketplace/store"
-                    : "/socmed-marketplace/update",
+                path == "/webappcms/socmed-marketplace/create"
+                    ? "/webappcms/socmed-marketplace/store"
+                    : "/webappcms/socmed-marketplace/update",
             type: "POST",
             data: data,
             success: (data) => {
@@ -124,9 +124,9 @@ jQuery(".form-validate").validate({
                             window.location.href = "/webappcms/social-media"; // Ganti dengan URL tujuan Anda
                         }
                         if (value.isConfirmed) {
-                            path == "/socmed-marketplace/create"
+                            path == "/webappcms/socmed-marketplace/create"
                                 ? (window.location.href =
-                                      "/socmed-marketplace/create")
+                                      "/webappcms/socmed-marketplace/create")
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
@@ -173,7 +173,7 @@ if (path == "/webappcms/social-media" || path == "/webappcms/marketplace") {
                 }).then((value) => {
                     if (value.isConfirmed) {
                         jQuery.ajax({
-                            url: "/socmed-marketplace/destroy/" + id,
+                            url: "/webappcms/socmed-marketplace/destroy/" + id,
                             type: "DELETE",
                             data: {
                                 _token: jQuery('meta[name="csrf-token"]').attr(

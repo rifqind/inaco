@@ -41,43 +41,27 @@
             <div class="container" data-aos="fade-up">
                 <div class="row justify-content-center">
                     <div class="col-12 col-sm-5">
-                        @if ($kontak)
-                            <h2 class="fw-bold mb-4 pb-2">{{ $kontak->pages_title }}</h2>
-                        @else
-                            @if ($code == 'id')
-                                <div class="text-center">Konten belum tersedia</div>
-                            @elseif ($code == 'ar')
-                                <div class="text-center">المحتوى غير متوفر بعد</div>
-                            @elseif ($code == 'vi')
-                                <div class="text-center">Nội dung chưa có sẵn</div>
-                            @else
-                                <div class="text-center">Content not available</div>
-                            @endif
-                        @endif
+                        <h2 class="fw-bold mb-4 pb-2"></h2>
                         <div class="d-flex align-items-start mb-3">
-                            <img src="{{ asset('data/subpages') . '/' . $daftar_kontak->where('sub_pages_slug', 'kontak-alamat')->value('sub_pages_image') }}"
-                                class="me-3">
+                            <img src="{{asset('assets/web/images/findus/location.png')}}" class="me-3">
                             <div class="">
                                 {!! $daftar_kontak->where('sub_pages_slug', 'kontak-alamat')->value('sub_pages_description') !!}
                             </div>
                         </div>
                         <div class="d-flex align-items-start mb-3">
-                            <img src="{{ asset('data/subpages') . '/' . $daftar_kontak->where('sub_pages_slug', 'kontak-telepon')->value('sub_pages_image') }}"
-                                class="me-3">
+                            <img src="{{asset('assets/web/images/findus/call.png')}}" class="me-3">
                             <div class="">
                                 {!! $daftar_kontak->where('sub_pages_slug', 'kontak-telepon')->value('sub_pages_description') !!}
                             </div>
                         </div>
                         <div class="d-flex align-items-start mb-3">
-                            <img src="{{ asset('data/subpages') . '/' . $daftar_kontak->where('sub_pages_slug', 'kontak-email')->value('sub_pages_image') }}"
-                                class="me-3">
+                            <img src="{{asset('assets/web/images/findus/message.png')}}" class="me-3">
                             <div class="">
                                 {!! $daftar_kontak->where('sub_pages_slug', 'kontak-email')->value('sub_pages_description') !!}
                             </div>
                         </div>
                         <div class="d-flex align-items-start mb-3">
-                            <img src="{{ asset('data/subpages') . '/' . $daftar_kontak->where('sub_pages_slug', 'kontak-fax')->value('sub_pages_image') }}"
-                                class="me-3">
+                            <img src="{{asset('assets/web/images/findus/printer.png')}}" class="me-3">
                             <div class="">
                                 {!! $daftar_kontak->where('sub_pages_slug', 'kontak-fax')->value('sub_pages_description') !!}
                             </div>

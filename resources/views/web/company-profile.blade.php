@@ -9,7 +9,15 @@
                     @if ($descriptions)
                         {!! $descriptions->sub_pages_description !!}
                     @else
-                        <div class="text-center">Konten belum tersedia</div>
+                        @if ($code == 'id')
+                            <div class="text-center">Konten belum tersedia</div>
+                        @elseif ($code == 'ar')
+                            <div class="text-center">المحتوى غير متوفر بعد</div>
+                        @elseif ($code == 'vi')
+                            <div class="text-center">Nội dung chưa có sẵn</div>
+                        @else
+                            <div class="text-center">Content not available</div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -31,7 +39,15 @@
                         @if ($page)
                             {!! $page->pages_description !!}
                         @else
-                            <div class="text-center">Konten belum tersedia</div>
+                            @if ($code == 'id')
+                                <div class="text-center">Konten belum tersedia</div>
+                            @elseif ($code == 'ar')
+                                <div class="text-center">المحتوى غير متوفر بعد</div>
+                            @elseif ($code == 'vi')
+                                <div class="text-center">Nội dung chưa có sẵn</div>
+                            @else
+                                <div class="text-center">Content not available</div>
+                            @endif
                         @endif
                     </div>
                 </div>

@@ -1069,12 +1069,12 @@ class HomeController extends Controller
                     ->where('sb.pages_id', $page->pages_id)
                     ->where('sb.sub_pages_status', 1)
                     ->get();
-                $kontak = SubpageTranslation::where('language_code', $code)
-                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                    ->where('sub_pages_slug', 'like', 'detail-kontak')
-                    ->where('sb.pages_id', $page->pages_id)
-                    ->where('sb.sub_pages_status', 1)
-                    ->first();
+                // $kontak = SubpageTranslation::where('language_code', $code)
+                //     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                //     ->where('sub_pages_slug', 'like', 'detail-kontak')
+                //     ->where('sb.pages_id', $page->pages_id)
+                //     ->where('sb.sub_pages_status', 1)
+                //     ->first();
                 $daftar_kontak = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('sub_pages_slug', 'like', 'kontak-%')
@@ -1088,7 +1088,7 @@ class HomeController extends Controller
                 'section' => $section ??= collect([]),
                 'page' => $page ??= null,
                 'code' => $code,
-                'kontak' => $kontak ??= null,
+                // 'kontak' => $kontak ??= null,
                 'socialmedia' => $socialmedia ??= null,
                 'daftar_kontak' => $daftar_kontak ??= collect([]),
             ]);
@@ -1421,10 +1421,12 @@ class HomeController extends Controller
                         case 'news':
                             if ($remainingPath != '') {
                                 $explode_remaining = explode('/', $remainingPath);
-                                $explode_remaining[0] = match ($explode_remaining[0]) {
-                                    'articles' => 'artikel',
-                                    'press-release' => 'press-release',
-                                };
+                                if ($language == 'id') {
+                                    $explode_remaining[0] = match ($explode_remaining[0]) {
+                                        'articles' => 'artikel',
+                                        'press-release' => 'press-release',
+                                    };
+                                } 
                                 if (sizeof($explode_remaining) > 1) {
                                     $news_id = NewsTranslation::where('news_slug', $explode_remaining[1])->value('news_id');
                                     $news_slug = NewsTranslation::where('language_code', $language)
@@ -1437,11 +1439,13 @@ class HomeController extends Controller
                             break;
                         case 'catalog':
                             if ($remainingPath != '') {
-                                $remainingPath = match ($remainingPath) {
-                                    'adult' => 'dewasa',
-                                    'teenager' => 'remaja',
-                                    'children' => 'anak'
-                                };
+                                if ($language == 'id') {
+                                    $remainingPath = match ($remainingPath) {
+                                        'adult' => 'dewasa',
+                                        'teenager' => 'remaja',
+                                        'children' => 'anak'
+                                    };
+                                }
                                 $goalPath = 'catalog/' . $remainingPath;
                             }
                             break;
