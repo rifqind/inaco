@@ -32,7 +32,8 @@ class IntermarketController extends Controller
 
             //check if language with code en exists if isnt exist get first row
             $translation = $getData->firstWhere('language_code', 'en');
-            if (!$translation) $translation = $getData->first();
+            if (!$translation)
+                $translation = $getData->first();
 
             $product_export = $translation->product_title;
             $value->product_export = $product_export;
@@ -52,7 +53,8 @@ class IntermarketController extends Controller
             if ($check > 1) {
                 $checkLvl2 = ProductTranslation::where('product_id', $value->product_id)
                     ->where('language_code', 'en')->first();
-                if ($checkLvl2) array_push($list, $checkLvl2->product_translation_id);
+                if ($checkLvl2)
+                    array_push($list, $checkLvl2->product_translation_id);
                 else {
                     $checkLvl2 = ProductTranslation::where('product_id', $value->product_id)->first();
                     array_push($list, $checkLvl2->product_translation_id);
@@ -86,7 +88,18 @@ class IntermarketController extends Controller
                 'country' => ['required', 'integer'],
                 'product_export' => ['required', 'integer']
             ]);
-            $insertIntermarket = InternationalMarket::create($data);
+            if ($data['product_export'] == 0) {
+                $all_product = Product::pluck('product_id')->toArray();
+                foreach ($all_product as $key => $value) {
+                    # code...
+                    $insertIntermarket = InternationalMarket::create([
+                        'country' => $data['country'],
+                        'product_export' => $value
+                    ]);
+                }
+            } else {
+                $insertIntermarket = InternationalMarket::create($data);
+            }
             DB::commit();
             return response()->json([
                 'message' => 'Success'
@@ -100,7 +113,7 @@ class IntermarketController extends Controller
         }
     }
 
-    public function update(Request $request, String $id = null)
+    public function update(Request $request, string $id = null)
     {
         if ($request->isMethod('get')) {
             $product = Product::get();
@@ -111,7 +124,8 @@ class IntermarketController extends Controller
                 if ($check > 1) {
                     $checkLvl2 = ProductTranslation::where('product_id', $value->product_id)
                         ->where('language_code', 'en')->first();
-                    if ($checkLvl2) array_push($list, $checkLvl2->product_translation_id);
+                    if ($checkLvl2)
+                        array_push($list, $checkLvl2->product_translation_id);
                     else {
                         $checkLvl2 = ProductTranslation::where('product_id', $value->product_id)->first();
                         array_push($list, $checkLvl2->product_translation_id);
@@ -125,10 +139,6 @@ class IntermarketController extends Controller
             $product = ProductTranslation::select(['product_id as value', 'product_title as label', 'language_code'])
                 ->whereIn('product_translation_id', $list)
                 ->get();
-            foreach ($product as $key => $value) {
-                # code...
-                $value->label = $value->label . ' (' . $value->language_code . ')';
-            }
             $country = DB::table('ref_country')->select(['id as value', 'nicename as label'])->get();
             $data = InternationalMarket::where('market_id', $id)->first();
             return view('cms.intermarket.update_intermarket', [
@@ -145,7 +155,19 @@ class IntermarketController extends Controller
                     'country' => ['required', 'integer'],
                     'product_export' => ['required', 'integer']
                 ]);
-                $updateIntermarket = InternationalMarket::where('market_id', $data['market_id'])->update($data);
+                if ($data['product_export'] == 0) {
+                    $all_product = Product::pluck('product_id')->toArray();
+                    foreach ($all_product as $key => $value) {
+                        # code...
+                        $insertIntermarket = InternationalMarket::where('market_id', $data['market_id'])
+                            ->update([
+                                'country' => $data['country'],
+                                'product_export' => $value
+                            ]);
+                    }
+                } else {
+                    $updateIntermarket = InternationalMarket::where('market_id', $data['market_id'])->update($data);
+                }
                 DB::commit();
                 return response()->json([
                     'message' => 'Success'
@@ -160,7 +182,7 @@ class IntermarketController extends Controller
         }
     }
 
-    public function destroy(String $id)
+    public function destroy(string $id)
     {
         try {
             //code...

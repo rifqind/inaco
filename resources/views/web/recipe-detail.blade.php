@@ -80,7 +80,15 @@
                 <div class="row justify-content-center">
                     <div class="col-md-12">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h2 class="recipe-title mb-0"><span>Resep Lainnya</span></h2>
+                            @if ($code == 'id')
+                                <h2 class="recipe-title mb-0"><span>Resep Lainnya</span></h2>
+                            @elseif($code == 'ar')
+                                <h2 class="recipe-title mb-0"><span>وصفات أخرى</span></h2>
+                            @elseif($code == 'vi')
+                                <h2 class="recipe-title mb-0"><span>Công Thức Khác</span></h2>
+                            @else
+                                <h2 class="recipe-title mb-0"><span>Other Recipes</span></h2>
+                            @endif
                             <a href="{{ route('web.recipe', ['code' => $code]) }}"
                                 class="btn btn-primary more d-none d-md-block">
                                 @if ($code == 'id')

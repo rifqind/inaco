@@ -1266,6 +1266,8 @@ class HomeController extends Controller
             ->get() : collect([]);
 
         $market = InternationalMarket::join('ref_country as rc', 'rc.id', '=', 'international_market.country')
+            ->select('rc.iso', 'rc.continent', 'rc.name')
+            ->distinct()
             ->get();
 
         $countryISO = $market->pluck('iso')->unique();
@@ -1426,7 +1428,7 @@ class HomeController extends Controller
                                         'articles' => 'artikel',
                                         'press-release' => 'press-release',
                                     };
-                                } 
+                                }
                                 if (sizeof($explode_remaining) > 1) {
                                     $news_id = NewsTranslation::where('news_slug', $explode_remaining[1])->value('news_id');
                                     $news_slug = NewsTranslation::where('language_code', $language)

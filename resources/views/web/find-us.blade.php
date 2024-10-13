@@ -67,7 +67,15 @@
                             </div>
                         </div>
                         <hr class="mt-5 mb-4 pt-2 pb-2">
-                        <h4 class="fw-bold mb-4">Toko Online</h4>
+                        @if ($code == 'id')
+                            <h4 class="fw-bold mb-4">Toko Online</h4>
+                        @elseif($code == 'ar')
+                            <h4 class="fw-bold mb-4">المتجر الإلكتروني</h4>
+                        @elseif($code == 'vi')
+                            <h4 class="fw-bold mb-4">Cửa Hàng Trực Tuyến</h4>
+                        @else
+                            <h4 class="fw-bold mb-4">Online Store</h4>
+                        @endif
                         <div class="d-flex align-items-center olshop">
                             @if ($socialmedia->lazada)
                                 <a class="me-3" href="{{ $socialmedia->lazada }}"><img
@@ -104,23 +112,79 @@
                                     <div class="text-center">Content not available</div>
                                 @endif
                             @endif
-                            <div class="form-group mb-3">
-                                <label for="name" class="form-label fw-bold mb-1">Name</label>
-                                <input type="text" class="form-control" name="name" id="name">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label fw-bold mb-1">Email</label>
-                                <input type="email" class="form-control" name="email" id="email">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="phone" class="form-label fw-bold mb-1">Phone</label>
-                                <input type="text" class="form-control" name="phone" id="phone">
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="message" class="form-label fw-bold mb-1">Message</label>
-                                <textarea rows="5" class="form-control" name="message" id="message"></textarea>
-                            </div>
-                            <button href="#" class="btn btn-primary px-5 more filled-button">Submit</button>
+                            @if($code == 'id')
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label fw-bold mb-1">Nama</label>
+                                    <input type="text" class="form-control" name="name" id="name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label fw-bold mb-1">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label fw-bold mb-1">Telepon</label>
+                                    <input type="text" class="form-control" name="phone" id="phone">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="message" class="form-label fw-bold mb-1">Pesan</label>
+                                    <textarea rows="5" class="form-control" name="message" id="message"></textarea>
+                                </div>
+                                <button href="#" class="btn btn-primary px-5 more filled-button">Kirim</button>
+                            @elseif($code == 'ar')
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label fw-bold mb-1">الاسم</label>
+                                    <input type="text" class="form-control" name="name" id="name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label fw-bold mb-1">البريد الإلكتروني</label>
+                                    <input type="email" class="form-control" name="email" id="email">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label fw-bold mb-1">الهاتف</label>
+                                    <input type="text" class="form-control" name="phone" id="phone">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="message" class="form-label fw-bold mb-1">الرسالة</label>
+                                    <textarea rows="5" class="form-control" name="message" id="message"></textarea>
+                                </div>
+                                <button href="#" class="btn btn-primary px-5 more filled-button">إرسال</button>
+                            @elseif($code == 'vi')
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label fw-bold mb-1">Tên</label>
+                                    <input type="text" class="form-control" name="name" id="name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label fw-bold mb-1">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label fw-bold mb-1">Số Điện Thoại</label>
+                                    <input type="text" class="form-control" name="phone" id="phone">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="message" class="form-label fw-bold mb-1">Tin Nhắn</label>
+                                    <textarea rows="5" class="form-control" name="message" id="message"></textarea>
+                                </div>
+                                <button href="#" class="btn btn-primary px-5 more filled-button">Gửi</button>
+                            @else
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label fw-bold mb-1">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label fw-bold mb-1">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="phone" class="form-label fw-bold mb-1">Phone</label>
+                                    <input type="text" class="form-control" name="phone" id="phone">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="message" class="form-label fw-bold mb-1">Message</label>
+                                    <textarea rows="5" class="form-control" name="message" id="message"></textarea>
+                                </div>
+                                <button href="#" class="btn btn-primary px-5 more filled-button">Submit</button>
+                            @endif
                         </form>
                     </div>
                 </div>
