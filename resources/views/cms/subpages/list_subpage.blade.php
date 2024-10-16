@@ -4,17 +4,20 @@
     </x-slot>
     <x-slot name="head">
         <!-- DataTables css -->
-        <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
+            type="text/css" />
+        <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet"
+            type="text/css" />
         <!-- Responsive Datatable css -->
     </x-slot>
     <div class="col-lg-12">
         <div class="card m-b-30">
             <div class="card-header pt-0">
                 @if (!$is_slugged)
-                <div class="d-sm-flex justify-content-between">
-                    <a href="{{ route('subpages.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
-                </div>
+                    <div class="d-sm-flex justify-content-between">
+                        <a href="{{ route('subpages.create') }}" class="btn btn-primary-rgba position-absolute"><i
+                                class="feather icon-plus mr-2"></i>Add New</a>
+                    </div>
                 @endif
             </div>
             <div class="card-body">
@@ -31,19 +34,34 @@
                         </thead>
                         <tbody>
                             @foreach ($data as $value)
-                            <tr data-id="{{ $value->id }}">
-                                <td>{{ $value->pages_title }}</td>
-                                <td>{{ $value->sub_pages_title }}</td>
-                                <td>{{ $value->sub_pages_description }}</td>
-                                <td>{{ $value->language_name }}</td>
-                                <td>
-                                    <a href="{{ route('subpages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
-                                    <a href="{{ route('subpages.create') }}?sub_pages_id={{ $value->sub_pages_id }}&language_code={{ $value->languageList }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>
-                                    @if (!$is_slugged)
-                                    <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
-                                    @endif
-                                </td>
-                            </tr>
+                                <tr data-id="{{ $value->id }}">
+                                    <td>{{ $value->pages_title }}</td>
+                                    <td>{{ $value->sub_pages_title }}</td>
+                                    <td>{{ $value->sub_pages_description }}</td>
+                                    <td>{{ $value->language_name }}</td>
+                                    <td>
+                                        @if (!$is_slugged)
+                                            <a href="{{ route('subpages.update', ['id' => $value->id]) }}"
+                                                class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top"
+                                                title="Edit"><i class="feather icon-edit"></i></a>
+                                            <a href="{{ route('subpages.create') }}?sub_pages_id={{ $value->sub_pages_id }}&language_code={{ $value->languageList }}"
+                                                class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top"
+                                                title="Add Language"><i
+                                                    class="ion ion-ios-add-circle-outline text-white"></i></a>
+                                            <button type="button" class="btn btn-round btn-danger delete-row"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"
+                                                data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
+                                        @else
+                                            <a href="{{ route('subpages.update', ['id' => $value->id]) }}?is_slugged={{ $pages_slug }}"
+                                                class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top"
+                                                title="Edit"><i class="feather icon-edit"></i></a>
+                                            <a href="{{ route('subpages.create') }}?sub_pages_id={{ $value->sub_pages_id }}&language_code={{ $value->languageList }}&is_slugged={{ $pages_slug }}"
+                                                class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top"
+                                                title="Add Language"><i
+                                                    class="ion ion-ios-add-circle-outline text-white"></i></a>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

@@ -5,6 +5,7 @@
 */
 "use strict";
 var path = window.location.pathname;
+var is_slugged = document.querySelector('.is-slugged');
 $(document).ready(function () {
     // Initialize Select2
     $("#val-page").select2();
@@ -125,14 +126,18 @@ $("#create-subpage").validate({
                         if (value.isConfirmed) {
                             path == "/webappcms/subpages/create"
                                 ? (window.location.href =
-                                      "/webappcms/subpages/create?sub_pages_id=" +
-                                      data.id +
-                                      "&language_code=" +
-                                      data.code)
+                                    "/webappcms/subpages/create?sub_pages_id=" +
+                                    data.id +
+                                    "&language_code=" +
+                                    data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/webappcms/subpages"; // Ganti dengan URL tujuan Anda
+                            if (is_slugged.textContent == '') {
+                                window.location.href = "/webappcms/subpages"; // Ganti dengan URL tujuan Anda
+                            } else {
+                                window.location.href = "/webappcms/subpages?pages_slug=" + is_slugged.textContent; // Ganti dengan URL tujuan Anda
+                            }
                         }
                     });
                 } else if (data.error) {
@@ -224,6 +229,10 @@ if (path == "/webappcms/subpages") {
     });
 } else {
     document.getElementById("back").addEventListener("click", (e) => {
-        window.location.href = "/webappcms/subpages";
+        if (is_slugged.textContent == '') {
+            window.location.href = "/webappcms/subpages"; // Ganti dengan URL tujuan Anda
+        } else {
+            window.location.href = "/webappcms/subpages?pages_slug=" + is_slugged.textContent; // Ganti dengan URL tujuan Anda
+        }
     });
 }

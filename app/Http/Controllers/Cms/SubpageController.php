@@ -32,14 +32,18 @@ class SubpageController extends Controller
         ]);
 
         $is_slugged = false;
+        $pages_slug = false;
         if ($request->pages_slug) {
             $query->join('pages_translation as pt', 'pt.pages_id', '=', 'sp.pages_id')
                 ->where('pt.pages_slug', $request->pages_slug);
+            $query->distinct();
             $is_slugged = true;
+            $pages_slug = $request->pages_slug;
         }
 
 
         //sementara
+        // dd($query->toSql());
         $data = $query->get();
         // dd($data);
         foreach ($data as $key => $value) {
@@ -74,16 +78,19 @@ class SubpageController extends Controller
         }
         return view('cms.subpages.list_subpage', [
             'data' => $data,
-            'is_slugged' => $is_slugged
+            'is_slugged' => $is_slugged,
+            'pages_slug' => $pages_slug,
         ]);
     }
 
     public function create(Request $request)
     {
         $languages = AppLanguage::select('code as value', 'name as label')->get();
-
         $pages = Page::get();
         $list = [];
+        $is_slugged = false;
+        if ($request->is_slugged)
+            $is_slugged = $request->is_slugged;
         foreach ($pages as $key => $value) {
             # code...
             $check = PageTranslation::where('pages_id', $value->pages_id)->count();
@@ -119,7 +126,8 @@ class SubpageController extends Controller
                     'languages' => $languages,
                     'pages' => $pages,
                     'data' => $data,
-                    'titles' => $titles
+                    'titles' => $titles,
+                    'is_slugged' => $is_slugged
                 ]);
             }
         }
@@ -134,7 +142,8 @@ class SubpageController extends Controller
         return view('cms.subpages.create_subpage', [
             'languages' => $languages,
             'pages' => $pages,
-            'data' => $data
+            'data' => $data,
+            'is_slugged' => $is_slugged
         ]);
     }
 
@@ -217,6 +226,9 @@ class SubpageController extends Controller
             $languages = AppLanguage::select('code as value', 'name as label')->get();
             $pages = Page::get();
             $list = [];
+            $is_slugged = false;
+            if ($request->is_slugged)
+                $is_slugged = $request->is_slugged;
             foreach ($pages as $key => $value) {
                 # code...
                 $check = PageTranslation::where('pages_id', $value->pages_id)->count();
@@ -253,7 +265,8 @@ class SubpageController extends Controller
             return view('cms.subpages.update_subpage', [
                 'languages' => $languages,
                 'pages' => $pages,
-                'data' => $data
+                'data' => $data,
+                'is_slugged' => $is_slugged
             ]);
         } else if ($request->isMethod('post')) {
             try {
