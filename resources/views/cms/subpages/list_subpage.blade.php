@@ -11,9 +11,11 @@
     <div class="col-lg-12">
         <div class="card m-b-30">
             <div class="card-header pt-0">
+                @if (!$is_slugged)
                 <div class="d-sm-flex justify-content-between">
                     <a href="{{ route('subpages.create') }}" class="btn btn-primary-rgba position-absolute"><i class="feather icon-plus mr-2"></i>Add New</a>
                 </div>
+                @endif
             </div>
             <div class="card-body">
                 <div class="">
@@ -34,9 +36,12 @@
                                 <td>{{ $value->sub_pages_title }}</td>
                                 <td>{{ $value->sub_pages_description }}</td>
                                 <td>{{ $value->language_name }}</td>
-                                <td><a href="{{ route('subpages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
+                                <td>
+                                    <a href="{{ route('subpages.update', ['id' => $value->id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>
                                     <a href="{{ route('subpages.create') }}?sub_pages_id={{ $value->sub_pages_id }}&language_code={{ $value->languageList }}" class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top" title="Add Language"><i class="ion ion-ios-add-circle-outline text-white"></i></a>
+                                    @if (!$is_slugged)
                                     <button type="button" class="btn btn-round btn-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete" data-id="{{ $value->id }}"><i class="feather icon-trash-2"></i></button>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

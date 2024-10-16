@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class SubpageController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         $query = SubpageTranslation::query();
         $query->join('sub_pages as sp', 'sp.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id');
@@ -30,6 +30,13 @@ class SubpageController extends Controller
             'sub_pages_description',
             'al.name as language_name'
         ]);
+
+        $is_slugged = false;
+        if ($request->pages_slug) {
+            $query->join('pages_translation as pt', 'pt.pages_id', '=', 'sp.pages_id')
+                ->where('pt.pages_slug', $request->pages_slug);
+            $is_slugged = true;
+        }
 
 
         //sementara
@@ -66,7 +73,8 @@ class SubpageController extends Controller
             $value->languageList = $languageList;
         }
         return view('cms.subpages.list_subpage', [
-            'data' => $data
+            'data' => $data,
+            'is_slugged' => $is_slugged
         ]);
     }
 

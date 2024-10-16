@@ -106,7 +106,7 @@ class HomeController extends Controller
                 'items' => [
                     ['title' => 'التقدير', 'desc' => 'جائزة INACO', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'حولنا', 'desc' => 'عن شركة INACO', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
-                    ['title' => 'نموذج الشركة', 'desc' => 'معلومات عن ملف الشركة', 'image' => 'profile.jpg', 'url' => '#'],
+                    ['title' => 'نموذج الشركة', 'desc' => 'معلومات عن ملف الشركة', 'image' => 'profile.jpg', 'url' => route('web.company-profile', ['code' => $code])],
                 ],
             ],
             'id' => [
@@ -114,7 +114,7 @@ class HomeController extends Controller
                 'items' => [
                     ['title' => 'Penghargaan', 'desc' => 'Beberapa penghargaan Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'Tentang Kami', 'desc' => 'Tentang perusahaan Inaco', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
-                    ['title' => 'Profil Perusahaan', 'desc' => 'Informasi tentang profil perusahaan', 'image' => 'profile.jpg', 'url' => '#'],
+                    ['title' => 'Profil Perusahaan', 'desc' => 'Informasi tentang profil perusahaan', 'image' => 'profile.jpg', 'url' => route('web.company-profile', ['code' => $code])],
                 ],
             ],
             'vi' => [
@@ -122,7 +122,7 @@ class HomeController extends Controller
                 'items' => [
                     ['title' => 'Giải thưởng', 'desc' => 'Một số giải thưởng của Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'Về Chúng Tôi', 'desc' => 'Về công ty Inaco', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
-                    ['title' => 'Hồ Sơ Công Ty', 'desc' => 'Thông tin về hồ sơ công ty', 'image' => 'profile.jpg', 'url' => '#'],
+                    ['title' => 'Hồ Sơ Công Ty', 'desc' => 'Thông tin về hồ sơ công ty', 'image' => 'profile.jpg', 'url' => route('web.company-profile', ['code' => $code])],
                 ],
             ],
             'default' => [
@@ -130,7 +130,7 @@ class HomeController extends Controller
                 'items' => [
                     ['title' => 'Awards', 'desc' => 'Some awards of Inaco', 'image' => 'award.jpg', 'url' => route('web.awards', ['code' => $code])],
                     ['title' => 'About Us', 'desc' => 'About Inaco company', 'image' => 'about.jpg', 'url' => route('web.about', ['code' => $code])],
-                    ['title' => 'Company Profile', 'desc' => 'Information about the company profile', 'image' => 'profile.jpg', 'url' => '#'],
+                    ['title' => 'Company Profile', 'desc' => 'Information about the company profile', 'image' => 'profile.jpg', 'url' => route('web.company-profile', ['code' => $code])],
                 ],
             ],
 
