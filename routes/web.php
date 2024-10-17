@@ -65,9 +65,9 @@ Route::prefix('{code?}')
                     ->get();
             }
             // Sanitize the page description, if it exists
-            if ($page) {
-                $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
-            }
+            // if ($page) {
+            //     $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
+            // }
             return view('web.about', [
                 'page' => $page,
                 'code' => $code,

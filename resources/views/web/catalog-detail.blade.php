@@ -10,9 +10,12 @@
                                 <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Kembali</a>
                             @elseif ($code == 'ar')
                                 <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>العودة</a>
+                            @elseif ($code == 'vi')
+                                <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Quay Lại</a>
                             @else
                                 <a href="#" id="goback" class="backlink"><i class="bi bi-arrow-left me-2"></i>Go Back</a>
                             @endif
+
                         </div>
                         <div class="col-md-7">
                             <div id="image-detail" class="image-catalog-detail mb-4 mb-sm-0">
@@ -36,12 +39,18 @@
                                     data-bs-toggle="modal" data-bs-target="#buyModal">
                                     اشترِ الآن
                                 </button>
+                            @elseif($code == 'vi')
+                                <button type="button" class="btn btn-primary button-catalog more btn-fill"
+                                    data-bs-toggle="modal" data-bs-target="#buyModal">
+                                    Mua Ngay
+                                </button>
                             @else
                                 <button type="button" class="btn btn-primary button-catalog more btn-fill"
                                     data-bs-toggle="modal" data-bs-target="#buyModal">
                                     Buy Now
                                 </button>
                             @endif
+
                         </div>
                     @else
                         <div class="text-center">
@@ -49,6 +58,8 @@
                                 Produk Tidak Ada
                             @elseif($code == 'ar')
                                 المنتج غير متوفر
+                            @elseif($code == 'vi')
+                                Sản Phẩm Không Có Sẵn
                             @else
                                 Product Not Available
                             @endif
@@ -71,11 +82,16 @@
                                 <h2>منتجات {{ $cat_title }} أخرى</h2>
                                 <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
                                     class="btn btn-primary more d-none d-sm-block">عرض المزيد</a>
+                            @elseif($code == 'vi')
+                                <h2>Các Sản Phẩm {{ $cat_title }} Khác</h2>
+                                <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
+                                    class="btn btn-primary more d-none d-sm-block">Xem Thêm</a>
                             @else
                                 <h2>Other {{ $cat_title }} Products</h2>
                                 <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
                                     class="btn btn-primary more d-none d-sm-block">View More</a>
                             @endif
+
                         </div>
                         <div class="catalog-list row">
                             @if($products->isNotEmpty())
@@ -99,6 +115,8 @@
                                                     Lihat Produk
                                                 @elseif ($code == 'ar')
                                                     انظر المنتجات
+                                                @elseif($code == 'vi')
+                                                    Xem Sản Phẩm
                                                 @else
                                                     See Product
                                                 @endif
@@ -107,6 +125,7 @@
                                     </div>
                                 @endforeach
                             @endif
+
                         </div>
                         <div class="text-center">
                             <a href="{{ route('web.products', ['code' => $code, 'category_title' => $cat_title_for_detail]) }}"
@@ -115,6 +134,8 @@
                                     Lihat Lainnya
                                 @elseif ($code == 'ar')
                                     عرض المزيد
+                                @elseif($code == 'vi')
+                                    Xem Thêm
                                 @else
                                     View More
                                 @endif
@@ -136,6 +157,8 @@
                         <h5 class="modal-title" id="exampleModalLabel">Beli Sekarang</h5>
                     @elseif ($code == 'ar')
                         <h5 class="modal-title" id="exampleModalLabel">اشتري الآن</h5>
+                    @elseif($code == 'vi')
+                        <h5 class="modal-title" id="exampleModalLabel">Mua Ngay</h5>
                     @else
                         <h5 class="modal-title" id="exampleModalLabel">Buy Now</h5>
                     @endif

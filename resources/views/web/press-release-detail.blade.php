@@ -19,17 +19,21 @@
                             <ol>
                                 @if ($code == 'id')
                                     <li><a href="/id">Home</a></li>
-                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Artikel</a></li>
+                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Press Release</a>
+                                    </li>
                                 @elseif ($code == 'ar')
                                     <li><a href="/ar">الرئيسية</a></li>
-                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">مقالة</a></li>
+                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">بيان صحفي</a></li>
                                 @elseif($code == 'vi')
                                     <li><a href="/vi">Trang Chủ</a></li>
-                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Bài Viết</a></li>
+                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Thông Cáo Báo
+                                            Chí</a></li>
                                 @else
                                     <li><a href="/">Home</a></li>
-                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Article</a></li>
+                                    <li><a href="{{route('web.news', ['code' => $code, 'id' => $id])}}">Press Release</a>
+                                    </li>
                                 @endif
+
                                 <li>{{$news->news_title}}</li>
                             </ol>
                         </div><!-- End Breadcrumbs -->
@@ -65,14 +69,15 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         @if ($code == 'id')
-                            <h2 class="article-title"><span>Artikel Terbaru</span></h2>
+                            <h2 class="article-title"><span>Press Release Terbaru</span></h2>
                         @elseif ($code == 'ar')
-                            <h2 class="article-title"><span>أحدث المقالات</span></h2>
+                            <h2 class="article-title"><span>أحدث البيانات الصحفية</span></h2>
                         @elseif ($code == 'vi')
-                            <h2 class="article-title"><span>Bài Viết Mới Nhất</span></h2>
+                            <h2 class="article-title"><span>Thông Cáo Báo Chí Mới Nhất</span></h2>
                         @else
-                            <h2 class="article-title"><span>Latest Articles</span></h2>
+                            <h2 class="article-title"><span>Latest Press Releases</span></h2>
                         @endif
+
                         <div class="row">
                             @if($newsList->isNotEmpty())
                                 @foreach ($newsList as $value)

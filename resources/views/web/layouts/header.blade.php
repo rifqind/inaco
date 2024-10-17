@@ -165,7 +165,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">موزعات
                                 التوزيع</a></li>
                     @endif
-                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco"
+                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/ar"><img title="Logo Inaco"
                                 src="{{ asset('assets/web/images/logo.png') }}"></a></li>
                     @if($header['International Market'] == 1)
                         <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">السوق
@@ -195,7 +195,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">Nhà
                                 Phân Phối</a></li>
                     @endif
-                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco"
+                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/vi"><img title="Logo Inaco"
                                 src="{{ asset('assets/web/images/logo.png') }}"></a></li>
                     @if($header['International Market'] == 1)
                         <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">Thị
@@ -210,7 +210,7 @@
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('web.distributor', ['code' => $code]) }}">Distributors</a></li>
                     @endif
-                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco"
+                    <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/en"><img title="Logo Inaco"
                                 src="{{ asset('assets/web/images/logo.png') }}"></a></li>
                     @if($header['International Market'] == 1)
                         <li class="nav-item"><a class="nav-link"
@@ -341,12 +341,13 @@
                     response = await axios.get(`/change-language/${langCode}/index`);
                 } else {
                     splitPath = window.location.pathname.split('/');
-                    remainingPath = splitPath.slice(2).join('/')
+                    remainingPath = splitPath.slice(2).join('$')
+                    console.log(splitPath, remainingPath)
                     if (!languageList.includes(splitPath[1])) {
                         response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`);
                     } else {
-                        const newSplitPath = remainingPath.split('/');
-                        const newRemainingPath = newSplitPath.slice(1).join('/');
+                        const newSplitPath = remainingPath.split('$');
+                        const newRemainingPath = newSplitPath.slice(1).join('$');
                         if (newSplitPath[0] == '')
                             if (langCode == 'id') response = { data: '/' };
                             else

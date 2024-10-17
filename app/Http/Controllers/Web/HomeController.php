@@ -544,12 +544,21 @@ class HomeController extends Controller
         $data = $this->newsGenerate($request, $code, $id, $title);
         if ($title) {
             $show = $this->newsGenerate($request, $code, $id, $title);
-            return view('web.news-detail', [
-                'news' => $show['news'],
-                'id' => $show['id'],
-                'newsList' => $show['newsList'],
-                'code' => $show['code'],
-            ]);
+            if ($data['news_category'] == 1) {
+                return view('web.news-detail', [
+                    'news' => $show['news'],
+                    'id' => $show['id'],
+                    'newsList' => $show['newsList'],
+                    'code' => $show['code'],
+                ]);
+            } else {
+                return view('web.press-release-detail', [
+                    'news' => $show['news'],
+                    'id' => $show['id'],
+                    'newsList' => $show['newsList'],
+                    'code' => $show['code'],
+                ]);
+            }
         }
         if ($data['news_category'] == 1) {
             return view('web.news', [
@@ -578,12 +587,21 @@ class HomeController extends Controller
         $data = $this->newsGenerate($request, $code, $id, $title);
         if ($title) {
             $show = $this->newsGenerate($request, $code, $id, $title);
-            return view('web.news-detail', [
-                'news' => $show['news'],
-                'id' => $show['id'],
-                'newsList' => $show['newsList'],
-                'code' => $show['code'],
-            ]);
+            if ($data['news_category'] == 1) {
+                return view('web.news-detail', [
+                    'news' => $show['news'],
+                    'id' => $show['id'],
+                    'newsList' => $show['newsList'],
+                    'code' => $show['code'],
+                ]);
+            } else {
+                return view('web.press-release-detail', [
+                    'news' => $show['news'],
+                    'id' => $show['id'],
+                    'newsList' => $show['newsList'],
+                    'code' => $show['code'],
+                ]);
+            }
         }
 
         if ($data['news_category'] == 1) {
@@ -645,7 +663,6 @@ class HomeController extends Controller
                 'count_views',
                 'news_slug'
             ]);
-
         if ($title) {
             $news = $this->getNewsDetail($title);
             $newsList = $this->paginateAndFormatNews($query, 2);
@@ -654,6 +671,7 @@ class HomeController extends Controller
             $show['id'] = $id == 'artikel' ? 'articles' : $id;
             $show['newsList'] = $newsList;
             $show['code'] = $code;
+            $show['news_category'] = $news_category;
             return $show;
         }
 
@@ -987,9 +1005,9 @@ class HomeController extends Controller
                     ->get();
             }
             // Sanitize the page description, if it exists
-            if ($page) {
-                $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
-            }
+            // if ($page) {
+            //     $page->pages_description = strip_tags(html_entity_decode($page->pages_description));
+            // }
             return view('web.about', [
                 'page' => $page,
                 'code' => $code,
@@ -1318,6 +1336,7 @@ class HomeController extends Controller
         // $language = $request->language;
         // $url = $request->url;
         // $remainingPath = $request->remainingPath;
+        // dd($url);
         switch ($url) {
             case 'tentang-kami':
                 $goalPath = 'about';
@@ -1361,7 +1380,7 @@ class HomeController extends Controller
             case 'produk':
                 $goalPath = 'products';
                 if ($remainingPath != '') {
-                    $explode_remaining = explode('/', $remainingPath);
+                    $explode_remaining = explode('$', $remainingPath);
                     $category_id = ProductCategoryTranslation::where('category_slug', $explode_remaining[0])->value('category_id');
                     $category_slug = ProductCategoryTranslation::where('language_code', $language)
                         ->where('category_id', $category_id)
@@ -1383,7 +1402,7 @@ class HomeController extends Controller
             case 'berita':
                 $goalPath = 'news';
                 if ($remainingPath != '') {
-                    $explode_remaining = explode('/', $remainingPath);
+                    $explode_remaining = explode('$', $remainingPath);
                     $explode_remaining[0] = match ($explode_remaining[0]) {
                         'artikel' => 'articles',
                         'press-release' => 'press-release',
@@ -1405,7 +1424,7 @@ class HomeController extends Controller
                 if ($remainingPath != '') {
                     switch ($goalPath) {
                         case 'products':
-                            $explode_remaining = explode('/', $remainingPath);
+                            $explode_remaining = explode('$', $remainingPath);
                             $category_id = ProductCategoryTranslation::where('category_slug', $explode_remaining[0])->value('category_id');
                             $category_slug = ProductCategoryTranslation::where('language_code', $language)
                                 ->where('category_id', $category_id)
@@ -1422,7 +1441,7 @@ class HomeController extends Controller
                             break;
                         case 'news':
                             if ($remainingPath != '') {
-                                $explode_remaining = explode('/', $remainingPath);
+                                $explode_remaining = explode('$', $remainingPath);
                                 if ($language == 'id') {
                                     $explode_remaining[0] = match ($explode_remaining[0]) {
                                         'articles' => 'artikel',

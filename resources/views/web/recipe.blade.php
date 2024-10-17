@@ -62,6 +62,7 @@
                                     @elseif($code == 'vi')
                                         Tất cả
                                     @else
+                                    All
                                     @endif
                                 </a>
                                 @foreach ($category as $value)
