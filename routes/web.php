@@ -26,13 +26,17 @@ Route::name('web.id.')->group(function () {
     Route::get('/distributor', [HomeController::class, 'distributorIndonesia'])->name('distributor');
     Route::get('/pasar-internasional', [HomeController::class, 'intermarketInd'])->name('intermarket');
     Route::get('/resep/{title?}', [HomeController::class, 'resep'])->name('resep');
+    Route::get('/resep/kategori/{cat_title?}', [HomeController::class, 'resep'])->name('resep.kategori');
+    Route::get('/resep/detail/{title?}', [HomeController::class, 'resepDetail'])->name('resep.detail');
     Route::get('/berita/{id}/{title?}', [HomeController::class, 'berita'])->name('berita');
 });
 Route::prefix('{code?}')
     // ->where(['code'], '[a-zA-Z]{2}')
-    ->name('web.')->group(function () {
+    ->name('web.')->group(function () { 
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/recipe/{title?}', [HomeController::class, 'recipe'])->name('recipe');
+        Route::get('/recipe/category/{cat_title?}', [HomeController::class, 'recipe'])->name('recipe.category');
+        Route::get('/recipe/detail/{title?}', [HomeController::class, 'recipeDetail'])->name('recipe.detail');
         Route::get('/catalog/{id}', [HomeController::class, 'catalog'])->name('catalog');
         Route::get('/news/{id}/{title?}', [HomeController::class, 'news'])->name('news');
         Route::get('/about', function (string $code = null) {

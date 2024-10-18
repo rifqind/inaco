@@ -118,7 +118,7 @@
                                             <div class="recipe-summamry">
                                                 <p>{{$value->recipe_description}}</p>
                                             </div>
-                                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
                                                 class="btn btn-primary w-100 more filled-button">
                                                 @if ($code == 'id')
                                                     Lihat Resep

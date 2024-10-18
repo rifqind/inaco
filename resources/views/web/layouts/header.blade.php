@@ -3,9 +3,23 @@
     <div class="container d-flex align-items-center justify-content-between">
 
         <h1 class="logo d-sm-none">
-            <a href="index.php">
-                <img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}">
-            </a>
+            @if ($code == 'id')
+                <a href="/">
+                    <img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}">
+                </a>
+            @elseif ($code == 'ar')
+                <a href="/ar">
+                    <img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}">
+                </a>
+            @elseif ($code == 'vi')
+                <a href="/vi">
+                    <img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}">
+                </a>
+            @else
+                <a href="/en">
+                    <img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}">
+                </a>
+            @endif
         </h1>
 
         <nav id="navbar" class="navbar w-100 justify-content-between">
@@ -336,6 +350,7 @@
             element.addEventListener('click', async (event) => {
                 event.preventDefault(); // Prevent the default action of the anchor tag
                 const langCode = event.target.closest('a').id.split('-')[2];
+                const search = window.location.search
                 let goalPath, splitPath, remainingPath, newPath, response
                 if (window.location.pathname == '/') {
                     response = await axios.get(`/change-language/${langCode}/index`);
@@ -344,7 +359,11 @@
                     remainingPath = splitPath.slice(2).join('$')
                     console.log(splitPath, remainingPath)
                     if (!languageList.includes(splitPath[1])) {
-                        response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`);
+                        response = await axios.get(`/change-language/${langCode}/${splitPath[1]}/${remainingPath}`, {
+                            params: {
+                                search: search
+                            }
+                        });
                     } else {
                         const newSplitPath = remainingPath.split('$');
                         const newRemainingPath = newSplitPath.slice(1).join('$');
@@ -353,7 +372,11 @@
                             else
                                 response = await axios.get(`/change-language/${langCode}/index`);
                         else
-                            response = await axios.get(`/change-language/${langCode}/${newSplitPath[0]}/${newRemainingPath}`);
+                            response = await axios.get(`/change-language/${langCode}/${newSplitPath[0]}/${newRemainingPath}`, {
+                                params: {
+                                    search: search
+                                }
+                            });
                         // if (newSplitPath[0] == '')
                         // console.log('uhuy')
                     }

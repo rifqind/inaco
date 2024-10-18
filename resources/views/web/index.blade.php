@@ -81,7 +81,7 @@
                             <button id="prev-catalog"><i class="bi bi-chevron-left"></i></button>
                             <button id="next-catalog"><i class="bi bi-chevron-right"></i></button>
                         </div>
-                        @if ($code == 'ar')
+                        <!-- @if ($code == 'ar')
                             <a href="{{ route('web.products', ['code' => $code]) }}"
                                 class="btn btn-primary more filled-button d-none d-sm-inline">انظر جميع المنتجات</a>
                         @elseif ($code == 'id')
@@ -93,7 +93,7 @@
                         @else
                             <a href="{{ route('web.products', ['code' => $code]) }}"
                                 class="btn btn-primary more filled-button d-none d-sm-inline">View All Products</a>
-                        @endif
+                        @endif -->
                     </div>
                 </div>
             </div>
@@ -101,26 +101,28 @@
                 <div class="row justify-content-end">
                     <div class="col-12 col-md-8">
                         <div id="catalog-slider" class="owl-carousel owl-theme">
-                            @foreach ($products as $value)
-                                <div class="item" data-aos="fade-up">
-                                    <div class="catalog-thumbnail">
-                                        <a
-                                            href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}">
-                                            <div class="image-catalog"><img
-                                                    src="{{ asset('data/product') . '/' . $value->product_id . '/' . $value->product_image }}?v=1">
-                                            </div>
-                                            <div class="content-catalog">
-                                                <div class="title-catalog">
-                                                    <h4>{{$value->product_title}}</h4>
+                            @if ($products->isNotEmpty())
+                                @foreach ($products as $value)
+                                    <div class="item" data-aos="fade-up">
+                                        <div class="catalog-thumbnail">
+                                            <a
+                                                href="{{ route('web.products', ['code' => $code, 'category_title' => $value->category_slug, 'product' => $value->product_slug]) }}">
+                                                <div class="image-catalog"><img
+                                                        src="{{ asset('data/product') . '/' . $value->product_id . '/' . $value->product_image }}?v=1">
                                                 </div>
-                                            </div>
-                                        </a>
+                                                <div class="content-catalog">
+                                                    <div class="title-catalog">
+                                                        <h4>{{$value->product_title}}</h4>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
                     </div>
-                    <div class="col-12 text-center">
+                    <!-- <div class="col-12 text-center">
                         @if ($code == 'id')
                             <a href="{{ route('web.products', ['code' => $code]) }}"
                                 class="btn btn-primary more filled-button d-inline-block d-sm-none mt-4">
@@ -142,7 +144,7 @@
                                 View All Products
                             </a>
                         @endif
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -176,29 +178,31 @@
                             </h3>
                         @endif
                         <div id="recipe-list" class="owl-carousel owl-theme">
-                            @foreach ($recipes as $value)
-                                <div class="item" data-aos="fade-up">
-                                    <div class="recipe-thumbnail mb-0">
-                                        <div class="recipe-image">
-                                            <img
-                                                src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->recipe_image}}">
-                                        </div>
-                                        <div class="recipe-content">
-                                            <div class="list-product">
-                                                <span>{{$value->product_title}}</span>
+                            @if ($recipes->isNotEmpty())
+                                @foreach ($recipes as $value)
+                                    <div class="item" data-aos="fade-up">
+                                        <div class="recipe-thumbnail mb-0">
+                                            <div class="recipe-image">
+                                                <img
+                                                    src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->recipe_image}}">
                                             </div>
-                                            <div class="recipe-title">
-                                                <h4>{{$value->recipe_title}}</h4>
+                                            <div class="recipe-content">
+                                                <div class="list-product">
+                                                    <span>{{$value->product_title}}</span>
+                                                </div>
+                                                <div class="recipe-title">
+                                                    <h4>{{$value->recipe_title}}</h4>
+                                                </div>
+                                                <div class="recipe-summamry">
+                                                    <p>{{$value->recipe_description}}</p>
+                                                </div>
+                                                <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                                    class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                             </div>
-                                            <div class="recipe-summamry">
-                                                <p>{{$value->recipe_description}}</p>
-                                            </div>
-                                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}"
-                                                class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
                         <div class="text-center" data-aos="fade-up">
                             @if ($code == 'id')
@@ -288,25 +292,27 @@
                             </div>
                         </div>
                         <div id="news-slider" class="owl-carousel owl-theme">
-                            @foreach ($news as $value)
-                                <div class="item" data-aos="fade-up">
-                                    <div class="thumbnail-article">
-                                        <div class="image-thumbnail"><img
-                                                src="{{ asset('data/news') . '/' . $value->news_image }}"></div>
-                                        <div class="content-thumbnail">
-                                            <div class="title-thumbnail">
-                                                <h4><a
-                                                        href="{{ route('web.news', ['id' => $value->news_category, 'code' => $code, 'title' => $value->news_slug]) }}">{{ $value->news_title }}</a>
-                                                </h4>
+                            @if ($news->isNotEmpty())
+                                @foreach ($news as $value)
+                                    <div class="item" data-aos="fade-up">
+                                        <div class="thumbnail-article">
+                                            <div class="image-thumbnail"><img
+                                                    src="{{ asset('data/news') . '/' . $value->news_image }}"></div>
+                                            <div class="content-thumbnail">
+                                                <div class="title-thumbnail">
+                                                    <h4><a
+                                                            href="{{ route('web.news', ['id' => $value->news_category, 'code' => $code, 'title' => $value->news_slug]) }}">{{ $value->news_title }}</a>
+                                                    </h4>
+                                                </div>
+                                                <div class="caption-thumbnail">
+                                                    <p>{{$value->news_description}}</p>
+                                                </div>
+                                                <div class="update-article">{{$value->create_date}}</div>
                                             </div>
-                                            <div class="caption-thumbnail">
-                                                <p>{{$value->news_description}}</p>
-                                            </div>
-                                            <div class="update-article">{{$value->create_date}}</div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
 
                         <div class="text-center" data-aos="fade-up">

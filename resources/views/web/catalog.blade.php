@@ -101,7 +101,7 @@
                     <div class="col-sm-4 col-md-3">
                         <div class="recipe-catalog">
                             @if(isset($recipes[0]))
-                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[0]->recipe_slug])}}">
+                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[0]->recipe_slug])}}">
                                 <div class="image-recipe-catalog">
                                     <img src="{{ asset('data/recipe') . '/' .$recipes[0]->recipe_id . '/' . $recipes[0]->recipe_image }}">
                                 </div>
@@ -113,7 +113,7 @@
                     <div class="col-sm-8 col-md-9">
                         <div class="recipe-catalog">
                             @if(isset($recipes[1]))
-                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[1]->recipe_slug])}}">
+                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[1]->recipe_slug])}}">
                                 <div class="image-recipe-catalog">
                                     <img src="{{ asset('data/recipe') . '/' .$recipes[1]->recipe_id . '/' . $recipes[1]->recipe_image }}">
                                 </div>
@@ -125,7 +125,7 @@
                     <div class="col-sm-6">
                         <div class="recipe-catalog">
                             @if(isset($recipes[2]))
-                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[2]->recipe_slug])}}">
+                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[2]->recipe_slug])}}">
                                 <div class="image-recipe-catalog">
                                     <img src="{{ asset('data/recipe') . '/' .$recipes[2]->recipe_id . '/' . $recipes[2]->recipe_image }}">
                                 </div>
@@ -137,7 +137,7 @@
                     <div class="col-sm-6">
                         <div class="recipe-catalog">
                             @if(isset($recipes[3]))
-                            <a href="{{route('web.recipe', ['code' => $code, 'title' => $recipes[3]->recipe_slug])}}">
+                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[3]->recipe_slug])}}">
                                 <div class="image-recipe-catalog">
                                     <img src="{{ asset('data/recipe') . '/' .$recipes[3]->recipe_id . '/' . $recipes[3]->recipe_image }}">
                                 </div>

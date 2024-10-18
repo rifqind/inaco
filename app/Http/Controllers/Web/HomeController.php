@@ -37,6 +37,8 @@ class HomeController extends Controller
             ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
             ->where('pct.language_code', $code)
             ->where('r.recipe_status', 1)
+            ->orderBy('r.create_date', 'desc')
+            ->limit(4)
             ->get(['recipe_translation.*', 'r.*', 'pct.category_title as product_title']);
 
         $products = ProductTranslation::where('products_translation.language_code', $code)
@@ -45,6 +47,7 @@ class HomeController extends Controller
             ->orderBy('p.display_sequence_onhome', 'asc')
             ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
             ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
+            ->limit(10)
             ->get(['products_translation.*', 'p.*', 'pc.category_slug']);
 
         // ->where('p.product_status', 1)
@@ -54,6 +57,8 @@ class HomeController extends Controller
         $news = NewsTranslation::where('language_code', $code)
             ->where('n.news_status', 1)
             ->join('news as n', 'n.news_id', '=', 'news_translation.news_id')
+            ->orderBy('n.create_date', 'desc')
+            ->limit(5)
             ->get([
                 'news_translation.news_title',
                 'news_translation.news_description',
@@ -151,27 +156,32 @@ class HomeController extends Controller
         $code ??= 'id';
         if ($code == 'id') {
             if ($request->currentPage) {
-                $link = route('web.id.resep', ['title' => $title]) . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
+                // $link = route('web.id.resep', ['title' => $title]) . '?currentPage=' . $request->currentPage . '&category=' . $request->category;
+                if ($title) {
+                    $link = route('web.id.resep.kategori', ['cat_title' => $title]) . '?currentPage=' . $request->currentPage;
+                } else {
+                    $link = route('web.id.resep') . '?currentPage=' . $request->currentPage;
+                }
                 return redirect($link);
             } else
                 return redirect()->route('web.id.resep', ['title' => $title]);
         }
         $data = $this->recipeGenerate($request, $code, $title);
-        if ($title) {
-            $show = $this->recipeDetailGenerate($code, $title);
-            return view('web.recipe-detail', [
-                'recipe' => $show['recipe'],
-                'recipeList' => $show['recipeList'],
-                'code' => $show['code'],
-                'image' => $show['image'],
-            ]);
-        }
+        // if ($title) {
+        //     $show = $this->recipeDetailGenerate($code, $title);
+        //     return view('web.recipe-detail', [
+        //         'recipe' => $show['recipe'],
+        //         'recipeList' => $show['recipeList'],
+        //         'code' => $show['code'],
+        //         'image' => $show['image'],
+        //     ]);
+        // }
 
         return view('web.recipe', [
             'recipes' => $data['recipes'],
             'currentSum' => $data['currentSum'],
             'category' => $data['category'],
-            'category_id' => $data['category_id'],
+            'category_slug' => $data['category_slug'],
             'code' => $data['code'],
             'page' => $data['page'],
             'section' => $data['section'],
@@ -182,20 +192,20 @@ class HomeController extends Controller
     {
         $code = 'id';
         $data = $this->recipeGenerate($request, $code, $title);
-        if ($title) {
-            $show = $this->recipeDetailGenerate($code, $title);
-            return view('web.recipe-detail', [
-                'recipe' => $show['recipe'],
-                'recipeList' => $show['recipeList'],
-                'code' => $show['code'],
-                'image' => $show['image'],
-            ]);
-        }
+        // if ($title) {
+        //     $show = $this->recipeDetailGenerate($code, $title);
+        //     return view('web.recipe-detail', [
+        //         'recipe' => $show['recipe'],
+        //         'recipeList' => $show['recipeList'],
+        //         'code' => $show['code'],
+        //         'image' => $show['image'],
+        //     ]);
+        // }
         return view('web.recipe', [
             'recipes' => $data['recipes'],
             'currentSum' => $data['currentSum'],
             'category' => $data['category'],
-            'category_id' => $data['category_id'],
+            'category_slug' => $data['category_slug'],
             'code' => $data['code'],
             'page' => $data['page'],
             'section' => $data['section'],
@@ -218,6 +228,123 @@ class HomeController extends Controller
             ->where('sb.sub_pages_status', 1)
             ->get() : collect([]);
 
+        // if ($title) {
+        // $query = RecipeTranslation::query();
+        // $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+        //     ->leftJoin('recipe_image as ri', 'r.recipe_id', '=', 'ri.recipe_id')
+        //     ->select(['recipe_translation.*', 'r.*', 'ri.image_filename', 'ri.image_cover'])
+        //     ->where('ri.image_cover', '!=', null) // Only join images that have a cover
+        //     ->where('language_code', $code)
+        //     ->where('r.recipe_status', 1)
+        //     ->orderBy('r.create_date', 'desc')
+        //     ->take(4);
+
+        // $recipeList = $query->get();
+
+        // // Loop through the recipe list to sanitize descriptions and assign images
+        // foreach ($recipeList as $recipe) {
+        //     $text = $recipe->recipe_description;
+        //     $cleanText = strip_tags($text);
+        //     $recipe->recipe_description = html_entity_decode($cleanText);
+
+        //     // Get the image filename for the cover image
+        //     if ($recipe->image_cover) {
+        //         $recipe->recipe_image = $recipe->image_filename; // image already available from join
+        //     } else {
+        //         $recipe->recipe_image = null; // In case there's no image
+        //     }
+        // }
+
+        // // Fetch single recipe based on slug
+        // $recipe = RecipeTranslation::join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+        //     ->where('recipe_slug', $title)
+        //     ->where('language_code', $code)
+        //     ->first();
+
+        // $image = RecipeImage::where('recipe_id', $recipe->recipe_id)->get();
+        // $res = 4 - $image->count();
+        // // dd($res);
+        // if ($res > 0) {
+        //     for ($i = 0; $i < $res; $i++) {
+        //         foreach ($image as $item) {
+        //             $image->push($item); // Duplicate the item and add it to the collection
+        //             if ($image->count() >= 4) {
+        //                 break 2; // Exit both loops if we reach 4 items
+        //             }
+        //         }
+        //     }
+        // }
+        // $recipe->create_date = $this->formatDate($recipe->create_date);
+        // return view('web.recipe-detail', [
+        //     'recipe' => $recipe,
+        //     'recipeList' => $recipeList,
+        //     'code' => $code,
+        //     'image' => $image,
+        // ]);
+        // }
+
+        $productList = RecipeTranslation::where('language_code', $code)
+            ->distinct()->pluck('product_id')->toArray();
+        $categoryList = ProductTranslation::where('language_code', $code)
+            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
+            ->whereIn('p.product_id', $productList)
+            ->distinct()->pluck('category_id')->toArray();
+        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
+            ->whereIn('category_id', $categoryList)
+            ->get(['category_title', 'category_id', 'category_slug']);
+        // dd($categoryShow);
+        $query = RecipeTranslation::query();
+        $query->where('recipe_translation.language_code', $code)
+            ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+            // ->join('products_translation as p', 'p.product_id', '=', 'recipe_translation.product_id')
+            ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
+            ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
+            // ->where('p.language_code', $code)
+            ->where('pct.language_code', $code)
+            ->where('r.recipe_status', 1)
+            ->select([
+                'recipe_translation.*',
+                'r.*',
+                // 'p.product_title',
+                'pct.category_slug'
+            ]);
+        if ($title) {
+            // if (!empty($request->category)) {
+            $getCategoryId = ProductCategoryTranslation::where('language_code', $code)
+                ->where('category_slug', $title)->value('category_id');
+            $fetchProductList = Product::where('category_id', $getCategoryId)
+                ->distinct()->pluck('product_id')->toArray();
+            $query->whereIn('recipe_translation.product_id', $fetchProductList);
+            // }
+        }
+        $recipes = $query->paginate($paginated, ['*'], 'page', $currentPage);
+        $recipes->getCollection()->transform(function ($value) {
+            $text = $value->recipe_description;
+            $cleanText = strip_tags($text);
+            $value->recipe_description = html_entity_decode($cleanText);
+            $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
+            $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
+                ->value('image_filename');
+            return $value;
+        });
+        $data = [];
+        $data['recipes'] = $recipes;
+        $data['currentSum'] = $recipes->count();
+        $data['category'] = $categoryShow;
+        $data['category_slug'] = $title;
+        $data['code'] = $code;
+        $data['page'] = $page;
+        $data['section'] = $section;
+        return $data;
+    }
+
+    public function recipeDetail(string $code, string $title)
+    {
+        $code ??= 'id';
+        if ($code == 'id') {
+            $link = route('web.id.resep.detail', ['title' => $title]);
+            return redirect($link);
+        }
         if ($title) {
             $query = RecipeTranslation::query();
             $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
@@ -272,52 +399,66 @@ class HomeController extends Controller
                 'image' => $image,
             ]);
         }
-
-        $productList = RecipeTranslation::where('language_code', $code)
-            ->distinct()->pluck('product_id')->toArray();
-        $categoryList = ProductTranslation::where('language_code', $code)
-            ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
-            ->whereIn('p.product_id', $productList)
-            ->distinct()->pluck('category_id')->toArray();
-        $categoryShow = ProductCategoryTranslation::where('language_code', $code)
-            ->whereIn('category_id', $categoryList)
-            ->get(['category_title', 'category_id']);
-        // dd($categoryShow);
-        $query = RecipeTranslation::query();
-        $query->where('recipe_translation.language_code', $code)
-            ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
-            ->join('products_translation as p', 'p.product_id', '=', 'recipe_translation.product_id')
-            ->where('p.language_code', $code)
-            ->where('r.recipe_status', 1)
-            ->select(['recipe_translation.*', 'r.*', 'p.product_title']);
-        if ($request->category) {
-            if (!empty($request->category)) {
-                $fetchProductList = Product::where('category_id', $request->category)
-                    ->distinct()->pluck('product_id')->toArray();
-                $query->whereIn('recipe_translation.product_id', $fetchProductList);
-            }
-        }
-        $recipes = $query->paginate($paginated, ['*'], 'page', $currentPage);
-        $recipes->getCollection()->transform(function ($value) {
-            $text = $value->recipe_description;
-            $cleanText = strip_tags($text);
-            $value->recipe_description = html_entity_decode($cleanText);
-            $image_id = RecipeImage::where('recipe_id', $value->recipe_id)->value('image_cover');
-            $value->recipe_image = RecipeImage::where('recipe_image_id', $image_id)
-                ->value('image_filename');
-            return $value;
-        });
-        $data = [];
-        $data['recipes'] = $recipes;
-        $data['currentSum'] = $recipes->count();
-        $data['category'] = $categoryShow;
-        $data['category_id'] = $request->category;
-        $data['code'] = $code;
-        $data['page'] = $page;
-        $data['section'] = $section;
-        return $data;
     }
 
+    public function resepDetail(string $title)
+    {
+        $code = 'id';
+        if ($title) {
+            $query = RecipeTranslation::query();
+            $query->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->leftJoin('recipe_image as ri', 'r.recipe_id', '=', 'ri.recipe_id')
+                ->select(['recipe_translation.*', 'r.*', 'ri.image_filename', 'ri.image_cover'])
+                ->where('ri.image_cover', '!=', null) // Only join images that have a cover
+                ->where('language_code', $code)
+                ->where('r.recipe_status', 1)
+                ->orderBy('r.create_date', 'desc')
+                ->take(4);
+
+            $recipeList = $query->get();
+
+            // Loop through the recipe list to sanitize descriptions and assign images
+            foreach ($recipeList as $recipe) {
+                $text = $recipe->recipe_description;
+                $cleanText = strip_tags($text);
+                $recipe->recipe_description = html_entity_decode($cleanText);
+
+                // Get the image filename for the cover image
+                if ($recipe->image_cover) {
+                    $recipe->recipe_image = $recipe->image_filename; // image already available from join
+                } else {
+                    $recipe->recipe_image = null; // In case there's no image
+                }
+            }
+
+            // Fetch single recipe based on slug
+            $recipe = RecipeTranslation::join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
+                ->where('recipe_slug', $title)
+                ->where('language_code', $code)
+                ->first();
+
+            $image = RecipeImage::where('recipe_id', $recipe->recipe_id)->get();
+            $res = 4 - $image->count();
+            // dd($res);
+            if ($res > 0) {
+                for ($i = 0; $i < $res; $i++) {
+                    foreach ($image as $item) {
+                        $image->push($item); // Duplicate the item and add it to the collection
+                        if ($image->count() >= 4) {
+                            break 2; // Exit both loops if we reach 4 items
+                        }
+                    }
+                }
+            }
+            $recipe->create_date = $this->formatDate($recipe->create_date);
+            return view('web.recipe-detail', [
+                'recipe' => $recipe,
+                'recipeList' => $recipeList,
+                'code' => $code,
+                'image' => $image,
+            ]);
+        }
+    }
     private function recipeDetailGenerate(string $code, string $title)
     {
         $query = RecipeTranslation::query();
@@ -1331,12 +1472,12 @@ class HomeController extends Controller
         }
     }
 
-    public function changeLang(string $language, string $url, string $remainingPath = null)
+    public function changeLang(Request $request, string $language, string $url, string $remainingPath = null)
     {
         // $language = $request->language;
         // $url = $request->url;
         // $remainingPath = $request->remainingPath;
-        // dd($url);
+        // dd($request->search);
         switch ($url) {
             case 'tentang-kami':
                 $goalPath = 'about';
@@ -1359,11 +1500,20 @@ class HomeController extends Controller
             case 'resep':
                 $goalPath = 'recipe';
                 if ($remainingPath != '') {
-                    $recipe_id = RecipeTranslation::where('recipe_slug', $remainingPath)->value('recipe_id');
-                    $recipe_slug = RecipeTranslation::where('language_code', $language)
-                        ->where('recipe_id', operator: $recipe_id)
-                        ->value('recipe_slug');
-                    $goalPath = 'recipe/' . $recipe_slug;
+                    $explode_remaining = explode('$', $remainingPath);
+                    if (sizeof($explode_remaining) > 1) {
+                        if ($explode_remaining[0] == 'detail') {
+                            $goalPath = 'recipe/detail/' . $explode_remaining[1];
+                        } else {
+                            $goalPath = 'recipe/category/' . $explode_remaining[1];
+                        }
+                    } else {
+                        $recipe_id = RecipeTranslation::where('recipe_slug', $remainingPath)->value('recipe_id');
+                        $recipe_slug = RecipeTranslation::where('language_code', $language)
+                            ->where('recipe_id', operator: $recipe_id)
+                            ->value('recipe_slug');
+                        $goalPath = 'recipe/' . $recipe_slug;
+                    }
                 }
                 break;
             case 'katalog':
@@ -1472,11 +1622,20 @@ class HomeController extends Controller
                             break;
                         case 'recipe':
                             if ($remainingPath != '') {
-                                $recipe_id = RecipeTranslation::where('recipe_slug', $remainingPath)->value('recipe_id');
-                                $recipe_slug = RecipeTranslation::where('language_code', $language)
-                                    ->where('recipe_id', operator: $recipe_id)
-                                    ->value('recipe_slug');
-                                $goalPath = 'recipe/' . $recipe_slug;
+                                $explode_remaining = explode('$', $remainingPath);
+                                if (sizeof($explode_remaining) > 1) {
+                                    if ($explode_remaining[0] == 'detail') {
+                                        $goalPath = 'recipe/detail/' . $explode_remaining[1];
+                                    } else {
+                                        $goalPath = 'recipe/category/' . $explode_remaining[1];
+                                    }
+                                } else {
+                                    $recipe_id = RecipeTranslation::where('recipe_slug', $remainingPath)->value('recipe_id');
+                                    $recipe_slug = RecipeTranslation::where('language_code', $language)
+                                        ->where('recipe_id', operator: $recipe_id)
+                                        ->value('recipe_slug');
+                                    $goalPath = 'recipe/' . $recipe_slug;
+                                }
                             }
                             break;
                         default:
@@ -1488,6 +1647,9 @@ class HomeController extends Controller
         $result = '/' . $language . '/' . $goalPath;
         if ($goalPath == 'index')
             $result = '/' . $language;
+        if ($request->search)
+        $result = $result . $request->search;
+        // dd($result);
         return response()->json($result);
     }
     private function getNewsDetail($slug)

@@ -116,9 +116,9 @@
                     </div>
 
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> JAWA BARAT </h3>
+                        <h3> YOGYAKARTA </h3>
                         @foreach ($distributor as $value)
-                            @if ($value->province_id == 12)
+                            @if ($value->province_id == 14)
                                 <div class="list-market"> {{ strtoupper($value->city_name) }}
                                 </div>
                             @endif

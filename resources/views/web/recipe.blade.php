@@ -54,7 +54,7 @@
                         <div class="filter-container text-center mb-5">
                             @if ($category->isNotEmpty())
                                 <a href="{{ route('web.recipe', ['code' => $code]) }}"
-                                    class="filter-button {{ $category_id ? '' : 'active' }}">
+                                    class="filter-button {{ $category_slug ? '' : 'active' }}">
                                     @if ($code == 'id')
                                         Semua
                                     @elseif($code == 'ar')
@@ -66,8 +66,8 @@
                                     @endif
                                 </a>
                                 @foreach ($category as $value)
-                                    <a href="{{ route('web.recipe', ['code' => $code]) }}?currentPage={{ $recipes->currentPage() }}&category={{ $value->category_id }}"
-                                        class="filter-button {{ $value->category_id == $category_id ? 'active' : '' }}">
+                                    <a href="{{ route('web.recipe.category', ['code' => $code, 'cat_title' => $value->category_slug]) }}?currentPage={{ $recipes->currentPage() }}"
+                                        class="filter-button {{ $value->category_slug == $category_slug ? 'active' : '' }}">
                                         {{ $value->category_title }}
                                     </a>
                                 @endforeach
@@ -89,7 +89,7 @@
                                                 <div class="recipe-summamry">
                                                     <p>{{$value->recipe_description}}</p>
                                                 </div>
-                                                <a href="{{route('web.recipe', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                                <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
                                                     class="btn btn-primary w-100 more filled-button">
                                                     @if ($code == 'id')
                                                         Lihat Resep
