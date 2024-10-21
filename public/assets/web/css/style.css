@@ -1347,11 +1347,11 @@ section {
 }
 
 .recipe-content {
-    /* position: relative; */
+    position: relative;
     padding: 20px 17px 24px;
 }
 
-.recipe-content .btn {
+.recipe-thumbnail .btn {
   position: absolute;
   left: 5%;
   bottom: 20px;

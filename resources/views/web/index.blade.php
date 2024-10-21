@@ -196,9 +196,19 @@
                                                 <div class="recipe-summamry">
                                                     <p>{{$value->recipe_description}}</p>
                                                 </div>
-                                                <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
-                                                    class="btn btn-primary w-100 more filled-button">Lihat Resep</a>
                                             </div>
+                                            <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                                class="btn btn-primary w-100 more filled-button">
+                                                @if ($code == 'id')
+                                                    Lihat Resep
+                                                @elseif($code == 'ar')
+                                                    شاهد الوصفات
+                                                @elseif($code == 'vi')
+                                                    Xem Công Thức
+                                                @else
+                                                    View Recipes
+                                                @endif
+                                            </a>
                                         </div>
                                     </div>
                                 @endforeach
@@ -264,31 +274,14 @@
                             </div>
 
                             <div class="button-news-slide mb-4 pb-2 d-none d-md-block">
-                                @if ($code == 'ar')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        انظر جميع النصائح
-                                    </a>
-                                @elseif ($code == 'id')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        Lihat Lainnya
-                                    </a>
-                                @elseif ($code == 'vi')
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        Xem Thêm
-                                    </a>
-                                @else
-                                    <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
-                                        class="btn btn-primary more border-0 text-red">
-                                        See More
-                                    </a>
+                                @if ($news->isNotEmpty())
+                                    @if($news->count() >= 4)
+                                        <div>
+                                            <button id="prev-news"><i class="bi bi-chevron-left"></i></button>
+                                            <button id="next-news"><i class="bi bi-chevron-right"></i></button>
+                                        </div>
+                                    @endif
                                 @endif
-                                <div>
-                                    <button id="prev-news"><i class="bi bi-chevron-left"></i></button>
-                                    <button id="next-news"><i class="bi bi-chevron-right"></i></button>
-                                </div>
                             </div>
                         </div>
                         <div id="news-slider" class="owl-carousel owl-theme">
