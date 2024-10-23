@@ -22,23 +22,43 @@
                     </div>
                     <div class="col-md-8">
                         <div id="sync1" class="owl-carousel owl-theme">
-                            @foreach ($image as $value)
-                                <div class="item">
-                                    <a class="image-event" href="#"><img
-                                            src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
-                                </div>
-                            @endforeach
+                            @if ($image->isNotEmpty())
+                                @foreach ($image as $value)
+                                    <div class="item">
+                                        <a class="image-event" href="#"><img
+                                                src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                    </div>
+                                @endforeach
+                            @else
+                                @if ($code == 'id')
+                                    Gambar tidak ada
+                                @elseif ($code == 'ar')
+                                    الصورة غير موجودة
+                                @elseif ($code == 'vi')
+                                    Hình Ảnh Không Có
+                                @else
+                                    Image Not Available
+                                @endif
+                            @endif
                         </div>
+                        @if ($image->count() < 1)
+                            <div id="sync2" class="owl-carousel owl-theme">
+                                @foreach ($image as $value)
+                                    <div class="item">
+                                        <a class="image-event" href="#"><img
+                                                src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
 
-                        <div id="sync2" class="owl-carousel owl-theme">
-                            @foreach ($image as $value)
-                                <div class="item">
-                                    <a class="image-event" href="#"><img
-                                            src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
-                                </div>
-                            @endforeach
-                        </div>
-
+                        <!-- <div class="plyr__video-embed position-relative rounded-4" id="player"> 
+                            <iframe
+                                src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1&iv_load_policy=3&showinfo=0"
+                                allowfullscreen
+                                allow="autoplay"
+                            ></iframe>
+                        </div> -->
                         <h1 class="title-detail-recipe">{{$recipe->recipe_title}}</h1>
                         <div class="info-recipe">{{$recipe->create_date}}</div>
                         <hr />

@@ -286,9 +286,11 @@ class ProductController extends Controller
             $languages = AppLanguage::whereIn('code', $remainingLang)
                 ->select('code as value', 'name as label')
                 ->get();
+            $image = ProductImage::where('product_id', $data->product_id)->get();
             return view('cms.products.update_products', [
                 'languages' => $languages,
                 'data' => $data,
+                'image' => $image,
                 'categories' => $getCategory
             ]);
         } else if ($request->isMethod('post')) {

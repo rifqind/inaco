@@ -66,6 +66,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current Sub Page Image</label>
+                        <div class="col-lg-6">
+                            <img class="img-show" src="{{ asset('data/subpages/') . '/' . $data->sub_pages_image }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">Sub Page Image<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">

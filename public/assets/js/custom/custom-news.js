@@ -224,7 +224,12 @@ if (path == "/webappcms/news") {
     document.getElementById("back").addEventListener("click", () => {
         const params = new URLSearchParams(window.location.search);
         const category = params.get("news_category");
-
-        window.location.href = "/webappcms/news?news_category=" + category;
+        const categoryToo = document.getElementById('news_category').value;
+        if (category) {
+            window.location.href = "/webappcms/news?news_category=" + category;
+        } else {
+            window.location.href = "/webappcms/news?news_category=" + categoryToo;
+        }
+            
     });
 }

@@ -82,6 +82,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current News Image</label>
+                        <div class="col-lg-6">
+                            <img class="img-show" src="{{ asset('data/news/') . '/' . $data->news_image }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">News Image</label>
                         <div class="col-lg-6">
                             <input type="file" class="form-control-file" id="news_image_update"

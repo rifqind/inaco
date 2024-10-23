@@ -268,9 +268,10 @@ class RecipeController extends Controller
                 $product_title = $translation->product_title;
                 $value->product_title = $product_title;
             }
-
+            $image = RecipeImage::where('recipe_id', $data->recipe_id)->get();
             return view('cms.recipe.update_recipe', [
                 'data' => $data,
+                'image' => $image,
                 'languages' => $languages,
                 'product' => $product
             ]);

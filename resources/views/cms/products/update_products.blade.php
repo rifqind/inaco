@@ -10,8 +10,7 @@
         <div class="card m-b-30">
             <div class="card-body">
                 <!-- h6 class="card-subtitle">Basic form validation.</h6 -->
-                <form class="form-validate" id="create-products" action="" method="post"
-                    enctype="multipart/form-data">
+                <form class="form-validate" id="create-products" action="" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{ $data->product_id }}" name="product_id">
                     <input type="hidden" value="{{ $data->product_translation_id }}" name="product_translation_id">
@@ -22,9 +21,9 @@
                             <select class="form-control" id="category_id" name="category_id" style="width:200px;">
                                 <option value="" disabled selected>Please select</option>
                                 @foreach ($categories as $value)
-                                    <option value="{{ $value->category_id }}"
-                                        {{ $data->category_id == $value->category_id ? 'selected' : '' }}>
-                                        {{ $value->category_title }}</option>
+                                    <option value="{{ $value->category_id }}" {{ $data->category_id == $value->category_id ? 'selected' : '' }}>
+                                        {{ $value->category_title }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -53,8 +52,7 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                    <option value="{{ $value->value }}"
-                                        {{ $data->language_code == $value->value ? 'selected' : '' }}>
+                                    <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'selected' : '' }}>
                                         {{ $value->label }}
                                     </option>
                                 @endforeach
@@ -99,15 +97,13 @@
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="show_on_home"
-                                    id="show_on_home1" value="1"
-                                    {{ $data->show_on_home == 1 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="show_on_home" id="show_on_home1"
+                                    value="1" {{ $data->show_on_home == 1 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="show_on_home1">Yes</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="show_on_home"
-                                    id="show_on_home2" value="0"
-                                    {{ $data->show_on_home == 0 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="show_on_home" id="show_on_home2"
+                                    value="0" {{ $data->show_on_home == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="show_on_home2">No</label>
                             </div>
                         </div>
@@ -120,11 +116,20 @@
                                 style="width:200px;">
                                 <option value="">Please select</option>
                                 @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}"
-                                        {{ $data->display_sequence_onhome == $i ? 'selected' : '' }}>
-                                        {{ $i }}</option>
+                                    <option value="{{ $i }}" {{ $data->display_sequence_onhome == $i ? 'selected' : '' }}>
+                                        {{ $i }}
+                                    </option>
                                 @endfor
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current Products Image</label>
+                        <div class="col-lg-6">
+                            @foreach ($image as $img)
+                                <img class="img-show"
+                                    src="{{ asset('data/product/') . '/' . $img->product_id . '/' . $img->image_filename }}">
+                            @endforeach
                         </div>
                     </div>
                     <div class="form-group row">
@@ -149,15 +154,13 @@
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="product_status"
-                                    id="product_status1" value="1"
-                                    {{ $data->product_status == 1 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="product_status" id="product_status1"
+                                    value="1" {{ $data->product_status == 1 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="product_status1">Active</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="product_status"
-                                    id="iproduct_status2" value="0"
-                                    {{ $data->product_status == 0 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="product_status" id="iproduct_status2"
+                                    value="0" {{ $data->product_status == 0 ? 'checked' : '' }}>
                                 <label class="form-check-label" for="product_status2">In Active</label>
                             </div>
                         </div>

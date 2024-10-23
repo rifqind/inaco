@@ -42,6 +42,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current Page Image</label>
+                        <div class="col-lg-6">
+                            <img class="img-show" src="{{ asset('data/pages/') . '/' . $data->pages_image }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">Page Image</label>
                         <div class="col-lg-6">
                             <input type="file" class="form-control-file" id="pages_image" name="pages_image_update">

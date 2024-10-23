@@ -10,8 +10,7 @@
         <div class="card m-b-30">
             <div class="card-body">
                 <!-- h6 class="card-subtitle">Basic form validation.</h6 -->
-                <form class="form-validate" id="create-recipe" action="" method="post"
-                    enctype="multipart/form-data">
+                <form class="form-validate" id="create-recipe" action="" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{ $data->recipe_id }}" name="recipe_id">
                     <input type="hidden" value="{{ $data->recipe_translation_id }}" name="recipe_translation_id">
@@ -19,15 +18,16 @@
                         <label class="col-lg-3 col-form-label" for="recipe_title">Recipe Title<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" value="{{ $data->recipe_title }}"
-                                id="recipe_title" name="recipe_title" placeholder="Enter Title">
+                            <input type="text" class="form-control" value="{{ $data->recipe_title }}" id="recipe_title"
+                                name="recipe_title" placeholder="Enter Title">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="recipe_description">Description <span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <textarea class="summernote" name="recipe_description" rows="5" placeholder="Enter Content.">
+                            <textarea class="summernote" name="recipe_description" rows="5"
+                                placeholder="Enter Content.">
                             {{ $data->recipe_description }}
                             </textarea>
                         </div>
@@ -48,10 +48,9 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                <option value="{{ $value->value }}"
-                                    {{ $data->language_code == $value->value ? 'selected' : '' }}>
-                                    {{ $value->label }}
-                                </option>
+                                    <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'selected' : '' }}>
+                                        {{ $value->label }}
+                                    </option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
@@ -65,12 +64,20 @@
                                 style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($product as $value)
-                                <option value="{{ $value->product_id }}"
-                                    {{ $data->product_id == $value->product_id ? 'selected' : '' }}>
-                                    {{ $value->product_title }}
-                                </option>
+                                    <option value="{{ $value->product_id }}" {{ $data->product_id == $value->product_id ? 'selected' : '' }}>
+                                        {{ $value->product_title }}
+                                    </option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current Recipe Image</label>
+                        <div class="col-lg-6">
+                            @foreach ($image as $img)
+                                <img class="img-show"
+                                    src="{{ asset('data/recipe/') . '/' . $img->recipe_id . '/' . $img->image_filename }}">
+                            @endforeach
                         </div>
                     </div>
                     <div class="form-group row">

@@ -438,18 +438,17 @@ class HomeController extends Controller
                 ->first();
 
             $image = RecipeImage::where('recipe_id', $recipe->recipe_id)->get();
-            $res = 4 - $image->count();
-            // dd($res);
-            if ($res > 0) {
-                for ($i = 0; $i < $res; $i++) {
-                    foreach ($image as $item) {
-                        $image->push($item); // Duplicate the item and add it to the collection
-                        if ($image->count() >= 4) {
-                            break 2; // Exit both loops if we reach 4 items
-                        }
-                    }
-                }
-            }
+            // $res = 4 - $image->count();
+            // if ($res > 0) {
+            //     for ($i = 0; $i < $res; $i++) {
+            //         foreach ($image as $item) {
+            //             $image->push($item); // Duplicate the item and add it to the collection
+            //             if ($image->count() >= 4) {
+            //                 break 2; // Exit both loops if we reach 4 items
+            //             }
+            //         }
+            //     }
+            // }
             $recipe->create_date = $this->formatDate($recipe->create_date);
             return view('web.recipe-detail', [
                 'recipe' => $recipe,

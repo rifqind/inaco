@@ -18,8 +18,8 @@
                         <label class="col-lg-3 col-form-label" for="banner_name">Banner Name<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" value="{{$data->banner_name}}" id="banner_name" name="banner_name"
-                                placeholder="Enter Banner Name">
+                            <input type="text" class="form-control" value="{{$data->banner_name}}" id="banner_name"
+                                name="banner_name" placeholder="Enter Banner Name">
                             <div class="invalid-feedback">Please enter banner name</div>
                         </div>
                     </div>
@@ -27,7 +27,8 @@
                         <label class="col-lg-3 col-form-label" for="banner_caption">Banner Caption <span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <textarea id="summernote" name="banner_caption" rows="5" placeholder="Enter Caption." class="form-control">{{$data->banner_caption}}</textarea>
+                            <textarea id="summernote" name="banner_caption" rows="5" placeholder="Enter Caption."
+                                class="form-control">{{$data->banner_caption}}</textarea>
                             <div class="invalid-feedback">Please enter the caption</div>
                         </div>
                     </div>
@@ -38,12 +39,18 @@
                             <select class="form-control" id="language_code" name="language_code" style="width:200px;">
                                 <option value="" selected disabled>Please select</option>
                                 @foreach ($languages as $value)
-                                <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'selected' : '' }}>
-                                    {{ $value->label }}
-                                </option>
+                                    <option value="{{ $value->value }}" {{ $data->language_code == $value->value ? 'selected' : '' }}>
+                                        {{ $value->label }}
+                                    </option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">Please select a language</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="">Current Banner Image</label>
+                        <div class="col-lg-6">
+                            <img class="img-show" src="{{ asset('data/banner/') . '/' . $data->banner_image }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -73,13 +80,16 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-3 col-form-label" for="display_sequence">Display Sequence<span class="text-danger">*</span></label>
+                        <label class="col-lg-3 col-form-label" for="display_sequence">Display Sequence<span
+                                class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <select class="form-control" id="display_sequence" name="display_sequence" style="width:200px;">
+                            <select class="form-control" id="display_sequence" name="display_sequence"
+                                style="width:200px;">
                                 <option value="">Please select</option>
                                 @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}</option>
-                                    @endfor
+                                    <option value="{{ $i }}" {{ $data->display_sequence == $i ? 'selected' : '' }}>{{ $i }}
+                                    </option>
+                                @endfor
                             </select>
                         </div>
                     </div>
@@ -87,8 +97,8 @@
                         <label class="col-lg-3 col-form-label" for="banner_url">Banner URL<span
                                 class="text-danger">*</span></label>
                         <div class="col-lg-6">
-                            <input type="text" value="{{$data->banner_url}}" class="form-control" id="banner_url" name="banner_url"
-                                placeholder="Enter Url">
+                            <input type="text" value="{{$data->banner_url}}" class="form-control" id="banner_url"
+                                name="banner_url" placeholder="Enter Url">
                             <div class="invalid-feedback">Please enter banner name</div>
                         </div>
                     </div>
