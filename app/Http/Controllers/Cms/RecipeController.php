@@ -128,6 +128,7 @@ class RecipeController extends Controller
                 'language_code' => ['required', 'string'],
                 'ingredient' => ['required', 'string'],
                 'recipe_status' => ['required', 'integer'],
+                'recipe_yt' => ['string', 'nullable', 'max:50']
             ]);
             $recipe_id_used = null;
             $recipe_slug = Str::slug($data['recipe_title'], '-');
@@ -145,6 +146,7 @@ class RecipeController extends Controller
                     'ingredient' => $data['ingredient'],
                     'product_id' => $data['product_id'],
                     'recipe_slug' => $recipe_slug,
+                    'recipe_yt' => ($request->recipe_yt_confirm == 1) ? $data['recipe_yt'] : null,
                 ]);
                 $recipe_id_used = $data['recipe_id'];
             } else {
@@ -289,6 +291,7 @@ class RecipeController extends Controller
                     'ingredient' => ['required', 'string'],
                     'recipe_status' => ['required', 'integer'],
                     'recipe_image_update.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
+                    'recipe_yt' => ['string', 'nullable', 'max:50']
                 ]);
                 $updateRecipeTranslation = RecipeTranslation::where('recipe_translation_id', $data['recipe_translation_id']);
                 $recipe_slug = Str::slug($data['recipe_title'], '-');
@@ -299,6 +302,7 @@ class RecipeController extends Controller
                     'product_id' => $data['product_id'],
                     'recipe_description' => $data['recipe_description'],
                     'recipe_slug' => $recipe_slug,
+                    'recipe_yt' => ($request->recipe_yt_confirm == 1) ? $data['recipe_yt'] : null,
                 ]);
                 $getRecipe = $updateRecipeTranslation->value('recipe_id');
                 $updateRecipe = Recipe::where('recipe_id', $getRecipe);

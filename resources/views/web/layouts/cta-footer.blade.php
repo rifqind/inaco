@@ -41,6 +41,9 @@
  						<a href="{{ $socialmedia->instagram  }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
  							<img src="{{ asset('assets/web/images/ig.png') }}"> sahabatinaco
  						</a>
+ 						<a href="{{ $socialmedia->linkedin  }}" class="d-flex me-4 align-items-center mb-2 mb-sm-0">
+ 							<img src="{{ asset('assets/web/images/linkedin-sm.png') }}"> PT Niramas Utama
+ 						</a>
  					</div>
  				</div>
  			</div>

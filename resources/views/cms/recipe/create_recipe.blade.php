@@ -138,6 +138,29 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-lg-3 col-form-label" for="recipe_yt_confirm">Youtube Link<span
+                                class="text-danger">*</span></label>
+                        <div class="col-lg-6">
+                            <div class="row pl-3 mb-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="recipe_yt_confirm" id="recipe_yt_confirm1"
+                                        value="1" {{ ($data->recipe_yt) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="recipe_yt_confirm1">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="recipe_yt_confirm"
+                                        id="recipe_yt_confirm2" value="0"
+                                        {{ (!$data->recipe_yt) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="recipe_yt_confirm2">No</label>
+                                </div>
+                            </div>
+                            <div class="row pl-3 d-none" id="youtube-link-input">
+                                <input type="text" class="form-control" id="recipe_yt" name="recipe_yt"
+                                    placeholder="Enter Youtube Link">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-lg-3 col-form-label"></label>
                         <div class="col-lg-8">
                             <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>

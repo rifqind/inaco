@@ -93,6 +93,20 @@ $(document).ready(function () {
     document.getElementById("back").addEventListener("click", () => {
         window.location.href = "/webappcms/recipes";
     });
+
+    const radioYt = document.getElementById('recipe_yt_confirm1')
+    if (radioYt.checked) {
+        document.getElementById('youtube-link-input').classList.remove('d-none')
+    } 
+    radioYt.addEventListener('click', () => {
+        document.getElementById('youtube-link-input').classList.remove('d-none')
+    })
+    document.getElementById('recipe_yt_confirm2').addEventListener('click', () => {
+        document.getElementById('youtube-link-input').classList.add('d-none')
+        let input = document.getElementById('recipe_yt')
+        input.value = null
+    })
+
 });
 jQuery(".form-validate").validate({
     ignore: [],
@@ -203,10 +217,10 @@ jQuery(".form-validate").validate({
                         if (value.isConfirmed) {
                             path == "/webappcms/recipes/create"
                                 ? (window.location.href =
-                                      "/webappcms/recipes/create?recipe_id=" +
-                                      data.id +
-                                      "&language_code=" +
-                                      data.code)
+                                    "/webappcms/recipes/create?recipe_id=" +
+                                    data.id +
+                                    "&language_code=" +
+                                    data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {

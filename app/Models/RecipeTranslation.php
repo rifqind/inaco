@@ -14,7 +14,7 @@ class RecipeTranslation extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     protected $fillable = [
-        'recipe_id', 'language_code', 'recipe_title', 'recipe_description', 'product_id', 'recipe_slug', 'ingredient'
+        'recipe_id', 'language_code', 'recipe_title', 'recipe_description', 'product_id', 'recipe_slug', 'ingredient', 'recipe_yt'
     ];
     public $timestamps = false;
 }

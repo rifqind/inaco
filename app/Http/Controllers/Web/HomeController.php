@@ -38,7 +38,7 @@ class HomeController extends Controller
             ->where('pct.language_code', $code)
             ->where('r.recipe_status', 1)
             ->orderBy('r.create_date', 'desc')
-            ->limit(4)
+            // ->limit(4)
             ->get(['recipe_translation.*', 'r.*', 'pct.category_title as product_title']);
 
         $products = ProductTranslation::where('products_translation.language_code', $code)
