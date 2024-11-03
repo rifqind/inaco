@@ -33,62 +33,10 @@ jQuery(".form-validate").validate({
             jQuery(e).remove();
     },
     rules: {
-        instagram: {
-            required: true,
-        },
-        facebook: {
-            required: true,
-        },
-        tiktok: {
-            required: true,
-        },
-        youtube: {
-            required: true,
-        },
-        twitter: {
-            required: true,
-        },
-        shopee: {
-            required: true,
-        },
-        tokopedia: {
-            required: true,
-        },
-        lazada: {
-            required: true,
-        },
-        tiktokshop: {
-            required: true,
-        },
+        
     },
     messages: {
-        instagram: {
-            required: "Please enter the link",
-        },
-        facebook: {
-            required: "Please enter the link",
-        },
-        tiktok: {
-            required: "Please enter the link",
-        },
-        youtube: {
-            required: "Please enter the link",
-        },
-        twitter: {
-            required: "Please enter the link",
-        },
-        shopee: {
-            required: "Please enter the link",
-        },
-        tokopedia: {
-            required: "Please enter the link",
-        },
-        lazada: {
-            required: "Please enter the link",
-        },
-        tiktokshop: {
-            required: "Please enter the link",
-        },
+        
     },
     submitHandler: (form) => {
         event.preventDefault();
@@ -212,6 +160,7 @@ if (path == "/webappcms/social-media" || path == "/webappcms/marketplace") {
             .DataTable({
                 responsive: false,
                 columns: [
+                    { width: "10%" },
                     { width: "10%" },
                     { width: "10%" },
                     { width: "10%" },

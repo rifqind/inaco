@@ -18,12 +18,22 @@ class SocmedmarketController extends Controller
 
         if ($routeName == 'socmed-marketplace.social-media.list') {
             $query->select([
-                'id', 'instagram', 'facebook', 'tiktok', 'youtube', 'twitter'
+                'id',
+                'instagram',
+                'facebook',
+                'tiktok',
+                'youtube',
+                'twitter',
+                'linkedin'
             ]);
         } else if ($routeName == 'socmed-marketplace.marketplace.list') {
             // dd($query);
             $query->select([
-                'id', 'shopee', 'tokopedia', 'lazada', 'tiktokshop'
+                'id',
+                'shopee',
+                'tokopedia',
+                'lazada',
+                'tiktokshop'
             ]);
         }
 
@@ -47,15 +57,16 @@ class SocmedmarketController extends Controller
             //code...
             DB::beginTransaction();
             $data = $request->validate([
-                'instagram' => ['required', 'string', 'max:60'],
-                'facebook' => ['required', 'string', 'max:60'],
-                'tiktok' => ['required', 'string', 'max:60'],
-                'youtube' => ['required', 'string', 'max:60'],
-                'twitter' => ['required', 'string', 'max:60'],
-                'shopee' => ['required', 'string', 'max:60'],
-                'tokopedia' => ['required', 'string', 'max:60'],
-                'lazada' => ['required', 'string', 'max:60'],
-                'tiktokshop' => ['required', 'string', 'max:60'],
+                'instagram' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'facebook' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'tiktok' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'youtube' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'twitter' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'shopee' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'tokopedia' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'lazada' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'tiktokshop' => ['sometimes', 'nullable', 'string', 'max:60'],
+                'linkedin' => ['sometimes', 'nullable', 'string', 'max:60'],
             ]);
             $insertSocmedMarket = OfficialSocmedMarketplace::create($data);
 
@@ -84,15 +95,16 @@ class SocmedmarketController extends Controller
                 //code...
                 DB::beginTransaction();
                 $data = $request->validate([
-                    'instagram' => ['required', 'string', 'max:60'],
-                    'facebook' => ['required', 'string', 'max:60'],
-                    'tiktok' => ['required', 'string', 'max:60'],
-                    'youtube' => ['required', 'string', 'max:60'],
-                    'twitter' => ['required', 'string', 'max:60'],
-                    'shopee' => ['required', 'string', 'max:60'],
-                    'tokopedia' => ['required', 'string', 'max:60'],
-                    'lazada' => ['required', 'string', 'max:60'],
-                    'tiktokshop' => ['required', 'string', 'max:60'],
+                    'instagram' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'facebook' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'tiktok' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'youtube' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'twitter' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'shopee' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'tokopedia' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'lazada' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'tiktokshop' => ['sometimes', 'nullable', 'string', 'max:60'],
+                    'linkedin' => ['sometimes', 'nullable', 'string', 'max:60'],
                 ]);
                 $updateSocmedMarket = OfficialSocmedMarketplace::where('id', $request->id)
                     ->update($data);

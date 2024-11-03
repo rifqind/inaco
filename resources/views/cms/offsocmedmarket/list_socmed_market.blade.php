@@ -38,6 +38,7 @@
                                     <th>Tiktok</th>
                                     <th>Youtube</th>
                                     <th>Twitter</th>
+                                    <th>Linkedin</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -49,6 +50,7 @@
                                         <td>{{ $value->tiktok }}</td>
                                         <td>{{ $value->youtube }}</td>
                                         <td>{{ $value->twitter }}</td>
+                                        <td>{{ $value->linkedin }}</td>
                                         <td><a href="{{ route('socmed-marketplace.update', ['id' => $value->id]) }}"
                                                 class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top"
                                                 title="Edit"><i class="feather icon-edit"></i></a>
