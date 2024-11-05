@@ -44,6 +44,7 @@ class HomeController extends Controller
         $products = ProductTranslation::where('products_translation.language_code', $code)
             ->where('p.product_status', 1)
             ->where('p.show_on_home', 1)
+            ->where('pc.language_code', $code)
             ->orderBy('p.display_sequence_onhome', 'asc')
             ->join('products as p', 'p.product_id', '=', 'products_translation.product_id')
             ->join('products_category_translation as pc', 'pc.category_id', '=', 'p.category_id')
@@ -296,16 +297,17 @@ class HomeController extends Controller
         $query = RecipeTranslation::query();
         $query->where('recipe_translation.language_code', $code)
             ->join('recipe as r', 'r.recipe_id', '=', 'recipe_translation.recipe_id')
-            // ->join('products_translation as p', 'p.product_id', '=', 'recipe_translation.product_id')
+            // ->join('products_translation as pt', 'p.product_id', '=', 'recipe_translation.product_id')
             ->join('products as p', 'p.product_id', '=', 'recipe_translation.product_id')
             ->join('products_category_translation as pct', 'pct.category_id', '=', 'p.category_id')
-            // ->where('p.language_code', $code)
+            // ->where('pt.language_code', $code)
             ->where('pct.language_code', $code)
             ->where('r.recipe_status', 1)
             ->select([
                 'recipe_translation.*',
                 'r.*',
-                // 'p.product_title',
+                // 'pt.product_title',
+                'pct.category_title',
                 'pct.category_slug'
             ]);
         if ($title) {

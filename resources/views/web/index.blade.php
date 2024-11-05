@@ -30,33 +30,7 @@
 
     <main id="main">
 
-        <!-- ======= About ======= -->
-        <section id="about-home" class="about-home">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10">
-                        <h1 class="page-header text-center mb-4" data-aos="fade-up">{{ $firstText['header'] }}</h1>
-                        <div id="about-list" class="owl-carousel owl-theme">
-                            @foreach($firstText['items'] as $item)
-                                <div class="item" data-aos="fade-up">
-                                    <div class="about-wrapper">
-                                        <a href="{{ $item['url'] }}">
-                                            <div class="image-about">
-                                                <img src="{{ asset('assets/web/images/' . $item['image']) }}">
-                                            </div>
-                                            <div class="content-about">
-                                                <div class="title-about">{{ $item['title'] }}</div>
-                                                <div class="desc-about">{{ $item['desc'] }}</div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- ======= Catalog ======= -->
         <section id="catalog-home" class="catalog-home">
@@ -330,6 +304,34 @@
                                     See More
                                 </a>
                             @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======= About ======= -->
+        <section id="about-home" class="about-home">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-10">
+                        <h1 class="page-header text-center mb-4" data-aos="fade-up">{{ $firstText['header'] }}</h1>
+                        <div id="about-list" class="owl-carousel owl-theme">
+                            @foreach($firstText['items'] as $item)
+                                <div class="item" data-aos="fade-up">
+                                    <div class="about-wrapper">
+                                        <a href="{{ $item['url'] }}">
+                                            <div class="image-about">
+                                                <img src="{{ asset('assets/web/images/' . $item['image']) }}">
+                                            </div>
+                                            <div class="content-about">
+                                                <div class="title-about">{{ $item['title'] }}</div>
+                                                <div class="desc-about">{{ $item['desc'] }}</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
