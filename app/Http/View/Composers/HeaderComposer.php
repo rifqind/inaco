@@ -3,8 +3,10 @@
 namespace App\Http\View\Composers;
 
 use App\Models\AppLanguage;
+use App\Models\MenuNavigation;
 use App\Models\MenuNavigationTranslation;
 use App\Models\ProductCategoryTranslation;
+use App\Models\ProductSegment;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -24,11 +26,8 @@ class HeaderComposer
             ]);
         foreach ($categories as $key => $value) {
             # code...
-            $categoryToShow = match ($value->segment_id) {
-                1 => ($lang == 'id') ? 'dewasa' : 'adult',
-                2 => ($lang == 'id') ? 'remaja' : 'teenager',
-                3 => ($lang == 'id') ? 'anak' : 'children'
-            };
+            $thisSegment = ProductSegment::where('segment_id', $value->segment_id)->first();
+            $categoryToShow = ($lang == 'id') ? strtolower($thisSegment->segment_name) : strtolower($thisSegment->segment_name_non_id);
 
             $value->segment = $categoryToShow;
         }
@@ -37,22 +36,49 @@ class HeaderComposer
         if (!$currentLangImage) {
             AppLanguage::where('code', 'id')->first();
         }
-        $menuList = ['Company', 'Products', 'Recipe', 'Distributors', 'International Market', 'News', 'Career'];
-        $headerScammer = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
-            ->whereIn('menu_navigation_translation.menu_title', $menuList)
-            ->get(['menu_title', 'on_website'])
-            ->mapWithKeys(function ($item) {
-                return [$item->menu_title => $item->on_website];
-            })
-            ->toArray();
-        foreach ($menuList as $value) {
-            if (!isset($headerScammer[$value])) {
-                $headerScammer[$value] = 0;
-            }
+        // $menuList = ['Company', 'Products', 'Recipe', 'Distributors', 'International Market', 'News', 'Career'];
+        $menuList = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
+            ->where('parent_menu', 0)
+            ->where('language_code', $lang)
+            ->where('on_website', 1)
+            ->orderBy('display_sequence')
+            ->get();
+
+        $childrenMenu = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
+            ->whereNot('parent_menu', 0)
+            ->where('language_code', $lang)
+            ->where('on_website', 1)
+            ->orderBy('display_sequence')
+            ->get();
+
+        $childrenCheck = MenuNavigation::whereNot('parent_menu', 0)
+            ->distinct()
+            ->pluck('parent_menu');
+
+        foreach ($menuList as $key => $value) {
+            # code...
+            if (in_array($value->menu_id, $childrenCheck->toArray())) {
+                $value->hasChildren = true;
+            } else
+                $value->hasChildren = false;
         }
+        // $headerScammer = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')
+        //     ->whereIn('menu_navigation_translation.menu_title', $menuList)
+        //     ->get(['menu_title', 'on_website'])
+        //     ->mapWithKeys(function ($item) {
+        //         return [$item->menu_title => $item->on_website];
+        //     })
+        //     ->toArray();
+        // foreach ($menuList as $value) {
+        //     if (!isset($headerScammer[$value])) {
+        //         $headerScammer[$value] = 0;
+        //     }
+        // }
         $view->with([
             'category' => $categories,
-            'header' => $headerScammer,
+            // 'header' => $headerScammer,
+            'menuList' => $menuList,
+            'childrenMenu' => $childrenMenu,
             'code' => $lang,
             'languages' => $languageList,
             'currentLangImage' => $currentLangImage,

@@ -12,6 +12,7 @@ use App\Models\PageTranslation;
 use App\Models\Product;
 use App\Models\ProductCategoryTranslation;
 use App\Models\ProductImage;
+use App\Models\ProductSegment;
 use App\Models\ProductTranslation;
 use App\Models\RecipeImage;
 use App\Models\RecipeTranslation;
@@ -19,6 +20,7 @@ use App\Models\SubpageTranslation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -579,18 +581,25 @@ class HomeController extends Controller
     private function catalogGenerate(Request $request, string $code = null, string $id, string $cat_title = null, string $productDetail = null)
     {
         $fakeId = $id;
+        $segments = ProductSegment::get();
         if ($code == 'id') {
-            $id = match ($id) {
-                'dewasa' => 1,
-                'remaja' => 2,
-                'anak' => 3,
-            };
+            foreach ($segments as $segment) {
+                if (Str::slug($segment->segment_name) == $id) $id = $segment->segment_id;
+            }
+            // $id = match ($id) {
+            //     'dewasa' => 1,
+            //     'remaja' => 2,
+            //     'anak' => 3,
+            // };
         } else {
-            $id = match ($id) {
-                'adult' => 1,
-                'teenager' => 2,
-                'children' => 3,
-            };
+            foreach ($segments as $segment) {
+                if (Str::slug($segment->segment_name_non_id) == $id) $id = $segment->segment_id;
+            }
+            // $id = match ($id) {
+            //     'adult' => 1,
+            //     'teenager' => 2,
+            //     'children' => 3,
+            // };
         }
         $query = ProductTranslation::query();
         $query->where('products_translation.language_code', $code)
@@ -1077,19 +1086,21 @@ class HomeController extends Controller
             $image_id = ProductImage::where('product_id', $value->product_id)->value('image_cover');
             $value->product_image = ProductImage::where('product_image_id', $image_id)
                 ->value('image_filename');
-            if ($code == 'id')
-                $id = match ($value->segment_id) {
-                    1 => 'dewasa',
-                    2 => 'remaja',
-                    3 => 'anak',
-                };
-            else
-                $id = match ($value->segment_id) {
-                    1 => 'adult',
-                    2 => 'teenager',
-                    3 => 'children',
-                };
-            $value->segment_id = $id;
+            $segment = ProductSegment::where('segment_id', $value->segment_id)->first();
+            // if ($code == 'id') {
+            //     $id = match ($value->segment_id) {
+            //         1 => 'dewasa',
+            //         2 => 'remaja',
+            //         3 => 'anak',
+            //     };
+            // } else {
+            //     $id = match ($value->segment_id) {
+            //         1 => 'adult',
+            //         2 => 'teenager',
+            //         3 => 'children',
+            //     };
+            // }
+            $value->segment_id = $code == 'id' ? $segment->segment_name : $segment->segment_name_non_id;
         }
         $data = [];
         $data['products'] = $products;
@@ -1340,27 +1351,13 @@ class HomeController extends Controller
             ->get() : collect([]);
 
         $distributor = Distributor::join('ref_province as rp', 'rp.id', '=', 'distributor.province')
-            ->join('ref_city as rc', 'rc.id', '=', 'distributor.city')
+            // ->join('ref_city as rc', 'rc.id', '=', 'distributor.city')
             ->select([
-                'distributor.*',
-                'rp.id as province_id',
+                'distributor.province',
                 'rp.name as province_name',
-                'rc.id as city_id',
-                'rc.name as city_name',
-                'distributor_type'
-            ]);
-        foreach ($distributor as $key => $value) {
-            # code...
-            $exploded_city = explode(' ', $value->city_name, 2);
-            $city_name = $exploded_city[1];
-            $value->city_name = $city_name;
-            //explode first word, how to?
-        }
+            ])->distinct();
         $distributorList = $distributor->get();
-        $getBigCity = $distributor->where('distributor_type', 1)->pluck('city');
-        $bigCity = DB::table('ref_city')
-            ->whereIn('id', $getBigCity)
-            ->get();
+        $bigCity = null;
         $data = [];
         $data['distributor'] = $distributorList;
         $data['bigCity'] = $bigCity;
@@ -1520,11 +1517,16 @@ class HomeController extends Controller
             case 'katalog':
                 $goalPath = 'catalog';
                 if ($remainingPath != '') {
-                    $remainingPath = match ($remainingPath) {
-                        'dewasa' => 'adult',
-                        'remaja' => 'teenager',
-                        'anak' => 'children'
-                    };
+                    // $remainingPath = match ($remainingPath) {
+                    //     'dewasa' => 'adult',
+                    //     'remaja' => 'teenager',
+                    //     'anak' => 'children'
+                    // };
+                    $segments = ProductSegment::get();
+                    foreach ($segments as $key => $value) {
+                        # code...
+                        if (Str::slug($value->segment_name) == $remainingPath) $remainingPath = Str::slug($value->segment_name_non_id);
+                    }
                     $goalPath = 'catalog/' . $remainingPath;
                 }
                 break;
@@ -1612,11 +1614,16 @@ class HomeController extends Controller
                         case 'catalog':
                             if ($remainingPath != '') {
                                 if ($language == 'id') {
-                                    $remainingPath = match ($remainingPath) {
-                                        'adult' => 'dewasa',
-                                        'teenager' => 'remaja',
-                                        'children' => 'anak'
-                                    };
+                                    // $remainingPath = match ($remainingPath) {
+                                    //     'adult' => 'dewasa',
+                                    //     'teenager' => 'remaja',
+                                    //     'children' => 'anak'
+                                    // };
+                                    $segments = ProductSegment::get();
+                                    foreach ($segments as $key => $value) {
+                                        # code...
+                                        if (Str::slug($value->segment_name_non_id) == $remainingPath) $remainingPath = Str::slug($value->segment_name);
+                                    }
                                 }
                                 $goalPath = 'catalog/' . $remainingPath;
                             }
@@ -1649,7 +1656,7 @@ class HomeController extends Controller
         if ($goalPath == 'index')
             $result = '/' . $language;
         if ($request->search)
-        $result = $result . $request->search;
+            $result = $result . $request->search;
         // dd($result);
         return response()->json($result);
     }

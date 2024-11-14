@@ -8,27 +8,27 @@
                 <div class="col-md-5 pe-md-5 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
                     data-aos="fade-up" data-aos-delay="200">
                     @if ($section->isNotEmpty())
-                        {!! $section->where('sub_pages_slug', 'bagian-satu')->value('sub_pages_description') !!}
+                    {!! $section->where('sub_pages_slug', 'bagian-satu')->value('sub_pages_description') !!}
                     @else
-                        @if ($code == 'id')
-                            <div class="text-center">Konten belum tersedia</div>
-                        @elseif ($code == 'ar')
-                            <div class="text-center">المحتوى غير متوفر بعد</div>
-                        @elseif ($code == 'vi')
-                            <div class="text-center">Nội dung chưa có sẵn</div>
-                        @else
-                            <div class="text-center">Content not available</div>
-                        @endif
+                    @if ($code == 'id')
+                    <div class="text-center">Konten belum tersedia</div>
+                    @elseif ($code == 'ar')
+                    <div class="text-center">المحتوى غير متوفر بعد</div>
+                    @elseif ($code == 'vi')
+                    <div class="text-center">Nội dung chưa có sẵn</div>
+                    @else
+                    <div class="text-center">Content not available</div>
+                    @endif
                     @endif
                 </div>
             </div>
         </div>
         <div class="hero-img">
             @if ($page)
-                <img src="{{ asset('data/pages') . '/' . $page->pages_image }}" class="img-fluid" alt="Artikel Inaco">
+            <img src="{{ asset('data/pages') . '/' . $page->pages_image }}" class="img-fluid" alt="Artikel Inaco">
             @else
-                <img src="{{ asset('assets/web/images/distributor/distributor-hero.jpg') }}" class="img-fluid"
-                    alt="Artikel Inaco">
+            <img src="{{ asset('assets/web/images/distributor/distributor-hero.jpg') }}" class="img-fluid"
+                alt="Artikel Inaco">
             @endif
         </div>
 
@@ -46,132 +46,33 @@
                     </div>
                     <div class="col-12 col-md-7 text-center">
                         @if ($section->isNotEmpty())
-                            {!! $section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description') !!}
+                        {!! $section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description') !!}
                         @else
-                            @if ($code == 'id')
-                                <div class="text-center">Konten belum tersedia</div>
-                            @elseif ($code == 'ar')
-                                <div class="text-center">المحتوى غير متوفر بعد</div>
-                            @elseif ($code == 'vi')
-                                <div class="text-center">Nội dung chưa có sẵn</div>
-                            @else
-                                <div class="text-center">Content not available</div>
-                            @endif
+                        @if ($code == 'id')
+                        <div class="text-center">Konten belum tersedia</div>
+                        @elseif ($code == 'ar')
+                        <div class="text-center">المحتوى غير متوفر بعد</div>
+                        @elseif ($code == 'vi')
+                        <div class="text-center">Nội dung chưa có sẵn</div>
+                        @else
+                        <div class="text-center">Content not available</div>
+                        @endif
                         @endif
                     </div>
                 </div>
                 <div class="row text-center mt-4">
                     <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> SUMATERA </h3>
                         @foreach ($distributor as $value)
-                            @if ($value->province_id < 11)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> DKI JAKARTA </h3>
-                        <div class="list-market"> DKI JAKARTA
+                        <div class="list-market"> {{ strtoupper($value->province_name) }}
                         </div>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> JAWA BARAT </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id == 12)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
                         @endforeach
-
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> JAWA TENGAH </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id == 13)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> JAWA TIMUR </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id == 15)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> BANTEN </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id == 16)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> YOGYAKARTA </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id == 14)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> BALI & NUSA TENGGARA </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id > 16 && $value->province_id < 20)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> KALIMANTAN </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id > 19 && $value->province_id < 25)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-
-                    </div>
-
-
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> SULAWESI </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id > 24 && $value->province_id < 31)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 card-market" data-aos="fade-up">
-                        <h3> MALUKU & PAPUA </h3>
-                        @foreach ($distributor as $value)
-                            @if ($value->province_id > 30 && $value->province_id < 35)
-                                <div class="list-market"> {{ strtoupper($value->city_name) }}
-                                </div>
-                            @endif
-                        @endforeach
-
                     </div>
                 </div>
             </div>
         </section>
         @include('web.layouts.cta-footer')
         <x-slot name="script">
-            <script>
+            <!-- <script>
                 var cities = {{Js::from($bigCity)}}
                     am5.ready(function () {
 
@@ -263,6 +164,6 @@
                         chart.appear(1000, 100);
 
                     }); // end am5.ready()
-            </script>
+            </script> -->
         </x-slot>
 </x-web-layout>

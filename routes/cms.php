@@ -13,6 +13,7 @@ use App\Http\Controllers\Cms\PageController;
 use App\Http\Controllers\Cms\ProductcategoryController;
 use App\Http\Controllers\Cms\ProductController;
 use App\Http\Controllers\Cms\RecipeController;
+use App\Http\Controllers\Cms\SegmentController;
 use App\Http\Controllers\Cms\SocmedmarketController;
 use App\Http\Controllers\Cms\SubpageController;
 use App\Http\Controllers\Cms\UserController;
@@ -98,6 +99,16 @@ Route::prefix('webappcms')->middleware(['auth', 'permission:Settings'])->name('s
     Route::get('/subpages/update/{id}', [SubpageController::class, 'update'])->name('update');
     Route::post('/subpages/update', [SubpageController::class, 'update']);
     Route::delete('/subpages/destroy/{id}', [SubpageController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('webappcms')->middleware(['auth', 'permission:Settings'])->name('segment.')->group(function () {
+    //segments
+    Route::get('/segment', [SegmentController::class, 'index'])->name('list');
+    Route::get('/segment/create', [SegmentController::class, 'create'])->name('create');
+    Route::post('/segment/store', [SegmentController::class, 'store'])->name('store');
+    Route::get('/segment/update/{id}', [SegmentController::class, 'update'])->name('update');
+    Route::post('/segment/update', [SegmentController::class, 'update']);
+    Route::delete('/segment/destroy/{id}', [SegmentController::class, 'destroy'])->name('destroy');
 });
 
 

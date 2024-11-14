@@ -103,6 +103,7 @@
                         <li><a href="{{ route('socmed-marketplace.social-media.list') }}">Social Media</a></li>
                         <li><a href="{{ route('socmed-marketplace.marketplace.list') }}">Market Place</a></li>
                         <li><a href="{{ route('language.list') }}">Language</a></li>
+                        <li><a href="{{ route('segment.list') }}">Product Segment</a></li>
                         <li><a href="{{ route('menu.list') }}">Menu Navigation</a></li>
                     </ul>
                 </li>

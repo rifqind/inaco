@@ -14,7 +14,7 @@ class ProductSegment extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     protected $fillable = [
-        'segment_name', 'segment_description'
+        'segment_name', 'segment_name_non_id', 'segment_description'
     ];
     public $timestamps = false;
 }
