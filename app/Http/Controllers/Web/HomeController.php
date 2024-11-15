@@ -1319,6 +1319,7 @@ class HomeController extends Controller
             'page' => $data['page'],
             'code' => $code,
             'section' => $data['section'],
+            'indonesiaISO' => $data['indonesiaISO']
         ]);
     }
 
@@ -1332,6 +1333,7 @@ class HomeController extends Controller
             'page' => $data['page'],
             'code' => $code,
             'section' => $data['section'],
+            'indonesiaISO' => $data['indonesiaISO']
         ]);
     }
 
@@ -1355,10 +1357,13 @@ class HomeController extends Controller
             ->select([
                 'distributor.province',
                 'rp.name as province_name',
+                'rp.iso as iso'
             ])->distinct();
         $distributorList = $distributor->get();
+        $indonesiaISO = $distributor->pluck('iso');
         $bigCity = null;
         $data = [];
+        $data['indonesiaISO'] = $indonesiaISO;
         $data['distributor'] = $distributorList;
         $data['bigCity'] = $bigCity;
         $data['page'] = $page;

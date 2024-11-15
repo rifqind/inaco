@@ -72,98 +72,62 @@
         </section>
         @include('web.layouts.cta-footer')
         <x-slot name="script">
-            <!-- <script>
-                var cities = {{Js::from($bigCity)}}
-                    am5.ready(function () {
+            <script>
+                var province = {{ Js::from($indonesiaISO) }}
+                am5.ready(function() {
 
-                        // Create root element
-                        var root = am5.Root.new("chartdistributor");
+                    // Create root element
+                    var root = am5.Root.new("chartdistributor");
 
-                        // Set themes
-                        root.setThemes([
-                            am5themes_Animated.new(root)
-                        ]);
+                    // Set themes
+                    root.setThemes([
+                        am5themes_Animated.new(root)
+                    ]);
 
+                    // Create chart
+                    var chart = root.container.children.push(am5map.MapChart.new(root, {
+                        panX: "none", // Disable panning
+                        panY: "none", // Disable panning
+                        wheelY: "none", // Disable zooming
+                        projection: am5map.geoMercator()
+                    }));
 
+                    // Create main polygon series for countries
+                    var polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+                        geoJSON: am5geodata_indonesiaLow,
+                    }));
 
-                        // Create the map chart
-                        var chart = root.container.children.push(
-                            am5map.MapChart.new(root, {
-                                panX: "none",
-                                panY: "none",
-                                wheelX: "none",
-                                wheelY: "none"
-                            })
-                        );
-                        // Set padding on the chart container
-                        chart.set("paddingLeft", 20); // Adjust as needed
-                        chart.set("paddingRight", 20); // Adjust as needed
+                    polygonSeries.mapPolygons.template.setAll({
+                        interactive: true,
+                        fill: am5.color(0xaaaaaa) // default color: grey
+                    });
 
-                        // Load Indonesia map
-                        var polygonSeries = chart.series.push(
-                            am5map.MapPolygonSeries.new(root, {
-                                geoJSON: am5geodata_indonesiaLow
-                            })
-                        );
+                    polygonSeries.mapPolygons.template.states.create("active", {
+                        fill: am5.color('#E20A19') // active color: red
+                    });
 
-                        // Set fill and stroke style for polygons (landmasses)
-                        polygonSeries.mapPolygons.template.setAll({
-                            fill: am5.color(0xdddddd), // Warna daratan peta
-                            stroke: am5.color(0xffffff), // Warna batas peta
-                            strokeWidth: 2 // Mengatur lebar garis batas menjadi lebih tebal
+                    polygonSeries.mapPolygons.template.events.on("pointerover", function(ev) {
+                        if (province.indexOf(ev.target.dataItem.get("id")) === -1) {
+                            ev.target.set("tooltipText", null);
+                        } else {
+                            ev.target.set("tooltipText", "{name}");
+                        }
+                    });
+
+                    // Set active countries
+                    polygonSeries.events.on("datavalidated", function() {
+                        polygonSeries.mapPolygons.each(function(polygon) {
+                            if (province.indexOf(polygon.dataItem.get("id")) !== -1) {
+                                polygon.states.applyAnimate("active");
+                            }
                         });
+                    });
 
-                        // Create point series for city markers
-                        var pointSeries = chart.series.push(am5map.MapPointSeries.new(root, {
-                            valueField: "value",
-                            calculateAggregates: true
-                        }));
-
-                        // Assign the cities data to the point series
-                        pointSeries.data.setAll(cities.map(function (city) {
-                            return {
-                                geometry: {
-                                    type: "Point",
-                                    coordinates: [city.longitude, city.latitude]
-                                },
-                                title: city.name // Assigning title for each city
-                            };
-                        }));
-
-                        // Create a custom bullet for the points
-                        pointSeries.bullets.push(function (root, series, dataItem) {
-                            var container = am5.Container.new(root, {});
-                            var image = container.children.push(am5.Picture.new(root, {
-                                width: 40,
-                                height: 30,
-                                centerX: am5.p50,
-                                centerY: am5.p100,
-                                src: "/assets/web/images/marker.svg", // Pastikan marker.svg berada di path yang benar
-                                tooltipText: "{title}" // Bind the tooltip to the correct city name
-                            }));
+                    // Make stuff animate on load
+                    chart.appear(1000, 100);
 
 
-                            // Customize tooltip appearance
-                            image.set("tooltip", am5.Tooltip.new(root, {
-                                getFillFromSprite: false,
-                                getStrokeFromSprite: true,
-                                background: am5.Rectangle.new(root, {
-                                    fill: am5.color(0xdddddd), // Set background color to #ddd
-                                    stroke: am5.color(0x999999), // Optional: add a border color
-                                    cornerRadius: 8 // Add rounded corners with 8px radius
-                                }),
-                                labelText: "{title}" // Set the text to the city's title
-                            }));
-
-                            return am5.Bullet.new(root, {
-                                sprite: container
-                            });
-                        });
-
-                        // Make stuff animate on load
-                        chart.appear(1000, 100);
-
-                    }); // end am5.ready()
-            </script> -->
+                }); // end am5.ready() 
+            </script>
         </x-slot>
 </x-web-layout>
