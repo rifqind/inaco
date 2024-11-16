@@ -1101,6 +1101,7 @@ class HomeController extends Controller
             //     };
             // }
             $value->segment_id = $code == 'id' ? $segment->segment_name : $segment->segment_name_non_id;
+
         }
         $data = [];
         $data['products'] = $products;

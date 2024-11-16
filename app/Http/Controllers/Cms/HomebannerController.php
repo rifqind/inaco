@@ -119,17 +119,17 @@ class HomebannerController extends Controller
                 if ($request->hasFile('banner_image')) {
                     $file = $request->file('banner_image');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 545x307
-                    if ($imageDimensions[0] < 545 || $imageDimensions[1] < 307) {
-                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                    // Check if the image dimensions are at least 1900x1072
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 545x307 pixels.'
+                            'error' => 'The image must be at least 1900x1072 pixels.'
                         ]);
                     }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/banner/' . $fileName;
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(545, 307, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
@@ -149,7 +149,7 @@ class HomebannerController extends Controller
                     // dd(public_path('data/banner'));
                     $quality = 100;
                     $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
-                    while (filesize(public_path('data/banner') . '/' . $fileName) > 400 * 1024) {
+                    while (filesize(public_path('data/banner') . '/' . $fileName) > 600 * 1024) {
                         $quality -= 5;
                         $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
                         if ($quality <= 10)
@@ -238,16 +238,16 @@ class HomebannerController extends Controller
                 if ($request->hasFile('banner_image_update')) {
                     $file = $request->file('banner_image_update');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 545x307
-                    if ($imageDimensions[0] < 545 || $imageDimensions[1] < 307) {
-                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                    // Check if the image dimensions are at least 1900x1072
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 545x307 pixels.'
+                            'error' => 'The image must be at least 1900x1072 pixels.'
                         ]);
                     }
                     // Resize the image if it's larger than the required dimensions
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(545, 307, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });

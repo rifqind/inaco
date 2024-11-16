@@ -69,8 +69,8 @@
                         <div class="col-lg-6">
                             <input type="hidden" value="{{ $data->banner_image }}" class="form-control-file"
                                 id="banner_image" name="banner_image">
-                            <div>Minimum Dimension : 545 x 307</div>
-                            <div>Max Size : 400kb (.png)</div>
+                            <div>Minimum Dimension : 1900 x 1072</div>
+                            <div>Max Size : 600kb (.png)</div>
                         </div>
                     </div>
                     @else
@@ -80,8 +80,8 @@
                         <div class="col-lg-6">
                             <input type="file" style="width:200px;" class="form-control-file" id="banner_image"
                                 name="banner_image">
-                            <div>Minimum Dimension : 545 x 307</div>
-                            <div>Max Size : 400kb (.png)</div>
+                            <div>Minimum Dimension : 1900 x 1072</div>
+                            <div>Max Size : 600kb (.png)</div>
                         </div>
                     </div>
                     @endif
