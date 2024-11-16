@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AppLanguage;
 use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;
+use App\Models\ProductSegment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -20,11 +21,14 @@ class HomebannerController extends Controller
         $query = HomebannerTranslation::query();
         $query->join('homebanner as h', 'h.banner_id', '=', 'homebanner_translation.banner_id');
         $query->join('app_language as al', 'al.code', '=', 'homebanner_translation.language_code');
+        $query->leftjoin('product_segment as ps', 'ps.segment_id', '=', 'h.segment_id');
         $query->select([
             'homebanner_translation.*',
             'h.banner_name',
             'h.banner_image',
             'h.display_sequence',
+            'ps.segment_name',
+            'ps.segment_name_non_id',
             'al.name as language_name'
         ]);
 
@@ -54,6 +58,7 @@ class HomebannerController extends Controller
     public function create(Request $request)
     {
         $languages = AppLanguage::select('code as value', 'name as label')->get();
+        $segments = ProductSegment::select('segment_id as value', 'segment_name as label')->get();
         if ($request) {
             $data = Homebanner::where('banner_id', $request->banner_id)->first();
             if ($data) {
@@ -69,7 +74,8 @@ class HomebannerController extends Controller
                 return view('cms.banner.create_homebanner', [
                     'languages' => $languages,
                     'data' => $data,
-                    'titles' => $titles
+                    'titles' => $titles,
+                    'segments' => $segments,
                 ]);
             }
         }
@@ -82,7 +88,8 @@ class HomebannerController extends Controller
         $data->language_code = null;
         return view('cms.banner.create_homebanner', [
             'languages' => $languages,
-            'data' => $data
+            'data' => $data,
+            'segments' => $segments,
         ]);
     }
 
@@ -99,6 +106,7 @@ class HomebannerController extends Controller
                 'banner_status' => ['required', 'integer'],
                 'banner_url' => ['sometimes', 'nullable', 'string'],
                 'display_sequence' => ['required', 'integer'],
+                'segment_id' => ['sometimes', 'nullable'],
             ]);
             $banner_id_used = null;
             if ($request->banner_id) {
@@ -138,6 +146,7 @@ class HomebannerController extends Controller
                         'banner_image' => $fileName,
                         'banner_status' => $data['banner_status'],
                         'display_sequence' => $data['display_sequence'],
+                        'segment_id' => $request->segment_id ?  $data['segment_id'] : null,
                     ]);
                     $insertBannerTranslation = HomebannerTranslation::create([
                         'banner_id' => $insertBanner->banner_id,
@@ -189,7 +198,8 @@ class HomebannerController extends Controller
                     'h.banner_name',
                     'h.banner_image',
                     'h.banner_status',
-                    'h.display_sequence'
+                    'h.display_sequence',
+                    'h.segment_id'
                 ]);
             $data = $query->first();
 
@@ -202,9 +212,11 @@ class HomebannerController extends Controller
             $languages = AppLanguage::whereIn('code', $remainingLang)
                 ->select('code as value', 'name as label')
                 ->get();
+            $segments = ProductSegment::select('segment_id as value', 'segment_name as label')->get();
             return view('cms.banner.update_banner', [
                 'languages' => $languages,
-                'data' => $data
+                'data' => $data,
+                'segments' => $segments,
             ]);
         } else if ($request->isMethod('post')) {
             try {
@@ -218,6 +230,7 @@ class HomebannerController extends Controller
                     'banner_status' => ['required', 'integer'],
                     'banner_url' => ['sometimes', 'nullable', 'string'],
                     'display_sequence' => ['required', 'integer'],
+                    'segment_id' => ['sometimes', 'nullable'],
                     'banner_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
 
@@ -233,6 +246,7 @@ class HomebannerController extends Controller
                     'banner_status' => $data['banner_status'],
                     'banner_name' => $data['banner_name'],
                     'display_sequence' => $data['display_sequence'],
+                    'segment_id' => $request->segment_id ? $data['segment_id'] : null,
                 ]);
 
                 if ($request->hasFile('banner_image_update')) {

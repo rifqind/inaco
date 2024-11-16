@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
+use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;
 use App\Models\InternationalMarket;
 use App\Models\NewsTranslation;
@@ -537,6 +538,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -571,6 +573,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -674,10 +677,12 @@ class HomeController extends Controller
             $show['cat_title_for_detail'] = $cat_title;
             return $show;
         }
+        $catalog_image = Homebanner::where('segment_id', $id)->value('banner_image');
         $data = [];
         $data['products'] = $products;
         $data['recipes'] = ($recipes) ? $recipes : collect([]);
         $data['segment'] = $id;
+        $data['catalog_image'] = ($catalog_image) ? $catalog_image : null;
         $data['code'] = $code;
         $data['fakeId'] = $fakeId;
         $data['cat_title_for_detail'] = $cat_title;
@@ -1101,7 +1106,6 @@ class HomeController extends Controller
             //     };
             // }
             $value->segment_id = $code == 'id' ? $segment->segment_name : $segment->segment_name_non_id;
-
         }
         $data = [];
         $data['products'] = $products;
@@ -1320,6 +1324,7 @@ class HomeController extends Controller
             'page' => $data['page'],
             'code' => $code,
             'section' => $data['section'],
+            'indonesiaISO' => $data['indonesiaISO']
         ]);
     }
 
@@ -1333,6 +1338,7 @@ class HomeController extends Controller
             'page' => $data['page'],
             'code' => $code,
             'section' => $data['section'],
+            'indonesiaISO' => $data['indonesiaISO']
         ]);
     }
 
@@ -1356,10 +1362,13 @@ class HomeController extends Controller
             ->select([
                 'distributor.province',
                 'rp.name as province_name',
+                'rp.iso as iso'
             ])->distinct();
         $distributorList = $distributor->get();
+        $indonesiaISO = $distributor->pluck('iso');
         $bigCity = null;
         $data = [];
+        $data['indonesiaISO'] = $indonesiaISO;
         $data['distributor'] = $distributorList;
         $data['bigCity'] = $bigCity;
         $data['page'] = $page;

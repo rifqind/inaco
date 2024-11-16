@@ -4,21 +4,11 @@
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="pt-0 hero-category mt-md-0" data-aos="fade-in">
         <div class="hero-img">
-            @switch($segment)
-            @case(1)
+            @if ($catalog_image)
+            <img src="{{ asset('data/banner') . '/' . $catalog_image }}?v=1" class="img-fluid" alt="Hero Desawa">
+            @else
             <img src="{{ asset('assets/web/images/catalog/hero-dewasa.jpg') }}" class="img-fluid" alt="Hero Desawa">
-            @break
-            @case(2)
-            <img src="{{ asset('assets/web/images/catalog/hero-remaja.jpg') }}" class="img-fluid" alt="Hero Desawa">
-            @break
-            @case(3)
-            <img src="{{ asset('assets/web/images/catalog/hero-anak.jpg') }}?v=1" class="img-fluid" alt="Hero Desawa">
-            @break
-            
-            @default
-            <img src="{{ asset('assets/web/images/catalog/hero-dewasa.jpg') }}" class="img-fluid" alt="Hero Desawa">
-
-            @endswitch
+            @endif
         </div>
     </section><!-- End Hero -->
     <main id="main">
@@ -98,7 +88,7 @@
                         @endif
                     </div>
                     @if (isset($recipes[0]))
-                    <div class="col-sm-4 col-md-3">
+                    <div class="col-sm-6">
                         <div class="recipe-catalog">
                             @if(isset($recipes[0]))
                             <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[0]->recipe_slug])}}">
@@ -110,7 +100,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="col-sm-8 col-md-9">
+                    <div class="col-sm-6">
                         <div class="recipe-catalog">
                             @if(isset($recipes[1]))
                             <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $recipes[1]->recipe_slug])}}">
