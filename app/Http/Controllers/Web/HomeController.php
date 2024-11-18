@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor;
+use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;
 use App\Models\InternationalMarket;
 use App\Models\NewsTranslation;
@@ -537,6 +538,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -571,6 +573,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -674,10 +677,12 @@ class HomeController extends Controller
             $show['cat_title_for_detail'] = $cat_title;
             return $show;
         }
+        $catalog_image = Homebanner::where('segment_id', $id)->value('banner_image');
         $data = [];
         $data['products'] = $products;
         $data['recipes'] = ($recipes) ? $recipes : collect([]);
         $data['segment'] = $id;
+        $data['catalog_image'] = ($catalog_image) ? $catalog_image : null;
         $data['code'] = $code;
         $data['fakeId'] = $fakeId;
         $data['cat_title_for_detail'] = $cat_title;

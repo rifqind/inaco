@@ -8,6 +8,7 @@ use App\Models\MenuNavigationTranslation;
 use App\Models\ProductCategoryTranslation;
 use App\Models\ProductSegment;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HeaderComposer
@@ -27,7 +28,7 @@ class HeaderComposer
         foreach ($categories as $key => $value) {
             # code...
             $thisSegment = ProductSegment::where('segment_id', $value->segment_id)->first();
-            $categoryToShow = ($lang == 'id') ? strtolower($thisSegment->segment_name) : strtolower($thisSegment->segment_name_non_id);
+            $categoryToShow = ($lang == 'id') ? Str::slug($thisSegment->segment_name) : Str::slug($thisSegment->segment_name_non_id);
 
             $value->segment = $categoryToShow;
         }

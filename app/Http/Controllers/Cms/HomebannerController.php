@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AppLanguage;
 use App\Models\Homebanner;
 use App\Models\HomebannerTranslation;
+use App\Models\ProductSegment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -20,11 +21,14 @@ class HomebannerController extends Controller
         $query = HomebannerTranslation::query();
         $query->join('homebanner as h', 'h.banner_id', '=', 'homebanner_translation.banner_id');
         $query->join('app_language as al', 'al.code', '=', 'homebanner_translation.language_code');
+        $query->leftjoin('product_segment as ps', 'ps.segment_id', '=', 'h.segment_id');
         $query->select([
             'homebanner_translation.*',
             'h.banner_name',
             'h.banner_image',
             'h.display_sequence',
+            'ps.segment_name',
+            'ps.segment_name_non_id',
             'al.name as language_name'
         ]);
 
@@ -54,6 +58,7 @@ class HomebannerController extends Controller
     public function create(Request $request)
     {
         $languages = AppLanguage::select('code as value', 'name as label')->get();
+        $segments = ProductSegment::select('segment_id as value', 'segment_name as label')->get();
         if ($request) {
             $data = Homebanner::where('banner_id', $request->banner_id)->first();
             if ($data) {
@@ -69,7 +74,8 @@ class HomebannerController extends Controller
                 return view('cms.banner.create_homebanner', [
                     'languages' => $languages,
                     'data' => $data,
-                    'titles' => $titles
+                    'titles' => $titles,
+                    'segments' => $segments,
                 ]);
             }
         }
@@ -82,7 +88,8 @@ class HomebannerController extends Controller
         $data->language_code = null;
         return view('cms.banner.create_homebanner', [
             'languages' => $languages,
-            'data' => $data
+            'data' => $data,
+            'segments' => $segments,
         ]);
     }
 
@@ -99,6 +106,7 @@ class HomebannerController extends Controller
                 'banner_status' => ['required', 'integer'],
                 'banner_url' => ['sometimes', 'nullable', 'string'],
                 'display_sequence' => ['required', 'integer'],
+                'segment_id' => ['sometimes', 'nullable'],
             ]);
             $banner_id_used = null;
             if ($request->banner_id) {
@@ -119,17 +127,17 @@ class HomebannerController extends Controller
                 if ($request->hasFile('banner_image')) {
                     $file = $request->file('banner_image');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 545x307
-                    if ($imageDimensions[0] < 545 || $imageDimensions[1] < 307) {
-                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                    // Check if the image dimensions are at least 1900x1072
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 545x307 pixels.'
+                            'error' => 'The image must be at least 1900x1072 pixels.'
                         ]);
                     }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/banner/' . $fileName;
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(545, 307, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
@@ -138,6 +146,7 @@ class HomebannerController extends Controller
                         'banner_image' => $fileName,
                         'banner_status' => $data['banner_status'],
                         'display_sequence' => $data['display_sequence'],
+                        'segment_id' => $request->segment_id ?  $data['segment_id'] : null,
                     ]);
                     $insertBannerTranslation = HomebannerTranslation::create([
                         'banner_id' => $insertBanner->banner_id,
@@ -149,7 +158,7 @@ class HomebannerController extends Controller
                     // dd(public_path('data/banner'));
                     $quality = 100;
                     $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
-                    while (filesize(public_path('data/banner') . '/' . $fileName) > 400 * 1024) {
+                    while (filesize(public_path('data/banner') . '/' . $fileName) > 600 * 1024) {
                         $quality -= 5;
                         $resizedImage->save(public_path('data/banner') . '/' . $fileName, $quality);
                         if ($quality <= 10)
@@ -189,7 +198,8 @@ class HomebannerController extends Controller
                     'h.banner_name',
                     'h.banner_image',
                     'h.banner_status',
-                    'h.display_sequence'
+                    'h.display_sequence',
+                    'h.segment_id'
                 ]);
             $data = $query->first();
 
@@ -202,9 +212,11 @@ class HomebannerController extends Controller
             $languages = AppLanguage::whereIn('code', $remainingLang)
                 ->select('code as value', 'name as label')
                 ->get();
+            $segments = ProductSegment::select('segment_id as value', 'segment_name as label')->get();
             return view('cms.banner.update_banner', [
                 'languages' => $languages,
-                'data' => $data
+                'data' => $data,
+                'segments' => $segments,
             ]);
         } else if ($request->isMethod('post')) {
             try {
@@ -218,6 +230,7 @@ class HomebannerController extends Controller
                     'banner_status' => ['required', 'integer'],
                     'banner_url' => ['sometimes', 'nullable', 'string'],
                     'display_sequence' => ['required', 'integer'],
+                    'segment_id' => ['sometimes', 'nullable'],
                     'banner_image_update' => 'sometimes|image|mimes:jpeg,png,jpg,gif',
                 ]);
 
@@ -233,21 +246,22 @@ class HomebannerController extends Controller
                     'banner_status' => $data['banner_status'],
                     'banner_name' => $data['banner_name'],
                     'display_sequence' => $data['display_sequence'],
+                    'segment_id' => $request->segment_id ? $data['segment_id'] : null,
                 ]);
 
                 if ($request->hasFile('banner_image_update')) {
                     $file = $request->file('banner_image_update');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 545x307
-                    if ($imageDimensions[0] < 545 || $imageDimensions[1] < 307) {
-                        // return back()->withErrors(['banner_image' => 'The image must be at least 545x307 pixels.']);
+                    // Check if the image dimensions are at least 1900x1072
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 545x307 pixels.'
+                            'error' => 'The image must be at least 1900x1072 pixels.'
                         ]);
                     }
                     // Resize the image if it's larger than the required dimensions
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(545, 307, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });

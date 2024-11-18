@@ -24,6 +24,7 @@
                                 <th>Banner Name</th>
                                 <th>Banner Caption</th>
                                 <th>Lang</th>
+                                <th>Segment</th>
                                 <th>Display Sequence</th>
                                 <th>Action</th>
                             </tr>
@@ -35,6 +36,7 @@
                                 <td>{{ $value->banner_name }}</td>
                                 <td>{{ $value->banner_caption }}</td>
                                 <td>{{ $value->language_name }}</td>
+                                <td>{{ $value->segment_name }} - {{ $value->segment_name_non_id }}</td>
                                 <td>{{ $value->display_sequence }}</td>
                                 <td>
                                     <a href="{{ route('banner.update', ['id' => $value->banner_translation_id]) }}" class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="feather icon-edit"></i></a>

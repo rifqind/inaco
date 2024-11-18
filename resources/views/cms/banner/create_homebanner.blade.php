@@ -69,8 +69,8 @@
                         <div class="col-lg-6">
                             <input type="hidden" value="{{ $data->banner_image }}" class="form-control-file"
                                 id="banner_image" name="banner_image">
-                            <div>Minimum Dimension : 545 x 307</div>
-                            <div>Max Size : 400kb (.png)</div>
+                            <div>Minimum Dimension : 1900 x 1072</div>
+                            <div>Max Size : 600kb (.png)</div>
                         </div>
                     </div>
                     @else
@@ -80,8 +80,8 @@
                         <div class="col-lg-6">
                             <input type="file" style="width:200px;" class="form-control-file" id="banner_image"
                                 name="banner_image">
-                            <div>Minimum Dimension : 545 x 307</div>
-                            <div>Max Size : 400kb (.png)</div>
+                            <div>Minimum Dimension : 1900 x 1072</div>
+                            <div>Max Size : 600kb (.png)</div>
                         </div>
                     </div>
                     @endif
@@ -123,6 +123,20 @@
                             <input type="text" class="form-control" id="banner_url" name="banner_url"
                                 placeholder="Enter Url">
                             <div class="invalid-feedback">Please enter banner name</div>
+                        </div>
+                    </div>
+                    <div class="form-group row {{ $data->segment_id ? 'd-none' : '' }}">
+                        <label class="col-lg-3 col-form-label" for="segment_id">Segment</label>
+                        <div class="col-lg-6">
+                            <select class="form-control" id="segment_id" name="segment_id" style="width:200px;">
+                                <option value="" selected disabled>Please select</option>
+                                <option value="">No segment</option>
+                                @foreach ($segments as $value)
+                                <option value="{{ $value->value }}" {{ $data->segment_id == $value->value ? 'selected' : '' }}>
+                                    {{ $value->label }}
+                                </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">

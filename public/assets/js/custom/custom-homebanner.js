@@ -65,6 +65,7 @@ if (path == "/webappcms/banner") {
                     { width: "20%" },
                     { width: "7%" },
                     { width: "7%" },
+                    { width: "7%" },
                     { width: "5%" },
                 ],
             })
