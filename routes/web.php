@@ -22,6 +22,7 @@ Route::name('web.id.')->group(function () {
     Route::get('/karir', [HomeController::class, 'pages'])->name('karir');
     Route::get('/tur-pabrik', [HomeController::class, 'pages'])->name('tur-pabrik');
     Route::get('/profil-perusahaan', [HomeController::class, 'pages'])->name('profil-perusahaan');
+    Route::get('/visi-misi', [HomeController::class, 'pages'])->name('visi-misi');
     Route::get('/produk/{category_title?}/{product?}', [HomeController::class, 'produk'])->name('produk');
     Route::get('/distributor', [HomeController::class, 'distributorIndonesia'])->name('distributor');
     Route::get('/pasar-internasional', [HomeController::class, 'intermarketInd'])->name('intermarket');
@@ -230,6 +231,29 @@ Route::prefix('{code?}')
                 'descriptions' => $tentang_description ??= null,
             ]);
         })->name('company-profile');
+        Route::get('/visi-mission', function (string $code = null) {
+            $code ??= 'id';
+            if ($code == 'id')
+                return redirect()->route('web.id.visi-misi');
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'visi-misi')
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
+            return view('web.vision-mission', [
+                'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+            ]);
+        })->name('visi-mission');
         Route::get('/distributor', [HomeController::class, 'distributor'])->name('distributor');
         Route::get('/products/{category_title?}/{product?}', [HomeController::class, 'products'])->name('products');
         Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');

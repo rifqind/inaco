@@ -1307,6 +1307,26 @@ class HomeController extends Controller
                     ->where('sb.sub_pages_status', 1)
                     ->first();
             }
+            return view('web.company-profile', [
+                'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+            ]);
+        } else if ($route == 'web.id.visi-misi') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+                ->where('pages_slug', 'visi-misi')
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
             return view('web.vision-mission', [
                 'page' => $page ??= null,
                 'code' => $code,
@@ -1315,7 +1335,7 @@ class HomeController extends Controller
         }
     }
 
-    public function newpages(Request $request, string $code = null, string $pages_id)
+    public function newpages(string $pages_id)
     {
    //     $route = Route::currentRouteName();
    //     $route == 'web.id.profil-perusahaan') {
@@ -1323,7 +1343,33 @@ class HomeController extends Controller
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
               //  ->where('pages_slug', 'profil-perusahaan')
-                ->where('pages_id', $pages_id)
+                ->where('sb.pages_id', $pages_id)
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
+            return view('web.vision-mission', [
+                'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+            ]);
+    }
+
+    public function nonidpages(string $code,string $pages_id)
+    {
+   //     $route = Route::currentRouteName();
+   //     $route == 'web.id.profil-perusahaan') {
+      //      $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+              //  ->where('pages_slug', 'profil-perusahaan')
+                ->where('sb.pages_id', $pages_id)
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
