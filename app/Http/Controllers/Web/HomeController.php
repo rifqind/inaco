@@ -880,6 +880,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             // 'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -912,6 +913,7 @@ class HomeController extends Controller
             'products' => $data['products'],
             'recipes' => $data['recipes'],
             'segment' => $data['segment'],
+            'catalog_image' => $data['catalog_image'],
             'code' => $data['code'],
             // 'fakeId' => $data['fakeId'],
             'cat_title_for_detail' => $data['cat_title_for_detail'],
@@ -1003,10 +1005,12 @@ class HomeController extends Controller
             $show['cat_title_for_detail'] = $cat_title;
             return $show;
         }
+        $catalog_image = Homebanner::where('segment_id', $segment)->value('banner_image');
         $data = [];
         $data['products'] = $products;
         $data['recipes'] = ($recipes) ? $recipes : collect([]);
         $data['segment'] = $segment;
+        $data['catalog_image'] = ($catalog_image) ? $catalog_image : null;
         $data['code'] = $code;
         // $data['fakeId'] = $fakeId;
         $data['cat_title_for_detail'] = $cat_title;
@@ -1303,12 +1307,38 @@ class HomeController extends Controller
                     ->where('sb.sub_pages_status', 1)
                     ->first();
             }
-            return view('web.company-profile', [
+            return view('web.vision-mission', [
                 'page' => $page ??= null,
                 'code' => $code,
                 'descriptions' => $tentang_description ??= null,
             ]);
         }
+    }
+
+    public function newpages(Request $request, string $code = null, string $pages_id)
+    {
+   //     $route = Route::currentRouteName();
+   //     $route == 'web.id.profil-perusahaan') {
+            $code = 'id';
+            $page = PageTranslation::where('language_code', $code)
+                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
+              //  ->where('pages_slug', 'profil-perusahaan')
+                ->where('pages_id', $pages_id)
+                ->where('pages_status', 1)
+                ->first();
+            if ($page) {
+                $tentang_description = SubpageTranslation::where('language_code', $code)
+                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
+                    ->where('sb.pages_id', $page->pages_id)
+                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_status', 1)
+                    ->first();
+            }
+            return view('web.vision-mission', [
+                'page' => $page ??= null,
+                'code' => $code,
+                'descriptions' => $tentang_description ??= null,
+            ]);
     }
 
     public function distributor(Request $request, string $code = null)
