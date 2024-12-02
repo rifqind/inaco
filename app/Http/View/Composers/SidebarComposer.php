@@ -65,7 +65,9 @@ class SidebarComposer
         }
 
         $showSettings = in_array('Settings', $role);
-        // dd($showSettings);
+        $role_name = DB::table('roles')->where('id', auth()->user()->role_id)->first();
+        if ($role_name->role_name == 'Super Admin') $showSettings = true;
+        else $showSettings = false;
         // Share the data with the view
         $view->with([
             'sidebarItems' => $sidebarItems,

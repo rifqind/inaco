@@ -26,9 +26,10 @@ class PermissionCheck
                 ->join('permissions as p', 'p.id', '=', 'roles_permissions.permission_id')
                 ->where('role_id', $role_id)
                 ->pluck('permission_name')->toArray();
+                // dd($roles_permissions, $permission);
             $check = in_array($permission, $roles_permissions);
-            // dd($check);
             if ($check) return $next($request);
+            // return $next($request);
         }
         return abort(403, 'unauthorized');
     }
