@@ -117,6 +117,6 @@
         <script src="{{ asset('assets/js/custom/custom-page.js') }}"></script>
         <!-- Summernote JS -->
         <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-        <script src="{{ asset('assets/js/custom/custom-form-editor.js') }}"></script>
+        <!-- <script src="{{ asset('assets/js/custom/custom-form-editor.js') }}"></script> -->
     </x-slot>
 </x-app-layout>

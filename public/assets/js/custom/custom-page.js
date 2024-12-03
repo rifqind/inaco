@@ -6,6 +6,7 @@
 "use strict";
 
 var path = window.location.pathname;
+var temporaryImages = [];
 jQuery("#create-page").validate({
     ignore: [],
     errorClass: "invalid-feedback animated fadeInDown",
@@ -76,6 +77,11 @@ jQuery("#create-page").validate({
         event.preventDefault();
         const form = document.getElementById("create-page");
         let formData = new FormData(form);
+        if (temporaryImages.length > 0) {
+            temporaryImages.forEach((path, index) => {
+                formData.append(`summernoteImg[${index}]`, path)
+            })
+        }
         jQuery.ajax({
             url: path == "/webappcms/pages/create" ? "/webappcms/pages/store" : "/webappcms/pages/update",
             type: "POST",
@@ -112,10 +118,10 @@ jQuery("#create-page").validate({
                         if (value.isConfirmed) {
                             path == "/webappcms/pages/create"
                                 ? (window.location.href =
-                                      "/webappcms/pages/create?pages_id=" +
-                                      data.id +
-                                      "&language_code=" +
-                                      data.code)
+                                    "/webappcms/pages/create?pages_id=" +
+                                    data.id +
+                                    "&language_code=" +
+                                    data.code)
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
@@ -204,21 +210,146 @@ if (path == "/webappcms/pages") {
             });
         });
         jQuery("#datatable-pages")
-        .DataTable({
-            responsive: false,
-            columns: [
-                { width: "5%" },
-                { width: "30%" },
-                { width: "5%" },
-                { width: "5%" },
-            ],
-        })
-        .buttons()
-        .container()
-        .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+            .DataTable({
+                responsive: false,
+                columns: [
+                    { width: "5%" },
+                    { width: "30%" },
+                    { width: "5%" },
+                    { width: "5%" },
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {
         window.location.href = "/webappcms/pages";
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    summerNoteInit()
+})
+const summerNoteInit = () => {
+    $('#summernote').summernote({
+        height: 320,
+        width: 600,
+        minHeight: null,
+        maxHeight: null,
+        focus: true,
+        imageAttributes: {
+            icon: '<i class="note-icon-pencil"/>',
+            removeEmpty: false, // true = remove attributes | false = leave empty if present
+            disableUpload: false // true = don't display Upload Options | Display Upload Options
+        },
+        popover: {
+            image: [
+                ['custom', ['imageAttributes']],
+                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+            ],
+        },
+        grid: {
+            wrapper: "row",
+            columns: [
+                "col-md-12",
+                "col-md-6",
+                "col-md-4",
+                "col-md-3",
+                "col-md-24",
+            ]
+        },
+        icons: {
+            grid: "bi bi-grid-3x2"
+        },
+        toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            //  ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+            onImageUpload: function (image) {
+                sendFile(image[0]);
+            },
+            onMediaDelete: function (target) {
+                deleteFile(target[0].src);
+            }
+        },
+    });
+}
+const sendFile = (file, editor, welEditable) => {
+    const _token = jQuery('meta[name="csrf-token"]').attr(
+        "content"
+    )
+    let data = new FormData()
+    data.append("file", file)
+    data.append("_token", _token)
+    $('#loading-image-summernote').show();
+    $('#summernote').summernote('disable');
+
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "/upload-image-summernote",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (url) {
+            // console.log(url);
+            if (url['status'] == "success") {
+                $('#summernote').summernote('enable');
+                $('#loading-image-summernote').hide();
+                $('#summernote').summernote('editor.saveRange');
+                $('#summernote').summernote('editor.restoreRange');
+                $('#summernote').summernote('editor.focus');
+                $('#summernote').summernote('editor.insertImage', url['image_url']);
+                temporaryImages.push(url['image_url']);
+            }
+            $("img").addClass("img-fluid");
+        },
+        error: function (data) {
+            // console.log(data)
+            $('#summernote').summernote('enable');
+            $('#loading-image-summernote').hide();
+        }
+    });
+}
+const deleteFile = (target) => {
+    const _token = jQuery('meta[name="csrf-token"]').attr(
+        "content"
+    )
+    let data = new FormData();
+    data.append("target", target);
+    data.append('_token', _token);
+    $('#loading-image-summernote').show();
+    $('.summernote').summernote('disable');
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "/delete-image-summernote",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            // console.log(result)
+            if (result['status'] == "success") {
+                $('.summernote').summernote('enable');
+                $('#loading-image-summernote').hide();
+            }
+        },
+        error: function (data) {
+            // console.log(data)
+            $('.summernote').summernote('enable');
+            $('#loading-image-summernote').hide();
+        }
     });
 }

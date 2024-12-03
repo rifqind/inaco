@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::post('webappcms/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+Route::middleware(['auth'])->post('/upload-image-summernote', [PageController::class, 'uploadSummerNote']);
+Route::middleware(['auth'])->post('/temp-summernote', [PageController::class, 'temporarySummerNote']);
+Route::middleware(['auth'])->post('/delete-image-summernote', [PageController::class, 'deleteSummerNote']);
 Route::prefix('webappcms')->middleware(['auth', 'permission:Settings'])->name('user.')->group(function () {
     //user, role and permission
     Route::get('/user', [UserController::class, 'index'])->name('list');
