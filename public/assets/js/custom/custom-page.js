@@ -137,11 +137,19 @@ jQuery("#create-page").validate({
                 }
             },
             error: (data) => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: data,
-                });
+                if (data.status == 413) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: 'The uploaded file is too large!',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: data,
+                    });
+                }
             },
         });
     },
@@ -316,8 +324,14 @@ const sendFile = (file, editor, welEditable) => {
             }
             $("img").addClass("img-fluid");
         },
-        error: function (data) {
-            // console.log(data)
+        error: function (error) {
+            if (error.status == 413) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: 'The uploaded file is too large!',
+                })
+            }
             $('#summernote').summernote('enable');
             $('#loading-image-summernote').hide();
         }

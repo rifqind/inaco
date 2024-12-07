@@ -118,20 +118,22 @@ class PageController extends Controller
                 ]);
                 $pages_id_used = $data['pages_id'];
                 $smnoteimg = $request->summernoteImg;
-                $filePath = 'image/summernote';
-                if (!File::exists(public_path($filePath))) {
-                    File::makeDirectory(public_path($filePath), 0777, true);
-                }
-                foreach ($smnoteimg as $value) {
-                    $exploded = explode('/', $value);
-                    $find_summernote = Summernote::where('pages_id', $pages_id_used)->where('file_name', $exploded[3])->first();
-                    if (!$find_summernote) {
-                        Summernote::create([
-                            'pages_id' => $pages_id_used,
-                            'file_name' => $exploded[3]
-                        ]);
+                if ($smnoteimg) {
+                    $filePath = 'image/summernote';
+                    if (!File::exists(public_path($filePath))) {
+                        File::makeDirectory(public_path($filePath), 0777, true);
                     }
-                    File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                    foreach ($smnoteimg as $value) {
+                        $exploded = explode('/', $value);
+                        $find_summernote = Summernote::where('pages_id', $pages_id_used)->where('file_name', $exploded[3])->first();
+                        if (!$find_summernote) {
+                            Summernote::create([
+                                'pages_id' => $pages_id_used,
+                                'file_name' => $exploded[3]
+                            ]);
+                        }
+                        File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                    }
                 }
             } else {
                 $data['pages_image'] = $request->validate([
@@ -177,20 +179,22 @@ class PageController extends Controller
                     }
                     $pages_id_used = $insertPage->pages_id;
                     $smnoteimg = $request->summernoteImg;
-                    $filePath = 'image/summernote';
-                    if (!File::exists(public_path($filePath))) {
-                        File::makeDirectory(public_path($filePath), 0777, true);
-                    }
-                    foreach ($smnoteimg as $value) {
-                        $exploded = explode('/', $value);
-                        $find_summernote = Summernote::where('pages_id', $pages_id_used)->where('file_name', $exploded[3])->first();
-                        if (!$find_summernote) {
-                            Summernote::create([
-                                'pages_id' => $pages_id_used,
-                                'file_name' => $exploded[3]
-                            ]);
+                    if ($smnoteimg) {
+                        $filePath = 'image/summernote';
+                        if (!File::exists(public_path($filePath))) {
+                            File::makeDirectory(public_path($filePath), 0777, true);
                         }
-                        File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                        foreach ($smnoteimg as $value) {
+                            $exploded = explode('/', $value);
+                            $find_summernote = Summernote::where('pages_id', $pages_id_used)->where('file_name', $exploded[3])->first();
+                            if (!$find_summernote) {
+                                Summernote::create([
+                                    'pages_id' => $pages_id_used,
+                                    'file_name' => $exploded[3]
+                                ]);
+                            }
+                            File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                        }
                     }
                 }
             }
@@ -341,20 +345,22 @@ class PageController extends Controller
                     }
                 }
                 $smnoteimg = $request->summernoteImg;
-                $filePath = 'image/summernote';
-                if (!File::exists(public_path($filePath))) {
-                    File::makeDirectory(public_path($filePath), 0777, true);
-                }
-                foreach ($smnoteimg as $value) {
-                    $exploded = explode('/', $value);
-                    $find_summernote = Summernote::where('pages_id', $getPages)->where('file_name', $exploded[3])->first();
-                    if (!$find_summernote) {
-                        Summernote::create([
-                            'pages_id' => $getPages,
-                            'file_name' => $exploded[3]
-                        ]);
+                if ($smnoteimg) {
+                    $filePath = 'image/summernote';
+                    if (!File::exists(public_path($filePath))) {
+                        File::makeDirectory(public_path($filePath), 0777, true);
                     }
-                    File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                    foreach ($smnoteimg as $value) {
+                        $exploded = explode('/', $value);
+                        $find_summernote = Summernote::where('pages_id', $getPages)->where('file_name', $exploded[3])->first();
+                        if (!$find_summernote) {
+                            Summernote::create([
+                                'pages_id' => $getPages,
+                                'file_name' => $exploded[3]
+                            ]);
+                        }
+                        File::move(public_path($value), public_path($filePath) . '/' . $exploded[3]);
+                    }
                 }
                 DB::commit();
                 return response()->json([
