@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="{{ asset('assets/web/vendor/owl-carousel/owl.theme.default.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/web/vendor/slick/slick.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/web/vendor/slick/slick-theme.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/web/vendor/plyr/plyr.css') }}" />
     <link href="{{ asset('assets/web/vendor/magnific/magnific-popup.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/web/vendor/amchart/index.js') }}"></script>
     <script src="{{ asset('assets/web/vendor/amchart/map.js') }}"></script>

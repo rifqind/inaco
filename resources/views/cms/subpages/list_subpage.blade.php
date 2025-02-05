@@ -63,6 +63,25 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @if ($is_pgcontent)
+                                @foreach ($data_page as $value_pg)
+                                   <tr> 
+                                    <td>{{ $value_pg->pages_title }}</td>
+                                    <td>Content</td>
+                                    <td>{{ $value_pg->pages_description }}</td>
+                                    <td>{{ $value_pg->language_name }}</td>
+                                    <td>
+                                        <a href="{{ route('pages.update', ['id' => $value_pg->id]) }}?is_pgcontent={{ $pgcontent }}"
+                                                class="btn btn-round btn-success" data-toggle="tooltip" data-placement="top"
+                                                title="Edit"><i class="feather icon-edit"></i></a>
+                                            <a href="{{ route('pages.create') }}?pages_id={{ $value_pg->pages_id }}&language_code={{ $value_pg->languageList }}&is_pgcontent={{ $pgcontent }}"
+                                                class="btn btn-round btn-info" data-toggle="tooltip" data-placement="top"
+                                                title="Add Language"><i
+                                                    class="ion ion-ios-add-circle-outline text-white"></i></a>
+                                    </td>
+                                  </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

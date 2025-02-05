@@ -20,8 +20,8 @@
                             @endif
                         </a>
                     </div>
-                    @if (!$recipe->recipe_yt)
                     <div class="col-md-8">
+                    @if (!$recipe->recipe_yt)
                         <div id="sync1" class="owl-carousel owl-theme">
                             @if ($image->isNotEmpty())
                             @foreach ($image as $value)
@@ -44,21 +44,22 @@
                         </div>
                         @if ($image->count() < 1)
                             <div id="sync2" class="owl-carousel owl-theme">
-                            @foreach ($image as $value)
-                            <div class="item">
-                                <a class="image-event" href="#"><img
-                                        src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                @foreach ($image as $value)
+                                <div class="item">
+                                    <a class="image-event" href="#"><img
+                                            src="{{ asset('data/recipe/') }}/{{$value->recipe_id}}/{{$value->image_filename}}"></a>
+                                </div>
+                                @endforeach
                             </div>
-                            @endforeach
-                    </div>
-                    @endif
-                    @endif
+                            @endif
+                    @else
                     <div class="plyr__video-embed position-relative rounded-4" id="player">
                         <iframe
                             src="{{ $recipe->recipe_yt }}"
                             allowfullscreen
                             allow="autoplay"></iframe>
                     </div>
+                     @endif
                     <h1 class="title-detail-recipe">{{$recipe->recipe_title}}</h1>
                     <div class="info-recipe">{{$recipe->create_date}}</div>
                     <hr />
@@ -95,7 +96,7 @@
 
 
         <!-- ======= Recipe ======= -->
-        <section id="recipe" class="recipe pt-5 mt-3 mb-0">
+        <section id="recipe" class="recipe mb-0 pt-0">
             <div class="container" data-aos="fade-up">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
@@ -138,19 +139,19 @@
                                         <div class="recipe-summamry">
                                             <p>{{$value->recipe_description}}</p>
                                         </div>
-                                        <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
-                                            class="btn btn-primary w-100 more filled-button">
-                                            @if ($code == 'id')
-                                            Lihat Resep
-                                            @elseif($code == 'ar')
-                                            شاهد الوصفات
-                                            @elseif($code == 'vi')
-                                            Xem Công Thức
-                                            @else
-                                            View Recipes
-                                            @endif
-                                        </a>
                                     </div>
+                                    <a href="{{route('web.recipe.detail', ['code' => $code, 'title' => $value->recipe_slug])}}"
+                                        class="btn btn-primary w-100 more filled-button">
+                                        @if ($code == 'id')
+                                        Lihat Resep
+                                        @elseif($code == 'ar')
+                                        شاهد الوصفات
+                                        @elseif($code == 'vi')
+                                        Xem Công Thức
+                                        @else
+                                        View Recipes
+                                        @endif
+                                    </a>
                                 </div>
                             </div>
                             @endforeach

@@ -2,7 +2,7 @@
  <header id="header" class="fixed-top header-scrolled">
      <div class="container d-flex align-items-center justify-content-between">
 
-         <h1 class="logo d-sm-none"><a href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}"></a></h1>
+         <h1 class="logo d-sm-none"><a href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.webp') }}"></a></h1>
 
          <nav id="navbar" class="navbar w-100 justify-content-between">
              <ul class=" w-100 justify-content-between">
@@ -64,7 +64,7 @@
              </li>
              <li class="nav-item"><a class="nav-link" href="{{ route('web.recipe', ['code' => $code]) }}">الإسقاط</a></li>
              <li class="nav-item"><a class="nav-link" href="{{ route('web.distributor', ['code' => $code]) }}">موزعات التوزيع</a></li>
-             <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.png') }}"></a></li>
+             <li class="nav-item logo-item d-none d-sm-block"><a class="nav-link" href="/"><img title="Logo Inaco" src="{{ asset('assets/web/images/logo.webp') }}"></a></li>
              <li class="nav-item"><a class="nav-link" href="{{ route('web.intermarket', ['code' => $code]) }}">السوق الدولية</a></li>
              <li class="nav-item dropdown has-megamenu">
                  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"> أخبار </a>

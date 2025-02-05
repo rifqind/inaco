@@ -24,9 +24,9 @@
         </div>
         <div class="hero-img">
             @if ($page)
-                <img src="{{ asset('data/pages') . '/' . $page->pages_image }}?v=1" class="img-fluid" alt="Factory Inaco">
+                <img src="{{ asset('data/pages') . '/' . $page->pages_image }}?v=1" class="img-fluid" alt="Visi Misi Inaco">
             @else
-                <img src="{{ asset('assets/web/images/about/about-hero.jpg') }}" class="img-fluid" alt="Tentang Inaco">
+                <img src="{{ asset('assets/web/images/about/about-hero.jpg') }}" class="img-fluid" alt="Visi Misi Inaco">
             @endif
         </div>
     </section>

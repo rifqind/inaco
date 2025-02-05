@@ -224,7 +224,7 @@
                         <div class="d-md-flex justify-content-between align-items-center">
                             <div>
                                 @if ($code == 'ar')
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Press Release
+                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">أخبار
                                         من INACO</h1>
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">آخر
                                         الأخبار من INACO</h3>
@@ -234,12 +234,11 @@
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">
                                         Berita terbaru dari Inaco</h3>
                                 @elseif ($code == 'vi')
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Thông cáo báo
-                                        chí từ INACO</h1>
+                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Thông tin từ INACO</h1>
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">Tin
                                         tức mới nhất từ INACO</h3>
                                 @else
-                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Press Release
+                                    <h1 class="page-header mb-2 text-center text-md-start" data-aos="fade-up">Info
                                         from INACO</h1>
                                     <h3 class="sub-header mb-4 mt-0 pb-2 text-center text-md-start" data-aos="fade-up">
                                         Latest news from INACO</h3>
@@ -284,22 +283,22 @@
 
                         <div class="text-center" data-aos="fade-up">
                             @if ($code == 'ar')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
+                                <a href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}"
                                     class="btn btn-primary more filled-button mt-4 mt-md-5">
                                     انظر جميع النصائح
                                 </a>
                             @elseif ($code == 'id')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
+                                <a href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}"
                                     class="btn btn-primary more filled-button mt-4 mt-md-5">
                                     Lihat Lainnya
                                 </a>
                             @elseif ($code == 'vi')
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
+                                <a href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}"
                                     class="btn btn-primary more filled-button mt-4 mt-md-5">
                                     Xem Thêm
                                 </a>
                             @else
-                                <a href="{{ route('web.news', ['id' => 'articles', 'code' => $code]) }}"
+                                <a href="{{ route('web.news', ['id' => 'press-release', 'code' => $code]) }}"
                                     class="btn btn-primary more filled-button mt-4 mt-md-5">
                                     See More
                                 </a>

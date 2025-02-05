@@ -5,7 +5,7 @@
             <div class="row justify-content-between">
                 <div class="col-md-7">
                     <div class="d-flex align-items-center">
-                        <img src="{{ asset('assets/web/images/logo.png') }}" class="me-4">
+                        <img src="{{ asset('assets/web/images/logo.png') }}" class="me-4" style="height:36px">
                         <div>
                             <h4>Inaco</h4>
                             <p>Jalan Raya Bekasi Tambun KM.39.5, Jatimulya, Kec. Tambun Sel., Kabupaten Bekasi, Jawa

@@ -39,9 +39,9 @@
         <!-- ======= Find Us ======= -->
         <section id="findus" class="findus">
             <div class="container" data-aos="fade-up">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center" style="font-size:12pt">
                     <div class="col-12 col-sm-5">
-                        <h2 class="fw-bold mb-4 pb-2"></h2>
+                        <!--h2 class="fw-bold mb-4 pb-2"></h2 -->
                         <div class="d-flex align-items-start mb-3">
                             <img src="{{asset('assets/web/images/findus/location.png')}}" class="me-3">
                             <div class="">
@@ -66,7 +66,7 @@
                                 {!! $daftar_kontak->where('sub_pages_slug', 'kontak-fax')->value('sub_pages_description') !!}
                             </div>
                         </div>
-                        <hr class="mt-5 mb-4 pt-2 pb-2">
+                        <hr class="pt-2 pb-2">
                         @if ($code == 'id')
                             <h4 class="fw-bold mb-4">Toko Online</h4>
                         @elseif($code == 'ar')
@@ -81,8 +81,8 @@
                                 <a class="me-3" href="{{ $socialmedia->lazada }}"><img
                                         src="{{ asset('assets/web/images/findus/lazada.png') }}"></a>
                             @endif
-                            @if ($socialmedia->tiktok)
-                                <a class="me-3" href="{{ $socialmedia->tiktok }}"><img
+                            @if ($socialmedia->tiktokshop)
+                                <a class="me-3" href="{{ $socialmedia->tiktokshop }}"><img
                                         src="{{ asset('assets/web/images/findus/tiktok.png') }}"></a>
                             @endif
                             @if ($socialmedia->tokopedia)
@@ -97,7 +97,7 @@
                         <hr class="mt-5 mb-4 pt-2 pb-2 d-sm-none">
                     </div>
                     <div class="col-12 col-sm-7">
-                        <form action="" method="post" id="question-message" class="form-validate">
+                        <!-- form action="" method="post" id="question-message" class="form-validate" -->
                             @csrf
                             @if ($section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description'))
                                 {!! $section->where('sub_pages_slug', 'bagian-dua')->value('sub_pages_description') !!}
@@ -113,7 +113,7 @@
                                 @endif
                             @endif
                             @if($code == 'id')
-                                <div class="form-group mb-3">
+                                <!--div class="form-group mb-3">
                                     <label for="name" class="form-label fw-bold mb-1">Nama</label>
                                     <input type="text" class="form-control" name="name" id="name">
                                 </div>
@@ -128,10 +128,10 @@
                                 <div class="form-group mb-4">
                                     <label for="message" class="form-label fw-bold mb-1">Pesan</label>
                                     <textarea rows="5" class="form-control" name="message" id="message"></textarea>
-                                </div>
-                                <button href="#" class="btn btn-primary px-5 more filled-button">Kirim</button>
+                                </div -->
+                                <a href="https://cs.inacofood.com/" target="_blank" class="btn btn-primary px-5 more filled-button">Kunjungi Customer Support Inaco</a>
                             @elseif($code == 'ar')
-                                <div class="form-group mb-3">
+                                <!-- div class="form-group mb-3">
                                     <label for="name" class="form-label fw-bold mb-1">الاسم</label>
                                     <input type="text" class="form-control" name="name" id="name">
                                 </div>
@@ -146,10 +146,10 @@
                                 <div class="form-group mb-4">
                                     <label for="message" class="form-label fw-bold mb-1">الرسالة</label>
                                     <textarea rows="5" class="form-control" name="message" id="message"></textarea>
-                                </div>
-                                <button href="#" class="btn btn-primary px-5 more filled-button">إرسال</button>
+                                </div -->
+                                <a href="https://cs.inacofood.com/" target="_blank" class="btn btn-primary px-5 more filled-button">قم بزيارة دعم العملاء Inaco</a>
                             @elseif($code == 'vi')
-                                <div class="form-group mb-3">
+                                <!-- div class="form-group mb-3">
                                     <label for="name" class="form-label fw-bold mb-1">Tên</label>
                                     <input type="text" class="form-control" name="name" id="name">
                                 </div>
@@ -164,10 +164,10 @@
                                 <div class="form-group mb-4">
                                     <label for="message" class="form-label fw-bold mb-1">Tin Nhắn</label>
                                     <textarea rows="5" class="form-control" name="message" id="message"></textarea>
-                                </div>
-                                <button href="#" class="btn btn-primary px-5 more filled-button">Gửi</button>
+                                </div -->
+                                <a href="https://cs.inacofood.com/" target="_blank" class="btn btn-primary px-5 more filled-button">Thăm Hỗ trợ Khách hàng Inaco</a>
                             @else
-                                <div class="form-group mb-3">
+                                <!-- div class="form-group mb-3">
                                     <label for="name" class="form-label fw-bold mb-1">Name</label>
                                     <input type="text" class="form-control" name="name" id="name">
                                 </div>
@@ -182,10 +182,10 @@
                                 <div class="form-group mb-4">
                                     <label for="message" class="form-label fw-bold mb-1">Message</label>
                                     <textarea rows="5" class="form-control" name="message" id="message"></textarea>
-                                </div>
-                                <button href="#" class="btn btn-primary px-5 more filled-button">Submit</button>
+                                </div -->
+                                <a href="https://cs.inacofood.com/" target="_blank" class="btn btn-primary px-5 more filled-button">Visit Inaco Customer Support</a>
                             @endif
-                        </form>
+                        <!-- /form-->
                     </div>
                 </div>
             </div>

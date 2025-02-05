@@ -80,7 +80,7 @@
                         <div class="col-lg-6">
                             <input type="file" style="width:200px;" class="form-control-file" id="banner_image"
                                 name="banner_image">
-                            <div>Minimum Dimension : 1900 x 1072</div>
+                            <div>Minimum Dimension : 1900 x 896</div>
                             <div>Max Size : 600kb (.png)</div>
                         </div>
                     </div>

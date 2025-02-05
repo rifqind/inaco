@@ -4,6 +4,7 @@
 <script src="{{ asset('assets/web/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/web/vendor/magnific/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('assets/web/vendor/owl-carousel/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('assets/web/vendor/plyr/plyr.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('assets/web/vendor/slick/slick.min.js') }}"></script>
 

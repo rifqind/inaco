@@ -40,7 +40,7 @@
                                                 <div class="col-sm-4 image-history pe-md-0"><img
                                                         src="{{ asset('data/subpages') . '/' . $value->sub_pages_image }}">
                                                 </div>
-                                                <div class="col-sm-8 pe-md-0 ps-md-0 content-history">
+                                                <div class="col-sm-8 content-history">
                                                     <div class="year-history">
                                                         <h2>{{$value->sub_pages_title}}</h2>
                                                     </div>
@@ -74,7 +74,7 @@
                                         <div class="row justify-content-center">
                                             <div class="col-sm-4 image-history pe-md-0"><img
                                                     src="{{ asset('data/subpages') . '/' . $value->sub_pages_image }}"></div>
-                                            <div class="col-sm-auto pe-md-0 ps-md-0 content-history">
+                                            <div class="col-sm-auto content-history">
                                                 <div class="year-history">
                                                     <h2>{{$value->sub_pages_title}}</h2>
                                                 </div>
