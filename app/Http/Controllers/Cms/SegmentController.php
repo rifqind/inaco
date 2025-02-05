@@ -36,7 +36,7 @@ class SegmentController extends Controller
             ]);
             ProductSegment::create($data);
             DB::commit();
-            return response()->json(['message', 'Success']);
+            return response()->json(['message' => 'Success']);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
