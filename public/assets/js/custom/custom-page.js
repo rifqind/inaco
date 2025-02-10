@@ -6,6 +6,7 @@
 "use strict";
 
 var path = window.location.pathname;
+var is_slugged = document.querySelector('.is-slugged');
 var temporaryImages = [];
 jQuery("#create-page").validate({
     ignore: [],
@@ -125,7 +126,11 @@ jQuery("#create-page").validate({
                                 : window.location.reload(); // Ganti dengan URL tujuan Anda
                         }
                         if (value.isDismissed) {
-                            window.location.href = "/webappcms/pages"; // Ganti dengan URL tujuan Anda
+                            if (is_slugged.textContent == '') {
+                                window.location.href = "/webappcms/pages"; // Ganti dengan URL tujuan Anda
+                            } else {
+                                window.location.href = "/webappcms/pages?pages_slug=" + is_slugged.textContent; // Ganti dengan URL tujuan Anda
+                            }
                         }
                     });
                 } else if (data.error) {
@@ -233,7 +238,11 @@ if (path == "/webappcms/pages") {
     });
 } else {
     document.getElementById("back").addEventListener("click", () => {
-        window.location.href = "/webappcms/pages";
+        if (is_slugged.textContent == '') {
+            window.location.href = "/webappcms/pages"; // Ganti dengan URL tujuan Anda
+        } else {
+            window.location.href = "/webappcms/pages?pages_slug=" + is_slugged.textContent; // Ganti dengan URL tujuan Anda
+        }
     });
 }
 

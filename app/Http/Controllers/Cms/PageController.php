@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class PageController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         $query = PageTranslation::query();
         $query->join('pages as p', 'p.pages_id', '=', 'pages_translation.pages_id');
@@ -31,6 +31,14 @@ class PageController extends Controller
             'al.name as language_name'
         ]);
 
+        $is_slugged = false;
+        $pages_slug = false;
+        if ($request->pages_slug) {
+            $query->where('pages_slug', $request->pages_slug);
+            $query->distinct();
+            $is_slugged = true;
+            $pages_slug = $request->pages_slug;
+        }
         //sementara
         $data = $query->get();
         foreach ($data as $key => $value) {
@@ -52,13 +60,18 @@ class PageController extends Controller
             $value->languageList = $languageList;
         }
         return view('cms.pages.list_page', [
-            'data' => $data
+            'data' => $data,
+            'is_slugged' => $is_slugged,
+            'pages_slug' => $pages_slug,
         ]);
     }
 
     public function create(Request $request)
     {
         $languages = AppLanguage::select('code as value', 'name as label')->get();
+        $is_slugged = false;
+        if ($request->is_slugged)
+            $is_slugged = $request->is_slugged;
         if ($request) {
             $data = Page::where('pages_id', $request->pages_id)->first();
             if ($data) {
@@ -73,7 +86,8 @@ class PageController extends Controller
                 return view('cms.pages.create_page', [
                     'languages' => $languages,
                     'data' => $data,
-                    'titles' => $titles
+                    'titles' => $titles,
+                    'is_slugged' => $is_slugged
                 ]);
             }
         }
@@ -86,7 +100,8 @@ class PageController extends Controller
         $data->language_code = null;
         return view('cms.pages.create_page', [
             'languages' => $languages,
-            'data' => $data
+            'data' => $data,
+            'is_slugged' => $is_slugged
         ]);
     }
 
@@ -234,7 +249,9 @@ class PageController extends Controller
                     'pages_title'
                 ]);
             $data = $query->first();
-
+            $is_slugged = false;
+            if ($request->is_slugged)
+                $is_slugged = $request->is_slugged;
             //only show remaining languages
             $usedLang = PageTranslation::where('pages_id', $data->pages_id)
                 ->where('pages_translation_id', '!=', $id)
@@ -246,7 +263,8 @@ class PageController extends Controller
                 ->get();
             return view('cms.pages.update_page', [
                 'languages' => $languages,
-                'data' => $data
+                'data' => $data,
+                'is_slugged' => $is_slugged
             ]);
         } else if ($request->isMethod('post')) {
             try {

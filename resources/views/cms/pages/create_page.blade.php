@@ -113,6 +113,7 @@
             </div>
         </div>
     </div>
+    <div class="d-none is-slugged">{{ $is_slugged }}</div>
     <x-slot name="script">
         <script src="{{ asset('assets/js/custom/custom-page.js') }}"></script>
         <!-- Summernote JS -->
