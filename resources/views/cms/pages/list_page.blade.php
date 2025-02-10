@@ -4,8 +4,8 @@
     </x-slot>
     <x-slot name="head">
         <!-- DataTables css -->
-        <link href="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ secure_asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ secure_asset('assets/plugins/datatables/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
         <!-- Responsive Datatable css -->
     </x-slot>
     <div class="col-lg-12">
@@ -58,18 +58,21 @@
     </div>
     <x-slot name="script">
         <!-- Datatable js -->
-        <script src="{{ asset('assets/js/custom/custom-page.js')}}"></script>
-        <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/jszip.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/pdfmake.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/vfs_fonts.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/buttons.html5.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/buttons.print.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+        <script type="text/javascript">sessionStorage.clear();
+      //  sessionStorage.setItem("url_listpage", window.location.href);
+    //alert(sessionStorage.getItem("url_listpage"));</script>
+        <script src="{{ secure_asset('assets/js/custom/custom-page.js')}}?v=<?php echo rand(); ?>"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/jszip.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/pdfmake.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/vfs_fonts.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/buttons.html5.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/buttons.print.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ secure_asset('assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
     </x-slot>
 </x-app-layout>

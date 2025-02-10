@@ -89,7 +89,7 @@ class NewsController extends Controller
                 'news_id' => ['sometimes', 'integer'],
                 'news_category' => ['required', 'integer'],
                 'create_date' => ['required'],
-                'news_title' => ['required', 'string', 'max:100'],
+                'news_title' => ['required', 'string', 'max:200'],
                 'news_description' => ['required', 'string'],
                 'language_code' => ['required', 'string'],
                 'news_status' => ['required', 'integer']
@@ -214,7 +214,7 @@ class NewsController extends Controller
                 DB::beginTransaction();
                 $data = $request->validate([
                     'news_translation_id' => ['required', 'integer'],
-                    'news_title' => ['required', 'string', 'max:100'],
+                    'news_title' => ['required', 'string', 'max:200'],
                     'news_description' => ['required', 'string'],
                     'language_code' => ['required', 'string'],
                     'news_status' => ['required', 'integer'],

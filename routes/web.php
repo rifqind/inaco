@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\RecipeController;
+use App\Http\Controllers\Web\DistributorController;
+use App\Http\Controllers\Web\NewsController;
 use App\Models\NewsTranslation;
 use App\Models\OfficialSocmedMarketplace;
 use App\Models\PageTranslation;
@@ -15,49 +20,55 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/cms.php';
 
 Route::name('web.id.')->group(function () {
-    Route::get('/katalog/{id}/{category_title?}/{product?}', [HomeController::class, 'katalog'])->name('katalog');
-    Route::get('/penghargaan', [HomeController::class, 'pages'])->name('penghargaan');
-    Route::get('/tentang-kami', [HomeController::class, 'pages'])->name('tentang');
-    Route::get('/temukan-kami', [HomeController::class, 'pages'])->name('temukan-kami');
-    Route::get('/karir', [HomeController::class, 'pages'])->name('karir');
-    Route::get('/tur-pabrik', [HomeController::class, 'pages'])->name('tur-pabrik');
-    Route::get('/profil-perusahaan', [HomeController::class, 'pages'])->name('profil-perusahaan');
-    Route::get('/visi-misi', [HomeController::class, 'pages'])->name('visi-misi');
-    Route::get('/produk/{category_title?}/{product?}', [HomeController::class, 'produk'])->name('produk');
-    Route::get('/distributor', [HomeController::class, 'distributorIndonesia'])->name('distributor');
-    Route::get('/pasar-internasional', [HomeController::class, 'intermarketInd'])->name('intermarket');
-    Route::get('/resep/{title?}', [HomeController::class, 'resep'])->name('resep');
-    Route::get('/resep/kategori/{cat_title?}', [HomeController::class, 'resep'])->name('resep.kategori');
-    Route::get('/resep/detail/{title?}', [HomeController::class, 'resepDetail'])->name('resep.detail');
-    Route::get('/berita/{id}/{title?}', [HomeController::class, 'berita'])->name('berita');
+    Route::get('/katalog/{id}/{category_title?}/{product?}', [ProductController::class, 'katalog'])->name('katalog');
+    Route::get('/penghargaan', [PageController::class, 'index'])->name('penghargaan');
+    Route::get('/temukan-kami', [PageController::class, 'index'])->name('temukan-kami');
+    Route::get('/karir', [PageController::class, 'index'])->name('karir');
+    Route::get('/tur-pabrik', [PageController::class, 'index'])->name('tur-pabrik');
+    Route::get('/profil-perusahaan', [PageController::class, 'index'])->name('profil-perusahaan');
+    Route::get('/visi-misi', [PageController::class, 'index'])->name('visi-misi');
+    Route::get('/produk/{category_title?}/{product?}', [ProductController::class, 'index'])->name('produk');
+    Route::get('/distributor', [DistributorController::class, 'index'])->name('distributor');
+    Route::get('/pasar-internasional', [DistributorController::class, 'intermarketInd'])->name('intermarket');
+    Route::get('/resep/{title?}', [RecipeController::class, 'index'])->name('resep');
+    Route::get('/resep/kategori/{cat_title?}', [RecipeController::class, 'index'])->name('resep.kategori');
+    Route::get('/resep/detail/{title?}', [RecipeController::class, 'resepDetail'])->name('resep.detail');
+    Route::get('/berita/{id}/{title?}', [NewsController::class, 'index'])->name('berita');
+    Route::get('/view/{id}', [PageController::class, 'view'])->name('view');
 });
+
+
 Route::prefix('{code?}')
     // ->where(['code'], '[a-zA-Z]{2}')
     ->name('web.')->group(function () { 
+  //      Route::get('/view/{id}', [PageController::class, 'view'])->name('view');
         Route::get('/', [HomeController::class, 'index'])->name('home');
-        Route::get('/recipe/{title?}', [HomeController::class, 'recipe'])->name('recipe');
-        Route::get('/recipe/category/{cat_title?}', [HomeController::class, 'recipe'])->name('recipe.category');
-        Route::get('/recipe/detail/{title?}', [HomeController::class, 'recipeDetail'])->name('recipe.detail');
-        Route::get('/catalog/{id}', [HomeController::class, 'catalog'])->name('catalog');
-        Route::get('/news/{id}/{title?}', [HomeController::class, 'news'])->name('news');
-        Route::get('/about', function (string $code = null) {
+        Route::get('/recipe/{title?}', [RecipeController::class, 'recipe'])->name('recipe');
+        Route::get('/recipe/category/{cat_title?}', [RecipeController::class, 'recipe'])->name('recipe.category');
+        Route::get('/recipe/detail/{title?}', [RecipeController::class, 'recipeDetail'])->name('recipe.detail');
+        Route::get('/catalog/{id}', [ProductController::class, 'catalog'])->name('catalog');
+        Route::get('/news/{id}/{title?}', [NewsController::class, 'news'])->name('news');
+        Route::get('/company-profile', function (string $code = null) {
             $code ??= 'id';
             if ($code == 'id')
-                return redirect()->route('web.id.tentang');
+                return redirect()->route('web.id.profil-perusahaan');
+
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'tentang-kami')
+                ->where('sb.pages_id', 5)    // Content Profil Perusahaan
                 ->where('pages_status', 1)
                 ->first();
 
             // Fetch tentang description
             if ($page) {
-                $tentang_description = SubpageTranslation::where('language_code', $code)
+                $header_description = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('sb.pages_id', $page->pages_id)
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_id', 5)                  // Header Profile Perusahaan / About
                     ->where('sb.sub_pages_status', 1)
                     ->first();
+            //    print_r($header_description->sub_pages_translation_id);    
+
             }
             // Fetch list of other years (excluding 'tentang-inaco')
             $tentang_list_tahun = collect();  // Initialize empty collection
@@ -66,7 +77,8 @@ Route::prefix('{code?}')
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('pages_id', $page->pages_id)
                     ->where('sb.sub_pages_status', 1)
-                    ->where('sub_pages_slug', 'not like', 'bagian-%')
+                    ->where('sb.sub_pages_id','<>', 5)   // Not header
+                    ->orderBy('sub_pages_title')
                     ->get();
             }
             // Sanitize the page description, if it exists
@@ -76,7 +88,7 @@ Route::prefix('{code?}')
             return view('web.about', [
                 'page' => $page,
                 'code' => $code,
-                'descriptions' => $tentang_description ??= null,
+                'descriptions' => $header_description ??= null,
                 'list_year' => $tentang_list_tahun ??= collect([]),
             ]);
         })->name('about');
@@ -86,32 +98,33 @@ Route::prefix('{code?}')
                 return redirect()->route('web.id.penghargaan');
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'penghargaan')
+                ->where('sb.pages_id', 6)    // Content Penghargaan
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
-                $tentang_description = SubpageTranslation::where('language_code', $code)
+                $header_description = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('sb.pages_id', $page->pages_id)
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_id', 21)    // Header Penghargaan
                     ->where('sb.sub_pages_status', 1)
                     ->first();
                 $award_list = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('pages_id', $page->pages_id)
+                    ->where('sb.sub_pages_id', '<>', 21)  // Not Header
                     ->where('sb.sub_pages_status', 1)
-                    ->where('sub_pages_slug', 'not like', 'bagian-%')->get();
+                    ->get();
                 $award_list = $award_list->map(function ($item) {
                     // Convert sub_pages_description to an integer
                     $item->sub_pages_description = (int) strip_tags(html_entity_decode($item->sub_pages_description));
                     return $item;
-                })->sortBy('sub_pages_description');
+                })->sortByDesc('sub_pages_description');
             }
 
             return view('web.awards', [
                 'page' => $page,
                 'code' => $code,
-                'descriptions' => $tentang_description ??= null,
+                'descriptions' => $header_description ??= null,
                 'award_list' => $award_list ??= collect([]),
             ]);
         })->name('awards');
@@ -121,13 +134,13 @@ Route::prefix('{code?}')
                 return redirect()->route('web.id.temukan-kami');
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'temukan-kami')
+                ->where('sb.pages_id', 8)    // Content Find Us
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
                 $section = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    -> whereIn('sb.sub_pages_id', [31, 37])  // Header & Hubungi Kami
                     ->where('sb.pages_id', $page->pages_id)
                     ->where('sb.sub_pages_status', 1)
                     ->get();
@@ -139,7 +152,7 @@ Route::prefix('{code?}')
                     ->first();
                 $daftar_kontak = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                    ->where('sub_pages_slug', 'like', 'kontak-%')
+                    -> whereIn('sb.sub_pages_id', [33, 35, 34, 36])  // Alamat, Telp, Email, Fax
                     ->where('sb.pages_id', $page->pages_id)
                     ->where('sb.sub_pages_status', 1)
                     ->get();
@@ -161,13 +174,13 @@ Route::prefix('{code?}')
                 return redirect()->route('web.id.karir');
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'karir')
+                ->where('sb.pages_id', 7)    // Content Karir
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
                 $section = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->whereIn('sb.sub_pages_id', [22, 23])  // Header & Content Middle
                     ->where('sb.pages_id', $page->pages_id)
                     ->where('sb.sub_pages_status', 1)
                     ->get();
@@ -191,72 +204,49 @@ Route::prefix('{code?}')
                 return redirect()->route('web.id.tur-pabrik');
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'tur-pabrik')
+                ->where('sb.pages_id', 17)    // Content Tur Pabrik
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
-                $tentang_description = SubpageTranslation::where('language_code', $code)
+                $header_description = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('sb.pages_id', $page->pages_id)
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                   ->where('sb.sub_pages_id', 49)    // Header Tur Pabrik
                     ->where('sb.sub_pages_status', 1)
                     ->first();
             }
             return view('web.factory-tour', [
                 'page' => $page ??= null,
                 'code' => $code,
-                'descriptions' => $tentang_description ??= null,
+                'descriptions' => $header_description ??= null,
             ]);
         })->name('factory-tour');
-        Route::get('/company-profile', function (string $code = null) {
-            $code ??= 'id';
-            if ($code == 'id')
-                return redirect()->route('web.id.profil-perusahaan');
-            $page = PageTranslation::where('language_code', $code)
-                ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'profil-perusahaan')
-                ->where('pages_status', 1)
-                ->first();
-            if ($page) {
-                $tentang_description = SubpageTranslation::where('language_code', $code)
-                    ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
-                    ->where('sb.pages_id', $page->pages_id)
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
-                    ->where('sb.sub_pages_status', 1)
-                    ->first();
-            }
-            return view('web.company-profile', [
-                'page' => $page ??= null,
-                'code' => $code,
-                'descriptions' => $tentang_description ??= null,
-            ]);
-        })->name('company-profile');
-        Route::get('/visi-mission', function (string $code = null) {
+        Route::get('/vision-mission', function (string $code = null) {
             $code ??= 'id';
             if ($code == 'id')
                 return redirect()->route('web.id.visi-misi');
             $page = PageTranslation::where('language_code', $code)
                 ->join('pages as sb', 'sb.pages_id', '=', 'pages_translation.pages_id')
-                ->where('pages_slug', 'visi-misi')
+                ->where('sb.pages_id', 16)    // Content Visi Misi
                 ->where('pages_status', 1)
                 ->first();
             if ($page) {
-                $tentang_description = SubpageTranslation::where('language_code', $code)
+                $header_description = SubpageTranslation::where('language_code', $code)
                     ->join('sub_pages as sb', 'sb.sub_pages_id', '=', 'sub_pages_translation.sub_pages_id')
                     ->where('sb.pages_id', $page->pages_id)
-                    ->where('sub_pages_slug', 'like', 'bagian-%')
+                    ->where('sb.sub_pages_id', 50)                  // Header Visi Misi
                     ->where('sb.sub_pages_status', 1)
                     ->first();
             }
             return view('web.vision-mission', [
                 'page' => $page ??= null,
                 'code' => $code,
-                'descriptions' => $tentang_description ??= null,
+                'descriptions' => $header_description ??= null,
             ]);
-        })->name('visi-mission');
-        Route::get('/distributor', [HomeController::class, 'distributor'])->name('distributor');
-        Route::get('/products/{category_title?}/{product?}', [HomeController::class, 'products'])->name('products');
-        Route::get('/international-market', [HomeController::class, 'intermarket'])->name('intermarket');
+        })->name('company-profile');
+        Route::get('/distributor', [DistributorController::class, 'distributor'])->name('distributor');
+        Route::get('/products/{category_title?}/{product?}', [ProductController::class, 'products'])->name('products');
+        Route::get('/international-market', [DistributorController::class, 'intermarket'])->name('intermarket');
     });
 Route::post('/web-question', [HomeController::class, 'question'])->name('question');
 Route::get('/change-language/{lang}/{url}/{remaining?}', [HomeController::class, 'changeLang']);

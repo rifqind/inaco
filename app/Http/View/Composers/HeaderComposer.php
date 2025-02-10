@@ -8,7 +8,6 @@ use App\Models\MenuNavigationTranslation;
 use App\Models\ProductCategoryTranslation;
 use App\Models\ProductSegment;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HeaderComposer
@@ -16,8 +15,11 @@ class HeaderComposer
     public function compose(View $view)
     {
         $lang = request()->route('code');
+        //    die($lang);
+        $listofLanguage = AppLanguage::pluck('code')->toArray();
         if (!$lang)
             $lang = 'id';
+        abort_if(!in_array($lang, AppLanguage::pluck('code')->toArray()), 404);
         $categories = ProductCategoryTranslation::where('language_code', $lang)
             ->join('products_category as pc', 'pc.category_id', '=', 'products_category_translation.category_id')
             ->where('pc.category_status', 1)
@@ -28,14 +30,14 @@ class HeaderComposer
         foreach ($categories as $key => $value) {
             # code...
             $thisSegment = ProductSegment::where('segment_id', $value->segment_id)->first();
-            $categoryToShow = ($lang == 'id') ? Str::slug($thisSegment->segment_name) : Str::slug($thisSegment->segment_name_non_id);
+            $categoryToShow = ($lang == 'id') ? strtolower($thisSegment->segment_name) : strtolower($thisSegment->segment_name_non_id);
 
             $value->segment = $categoryToShow;
         }
         $languageList = AppLanguage::get();
         $currentLangImage = AppLanguage::where('code', $lang)->first();
         if (!$currentLangImage) {
-            AppLanguage::where('code', 'id')->first();
+            $currentLangImage = AppLanguage::where('code', 'id')->first();
         }
         // $menuList = ['Company', 'Products', 'Recipe', 'Distributors', 'International Market', 'News', 'Career'];
         $menuList = MenuNavigationTranslation::join('menu_navigation as mn', 'mn.menu_id', '=', 'menu_navigation_translation.menu_id')

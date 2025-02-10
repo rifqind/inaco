@@ -4,7 +4,7 @@
     </x-slot>
     <x-slot name="head">
         <!-- Summernote css -->
-        <link href="{{ asset('assets/plugins/summernote/summernote-bs4.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('assets/plugins/summernote/summernote-bs4.css') }}" rel="stylesheet">
     </x-slot>
     <div class="col-lg-12">
         <div class="card m-b-30">
@@ -44,13 +44,13 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">Current Page Image</label>
                         <div class="col-lg-6">
-                            <img class="img-show" src="{{ asset('data/pages/') . '/' . $data->pages_image }}">
+                            <img class="img-show" src="{{ secure_asset('data/pages/') . '/' . $data->pages_image }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label" for="">Page Image</label>
                         <div class="col-lg-6">
-                            <input type="file" class="form-control-file" id="pages_image" name="pages_image_update">
+                            <input type="file" class="form-control-file" id="pages_image" name="pages_image_update" accept="image/*">
                             <div class="">Please select an updated image if exists</div>
                             <div>Minimum Dimension : 1440 x 392</div>
                         </div>
@@ -81,9 +81,9 @@
     </div>
     <div class="d-none is-slugged">{{ $is_slugged }}</div>
     <x-slot name="script">
-        <script src="{{ asset('assets/js/custom/custom-page.js')}}"></script>
+        <script src="{{ secure_asset('assets/js/custom/custom-page.js')}}?v=<?php echo rand(); ?>"></script>
         <!-- Summernote JS -->
-        <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-        <!-- <script src="{{ asset('assets/js/custom/custom-form-editor.js') }}"></script> -->
+        <script src="{{ secure_asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+        <!-- <script src="{{ secure_asset('assets/js/custom/custom-form-editor.js') }}"></script> -->
     </x-slot>
 </x-app-layout>

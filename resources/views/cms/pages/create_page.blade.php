@@ -12,7 +12,7 @@
     </x-slot>
     <x-slot name="head">
         <!-- Summernote css -->
-        <link href="{{ asset('assets/plugins/summernote/summernote-bs4.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('assets/plugins/summernote/summernote-bs4.css') }}" rel="stylesheet">
     </x-slot>
     <div class="col-lg-12">
         <div class="card m-b-30">
@@ -69,7 +69,7 @@
                                     class="text-danger">*</span></label>
                             <div class="col-lg-6">
                                 <input type="hidden" value="{{ $data->pages_image }}" class="form-control-file"
-                                    id="pages_image" name="pages_image">
+                                    id="pages_image" name="pages_image" accept="image/*">
                                 <div class="invalid-feedback">Please select an image</div>
                                 <div>Minimum Dimension : 1440 x 392</div>
                             </div>
@@ -115,9 +115,9 @@
     </div>
     <div class="d-none is-slugged">{{ $is_slugged }}</div>
     <x-slot name="script">
-        <script src="{{ asset('assets/js/custom/custom-page.js') }}"></script>
+        <script src="{{ secure_asset('assets/js/custom/custom-page.js') }}"></script>
         <!-- Summernote JS -->
-        <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-        <!-- <script src="{{ asset('assets/js/custom/custom-form-editor.js') }}"></script> -->
+        <script src="{{ secure_asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+        <!-- <script src="{{ secure_asset('assets/js/custom/custom-form-editor.js') }}"></script> -->
     </x-slot>
 </x-app-layout>

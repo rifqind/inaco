@@ -50,6 +50,9 @@ class HomebannerController extends Controller
             $languageList = HomebannerTranslation::where('banner_id', $value->banner_id)->pluck('language_code');
             $value->languageList = $languageList;
         }
+
+        print_r(env('APP_URL'));
+
         return view('cms.banner.list_homebanner', [
             'data' => $data
         ]);
@@ -127,17 +130,17 @@ class HomebannerController extends Controller
                 if ($request->hasFile('banner_image')) {
                     $file = $request->file('banner_image');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 1900x1072
-                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
+                    // Check if the image dimensions are at least 1900x896
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 896) {
                         // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 1900x1072 pixels.'
+                            'error' => 'The image must be at least 1900x1896 pixels.'
                         ]);
                     }
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/banner/' . $fileName;
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 896, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
@@ -252,16 +255,16 @@ class HomebannerController extends Controller
                 if ($request->hasFile('banner_image_update')) {
                     $file = $request->file('banner_image_update');
                     $imageDimensions = getimagesize($file);
-                    // Check if the image dimensions are at least 1900x1072
-                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 1072) {
-                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x1072 pixels.']);
+                    // Check if the image dimensions are at least 1900x896
+                    if ($imageDimensions[0] < 1900 || $imageDimensions[1] < 896) {
+                        // return back()->withErrors(['banner_image' => 'The image must be at least 1900x896 pixels.']);
                         return response()->json([
-                            'error' => 'The image must be at least 1900x1072 pixels.'
+                            'error' => 'The image must be at least 1900x896 pixels.'
                         ]);
                     }
                     // Resize the image if it's larger than the required dimensions
                     $image = Image::read($file->path());
-                    $resizedImage = $image->resize(1900, 1072, function ($constraint) {
+                    $resizedImage = $image->resize(1900, 896, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });

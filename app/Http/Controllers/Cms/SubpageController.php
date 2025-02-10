@@ -33,9 +33,12 @@ class SubpageController extends Controller
 
         $is_slugged = false;
         $pages_slug = false;
+        $pgcontent = false;
+        $is_pgcontent = false;
         if ($request->pages_slug) {
             $query->join('pages_translation as pt', 'pt.pages_id', '=', 'sp.pages_id')
-                ->where('pt.pages_slug', $request->pages_slug);
+                ->where('sp.pages_id', $request->pages_slug);
+            //    ->where('pt.pages_slug', $request->pages_slug);
             $query->distinct();
             $is_slugged = true;
             $pages_slug = $request->pages_slug;
@@ -76,10 +79,54 @@ class SubpageController extends Controller
             $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
             $value->languageList = $languageList;
         }
+
+
+        if($request->pgcontent){
+            $is_pgcontent = true;
+            $pgcontent = $request->pgcontent;
+            $query = PageTranslation::query();
+             $query->join('pages as p', 'p.pages_id', '=', 'pages_translation.pages_id');
+            $query->join('app_language as al', 'al.code', '=', 'pages_translation.language_code');
+            $query->where('p.pages_id', $request->pages_slug);
+            $query->select([
+              'pages_translation_id as id',
+               'p.pages_id',
+              'pages_title',
+             'pages_description',
+             'al.name as language_name'
+            ]);
+
+         //sementara
+            $data_page = $query->get();
+            foreach ($data_page as $key => $value) {
+                # code...
+                $text = $value->pages_description;
+                $cleanText = strip_tags($text);
+                $cleanText = html_entity_decode($cleanText);
+                $words = explode(' ', $cleanText);
+
+                // Check if the word count is greater than 10
+                if (count($words) > 10) {
+                    $firstTenWords = implode(' ', array_slice($words, 0, 10));
+                    $value->pages_description = $firstTenWords . '...';
+                } else {
+                    $value->pages_description = $cleanText;
+                }
+
+                $languageList = PageTranslation::where('pages_id', $value->pages_id)->pluck('language_code');
+                $value->languageList = $languageList;
+            }
+        }else
+            $data_page = $is_pgcontent;
+
+
         return view('cms.subpages.list_subpage', [
+            'data_page' => $data_page,
             'data' => $data,
             'is_slugged' => $is_slugged,
             'pages_slug' => $pages_slug,
+            'is_pgcontent' => $is_pgcontent,
+            'pgcontent' => $pgcontent
         ]);
     }
 
@@ -164,7 +211,7 @@ class SubpageController extends Controller
             $sub_pages_slug = Str::slug($data['sub_pages_title'], '-');
             if ($request->sub_pages_id) {
                 $data['sub_pages_image'] = $request->validate([
-                    'sub_pages_image' => 'required'
+                    'sub_pages_image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
                 ]);
                 $insertSubpageTranslation = SubpageTranslation::create([
                     'sub_pages_id' => $data['sub_pages_id'],
@@ -176,13 +223,12 @@ class SubpageController extends Controller
                 $sub_pages_id_used = $data['sub_pages_id'];
             } else {
                 $data['sub_pages_image'] = $request->validate([
-                    'sub_pages_image' => 'required|image|mimes:jpeg,png,jpg,gif'
+                    'sub_pages_image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
                 ]);
                 if ($request->hasFile('sub_pages_image')) {
                     $file = $request->file('sub_pages_image');
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $filePath = 'data/subpages/' . $fileName;
-
                     $insertSubpage = Subpage::create([
                         'create_date' => date('Y-m-d H:i:s'),
                         'pages_id' => $data['pages_id'],
@@ -197,9 +243,25 @@ class SubpageController extends Controller
                         'sub_pages_slug' => $sub_pages_slug,
                     ]);
                     $file->move(public_path('data/subpages'), $fileName);
-                    $sub_pages_id_used = $insertSubpage->sub_pages_id;
+                
+                }else{
+                    $insertSubpage = Subpage::create([
+                        'create_date' => date('Y-m-d H:i:s'),
+                        'pages_id' => $data['pages_id'],
+                        'sub_pages_status' => $data['sub_pages_status']
+                    ]);
+                    $insertSubpageTranslation = SubpageTranslation::create([
+                        'sub_pages_id' => $insertSubpage->sub_pages_id,
+                        'language_code' => $data['language_code'],
+                        'sub_pages_title' => $data['sub_pages_title'],
+                        'sub_pages_description' => $data['sub_pages_description'],
+                        'sub_pages_slug' => $sub_pages_slug,
+                    ]);
                 }
+
+                $sub_pages_id_used = $insertSubpage->sub_pages_id;
             }
+
             $languageList = PageTranslation::where('pages_id', $sub_pages_id_used)
                 ->pluck('language_code');
             DB::commit();
